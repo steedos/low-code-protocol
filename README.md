@@ -30,6 +30,12 @@
 
 参考：[Salesforce 2GP Managed Packages](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_comparison.htm)
 
+## 公式
+
+`公式`是一种更简化版本的`微代码`，由系统管理员或者是业务人员编写，实现公式字段计算以及系统中的各种规则判断。
+
+参考：[Salesforce Formula](https://help.salesforce.com/s/articleView?id=customize_formuladef.htm&type=5&language=en_US)
+
 ## 元数据 API
 
 `低代码解释引擎`负责加载所有`软件包`，并合并其中的`元数据`。并提供统一的API，包括`元数据`的查询与更新；批量上传与下载。
@@ -39,6 +45,8 @@
 ## 记录 API
 
 `记录 API` 负责访问数据库进行增删改查处理。企业低代码平台在访问数据库之前需要进行权限处理，并运行`微代码`。
+
+参考：[Salesforce Records API](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/using_resources_working_with_records.htm)
 
 ## 低代码设计引擎
 
@@ -51,3 +59,5 @@
 ## 低代码应用
 
 `低代码应用`是低代码平台的最终呈现结果，低代码应用配置文件组成，因此可以灵活的修改。
+
+参考： [Salesforce CRM](https://www.salesforce.com/crm/)

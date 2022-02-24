@@ -28,6 +28,12 @@
 
 参考：[Salesforce Functions](https://developer.salesforce.com/docs/platform/functions/overview)
 
+## 微页面
+
+需要支持使用代码形式编写自定义控件，或是直接开发自定义前端页面。微页面中需要支持快捷调用平台的基础控件，包括并不限于列表视图、记录详情视图、图表、报表。
+
+参考：[Salesforce Lightning](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/intro_lightning.htm)
+
 ## ObjectSQL
 
 低代码平台通过定义driver的方式实现对不同数据库的支持。本协议约定一种跨数据库的语法，用于查询和修改记录。以便`低代码应用`可以方便的切换数据库。

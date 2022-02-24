@@ -10,6 +10,12 @@
 
 参考 [Salesforce Metadata Types](https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_types_list.htm)
 
+## 公式
+
+`公式`是一种更简化版本的`微代码`，由系统管理员或者是业务人员编写，实现公式字段计算以及系统中的各种规则判断。
+
+参考：[Salesforce Formula](https://help.salesforce.com/s/articleView?id=customize_formuladef.htm&type=5&language=en_US)
+
 ## 微代码
 
 软件包使用`微代码`实现后端数据相关业务逻辑开发，主要包括控制类、触发器。不同软件包中的控制类和触发器中的`微代码`必须集中加载到统一的环境中运行，以便实现数据库事务。因此`微代码`中可以调用低代码平台中的固定方法，不能引用第三方软件包。
@@ -21,12 +27,6 @@
 `软件包`通过自定义`函数`的方式实现复杂业务需求的开发。数据库事务在`函数`内部自行处理。`函数`可以发布为API。`函数`中可以引用第三方软件包，理论上可以实现任意功能。
 
 参考：[Salesforce Functions](https://developer.salesforce.com/docs/platform/functions/overview)
-
-## 公式
-
-`公式`是一种更简化版本的`微代码`，由系统管理员或者是业务人员编写，实现公式字段计算以及系统中的各种规则判断。
-
-参考：[Salesforce Formula](https://help.salesforce.com/s/articleView?id=customize_formuladef.htm&type=5&language=en_US)
 
 ## ObjectSQL
 

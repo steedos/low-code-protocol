@@ -40,6 +40,12 @@
 
 参考：[Salesforce 2GP Managed Packages](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_comparison.htm)
 
+## 标准对象
+
+标准对象定义低代码平台元数据的存储格式，包括对象、字段、权限、报表、流程等；以及企业软件必须的基础数据：组织、人员、角色等。
+
+参考：[Salesforce Standard Objects](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_list.htm)
+
 ## 元数据 API
 
 `低代码解释引擎`负责加载所有`软件包`，并合并其中的`元数据`。并提供统一的API，包括`元数据`的查询与更新；批量上传与下载。

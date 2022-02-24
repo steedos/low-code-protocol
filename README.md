@@ -28,6 +28,10 @@
 
 参考：[Salesforce Formula](https://help.salesforce.com/s/articleView?id=customize_formuladef.htm&type=5&language=en_US)
 
+## ObjectSQL
+
+低代码平台通过定义driver的方式实现对不同数据库的支持。本协议约定一种跨数据库的语法，用于查询和修改记录。以便`低代码应用`可以方便的切换数据库。
+
 ## 软件包
 
 `软件包`是低代码平台产出的最小单位，由元数据、代码段、微服务组成。`低代码设计引擎`负责可视化设计元数据并以配置文件形式输出。`低代码解释引擎`负责加载、合并`软件包`中的`元数据`，生成`低代码应用`。

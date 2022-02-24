@@ -22,6 +22,12 @@
 
 参考：[Salesforce Functions](https://developer.salesforce.com/docs/platform/functions/overview)
 
+## 公式
+
+`公式`是一种更简化版本的`微代码`，由系统管理员或者是业务人员编写，实现公式字段计算以及系统中的各种规则判断。
+
+参考：[Salesforce Formula](https://help.salesforce.com/s/articleView?id=customize_formuladef.htm&type=5&language=en_US)
+
 ## 软件包
 
 `软件包`是低代码平台产出的最小单位，由元数据、代码段、微服务组成。`低代码设计引擎`负责可视化设计元数据并以配置文件形式输出。`低代码解释引擎`负责加载、合并`软件包`中的`元数据`，生成`低代码应用`。
@@ -29,12 +35,6 @@
 本协议约定软件包的目录结构、版本号、软件包依赖等规则；约定软件包的发布、安装与升级规范；约定软件包仓库的规范。
 
 参考：[Salesforce 2GP Managed Packages](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_comparison.htm)
-
-## 公式
-
-`公式`是一种更简化版本的`微代码`，由系统管理员或者是业务人员编写，实现公式字段计算以及系统中的各种规则判断。
-
-参考：[Salesforce Formula](https://help.salesforce.com/s/articleView?id=customize_formuladef.htm&type=5&language=en_US)
 
 ## 元数据 API
 

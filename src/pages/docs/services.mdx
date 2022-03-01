@@ -3,6 +3,88 @@ title: 微服务
 description: 
 ---
 
+## 微服务协议
+
+支持在软件包中自定义微服务。微服务可以用任何语言编写，运行在任何环境中，但需要统一注册到微服务中心。
+
+### 微服务注册
+
+微服务需注册到微服务中心才能互相调用，包括可以在触发器中调用。
+
+```
+{
+    name: "posts",
+    version: 1,
+
+    settings: {
+        // It means, your HTTP server running on port 5000 and sidecar can reach it on `localhost`
+        // The URLs in action/event handlers contains relative URL.
+        baseUrl: "http://service.mesh:5000"
+    },
+
+    actions: {
+        list: {
+            params: {
+                limit: "number",
+                offset: "number"
+            },
+            // Shorthand handler URL what will be called by sidecar
+            handler: "/actions/posts/list"
+        }
+    },
+
+    events: {
+        "user.created": {
+            // Shorthand handler URL what will be called by sidecar
+            handler: "/events/user.created"
+        }
+    }
+}
+```
+
+### Actions
+
+服务公开的可调用的方法称为活动或动作或行为 (actions, 以后不加区分)。 
+
+```js
+    actions: {
+        list: {
+            params: {
+                limit: "number",
+                offset: "number"
+            },
+            // Shorthand handler URL what will be called by sidecar
+            handler: "/actions/posts/list"
+        }
+    },
+```
+
+actions可以使用 broker.call 来调用。 
+
+```js
+const res = await broker.call("posts.list", { limit: 10, offset: 0 });
+```
+
+### Events
+
+您可以在 events 中订阅事件。
+
+```js
+    events: {
+        "user.created": {
+            // Shorthand handler URL what will be called by sidecar
+            handler: "/events/user.created"
+        }
+    }
+```
+
+
+可以使用broker.emit命令抛出事件。
+
+```js
+// The `user` will be serialized to transportation.
+broker.emit("user.created", user);
+```
 
 ## 内核微服务
 
@@ -25,3 +107,9 @@ description:
 根据对象的元数据定义，自动生成记录增删改查API，提供给前端页面调用。
 
 [了解更多](./service-records)
+
+## 参考
+
+- [Salesforce Functions](https://developer.salesforce.com/docs/platform/functions/overview)
+- [Moleculer Service](https://moleculer.services/zh/docs/0.14/services.html)
+- [Moleculer Sidecar](https://github.com/moleculerjs/sidecar)

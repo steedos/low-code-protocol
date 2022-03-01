@@ -34,8 +34,9 @@ export const documentationNav = {
   ],
   '可视化设计工具': [
     pages['designer-object'],
-    pages['designer-report'],
+    pages['designer-amis'],
     pages['designer-bpm'],
+    pages['designer-report'],
     pages['designer-code'],
   ],
   '用户界面': [

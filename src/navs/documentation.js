@@ -20,6 +20,9 @@ export const documentationNav = {
     pages['designer'],
     pages['services'],
   ],
+  '微服务': [
+    pages['service-metadata'],
+  ],
   'API': [
     pages['api-metadata'],
     pages['api-records'],

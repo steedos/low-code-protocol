@@ -14,6 +14,7 @@ export const documentationNav = {
     pages['automation'],
     pages['trigger'],
     pages['services'],
+    pages['event'],
     pages['page'],
     pages['standard-objects'],
     pages['sync'],
@@ -27,12 +28,19 @@ export const documentationNav = {
     pages['metadata-bpm'],
     pages['metadata-report'],
   ],
-  '内核微服务': [
+  '平台微服务': [
+    pages['service-message'],
+    pages['service-logging'],
+    pages['service-tracing'],
+    pages['service-metrics'],
+    pages['service-auditing'],
+  ],
+  '核心微服务': [
     pages['service-package'],
     pages['service-metadata'],
     pages['service-records'],
   ],
-  '扩展微服务': [
+  '应用微服务': [
     pages['service-bpm'],
     pages['service-amis'],
     pages['service-report'],

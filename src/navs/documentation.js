@@ -22,13 +22,25 @@ export const documentationNav = {
     pages['service-metadata'],
     pages['service-records'],
   ],
+  '扩展微服务': [
+    pages['service-bpm'],
+    pages['service-amis'],
+    pages['service-report'],
+    pages['service-node-red'],
+  ],
   'API': [
     pages['api-metadata'],
     pages['api-records'],
   ],
-  'UI': [
+  '可视化设计工具': [
+    pages['designer-object'],
+    pages['designer-report'],
+    pages['designer-bpm'],
+    pages['designer-code'],
+  ],
+  '用户界面': [
     pages['ui-record-view'],
     pages['ui-list-view'],
-    pages['ui-page'],
+    pages['ui-amis'],
   ],
 }

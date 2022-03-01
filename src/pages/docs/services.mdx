@@ -1,18 +1,27 @@
 ---
-title: 平台基础服务
+title: 微服务
 description: 
 ---
 
-## Package Service
+
+## 基础微服务
+
+低代码平台内核需要包含以下基础微服务。
+
+### 软件包服务
 
 安装、升级、卸载软件包，加载软件包中的元数据并发送给 Metadata Service
 
-## Metadata Service
+[了解更多](./service-package)
+
+### 元数据服务
 
 负责汇总和合并元数据，并提供 Metadata API 供前端页面和VSCode插件调用。
 
 [了解更多](./service-metadata)
 
-## Records Service
+### 记录服务
 
 根据对象的元数据定义，自动生成记录增删改查API，提供给前端页面调用。
+
+[了解更多](./service-records)

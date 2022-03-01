@@ -8,15 +8,15 @@ const pages = createPageList(
 export const documentationNav = {
   '快速向导': [
     pages['overview'],
+    pages['package'],
     pages['metadata'],
     pages['code'],
-    pages['package'],
+    pages['services'],
     pages['standard-objects'],
     pages['sync'],
     pages['designer'],
-    pages['services'],
   ],
-  '服务': [
+  '内核微服务': [
     pages['service-package'],
     pages['service-metadata'],
     pages['service-records'],

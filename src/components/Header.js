@@ -124,11 +124,11 @@ export function NavPopover({ display = 'md:hidden', className, ...props }) {
 export function NavItems() {
   return (
     <>
-      <li>
+      {/* <li>
         <Link href="/docs/overview">
           <a className="hover:text-sky-500 dark:hover:text-sky-400">Docs</a>
         </Link>
-      </li>
+      </li> */}
       {/* <li>
         <Link href="/blog">
           <a className="hover:text-sky-500 dark:hover:text-sky-400">Blog</a>
@@ -203,8 +203,8 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                     Router.push('/brand')
                   }}
                 >
-                  <span className="sr-only">Steedos Low-Code Protocol</span>
-                  <h1 class="inline-block text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">Steedos Low-Code Protocol</h1>
+                  <span className="sr-only">Enterprise Low-Code Protocol</span>
+                  <h1 class="inline-block text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">Enterprise Low-Code Protocol</h1>
                   {/* <Logo className="w-auto h-5" /> */}
                 </a>
               </Link>
@@ -219,10 +219,10 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                 <div className="flex items-center border-l border-slate-200 ml-6 pl-6 dark:border-slate-800">
                   <ThemeToggle panelClassName="mt-8" />
                   <a
-                    href="https://github.com/tailwindlabs/tailwindcss"
+                    href="https://github.com/steedos/low-code-protocol"
                     className="ml-6 block text-slate-400 hover:text-slate-500 dark:hover:text-slate-300"
                   >
-                    <span className="sr-only">Tailwind CSS on GitHub</span>
+                    <span className="sr-only">Enterprise Low-Code Protocol on GitHub</span>
                     <svg
                       viewBox="0 0 16 16"
                       className="w-5 h-5"

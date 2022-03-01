@@ -6,15 +6,20 @@ const pages = createPageList(
 )
 
 export const documentationNav = {
-  '低代码协议': [
+  '快速向导': [
     {
       title: '概览',
       href: '/docs/overview',
       match: /^\/docs\/overview/,
     },
     pages['metadata'],
+    pages['code'],
+    pages['package'],
+    pages['standard-objects'],
+    pages['designer'],
+    pages['services'],
   ],
-  'API': [
+  '微服务': [
     pages['api-metadata'],
     pages['api-records'],
   ],

@@ -45,11 +45,19 @@ export const documentationNav = {
   '可视化设计工具': [
     pages['designer-object'],
     pages['designer-amis'],
+    pages['designer-formular'],
+    pages['designer-code'],
     pages['designer-bpm'],
     pages['designer-report'],
-    pages['designer-code'],
+    pages['designer-process'],
+    pages['designer-flows'],
+  ],
+  '元数据同步工具': [
+    pages['sync-cli'],
+    pages['sync-vscode'],
   ],
   '用户界面': [
+    pages['ui-login'],
     pages['ui-record-view'],
     pages['ui-list-view'],
     pages['ui-amis'],

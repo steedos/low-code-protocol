@@ -29,5 +29,6 @@ export const documentationNav = {
   'UI': [
     pages['ui-record-view'],
     pages['ui-list-view'],
+    pages['ui-page'],
   ],
 }

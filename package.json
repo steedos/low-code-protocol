@@ -23,6 +23,7 @@
     "@reach/rect": "^0.10.5",
     "@silvenon/remark-smartypants": "^1.0.0",
     "@sindresorhus/slugify": "^1.1.0",
+    "@sls-next/serverless-component": "^3.7.0-alpha.7",
     "@svgr/webpack": "^5.5.0",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/typography": "^0.5.0",

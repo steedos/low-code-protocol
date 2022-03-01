@@ -204,7 +204,7 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
                   }}
                 >
                   {/* <span className="sr-only">企业级低代码平台协议</span> */}
-                  <h1 class="inline-block text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">企业级低代码平台协议</h1>
+                  <h1 className="inline-block text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">企业级低代码平台协议</h1>
                   {/* <Logo className="w-auto h-5" /> */}
                 </a>
               </Link>

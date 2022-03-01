@@ -1,4 +1,4 @@
-import { Widont } from '@/components/home/common'
+// import { Widont } from '@/components/home/common'
 import PostItem from '@/components/PostItem'
 import Link from 'next/link'
 import tinytime from 'tinytime'
@@ -20,7 +20,8 @@ export function BlogPostLayout({ children, meta, slug, latestPosts }) {
         <article className={clsx('relative pt-10', grid)}>
           <Metadata meta={meta} />
           <h1 className="col-span-full text-3xl sm:text-4xl sm:text-center xl:mb-16 font-extrabold tracking-tight text-slate-900 dark:text-slate-200">
-            <Widont>{meta.title}</Widont>
+            {/* <Widont>{meta.title}</Widont> */}
+            {meta.title}
           </h1>
           <div className="text-sm leading-6 mb-16 xl:mb-0">
             <div className="hidden mb-5 pb-5 border-b border-slate-200 xl:block dark:border-slate-200/5">

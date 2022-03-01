@@ -16,10 +16,11 @@ export const documentationNav = {
     pages['code'],
     pages['package'],
     pages['standard-objects'],
+    pages['sync'],
     pages['designer'],
     pages['services'],
   ],
-  '微服务': [
+  'API': [
     pages['api-metadata'],
     pages['api-records'],
   ],

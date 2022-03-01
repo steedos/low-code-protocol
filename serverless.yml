@@ -1,3 +1,14 @@
 # serverless.yml
-myNextApplication:
-  component: "./node_modules/@sls-next/serverless-component"
+lcp-website-prod:
+  component: "@sls-next/serverless-component@v3.6.1-alpha.2" # it is recommended you pin the latest stable version of serverless-next.js
+  inputs:
+    domain: ["www", "low-code-protocol.com"]
+    stage: prod
+    deploy: true
+    bucketRegion: ap-east-1
+    bucketName: lcp-website-prod
+    region: ap-east-1
+    runtime: nodejs14.x
+    memory: 2048
+    timeout: 30
+    enableS3Acceleration: false

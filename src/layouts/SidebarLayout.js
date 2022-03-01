@@ -97,7 +97,7 @@ function Nav({ nav, children, fallbackHref, mobile = false }) {
 
   return (
     <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6 relative">
-      <div className="sticky top-0 -ml-0.5 pointer-events-none">
+      {/* <div className="sticky top-0 -ml-0.5 pointer-events-none">
         {!mobile && <div className="h-10 bg-white dark:bg-slate-900" />}
         <div className="bg-white dark:bg-slate-900 relative pointer-events-auto">
           <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-slate-400 rounded-md ring-1 ring-slate-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-slate-300 dark:bg-slate-800 dark:highlight-white/5 dark:hover:bg-slate-700">
@@ -138,7 +138,7 @@ function Nav({ nav, children, fallbackHref, mobile = false }) {
           </SearchButton>
         </div>
         {!mobile && <div className="h-8 bg-gradient-to-b from-white dark:from-slate-900" />}
-      </div>
+      </div> */}
       <ul>
         {/* <TopLevelNav mobile={mobile} /> */}
         {children}

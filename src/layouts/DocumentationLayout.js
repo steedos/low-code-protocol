@@ -10,7 +10,7 @@ export function DocumentationLayout(props) {
 
   return (
     <>
-      <Title suffix={router.pathname === '/' ? undefined : 'Enterprise Low-Code Protocol'}>
+      <Title suffix={router.pathname === '/' ? undefined : '企业级低代码平台协议'}>
         {props.layoutProps.meta.metaTitle || props.layoutProps.meta.title}
       </Title>
       <Head>

@@ -17,6 +17,10 @@ export const documentationNav = {
     pages['sync'],
     pages['designer'],
   ],
+  '元数据': [
+    pages['metadata-object'],
+    pages['metadata-permissions'],
+  ],
   '内核微服务': [
     pages['service-package'],
     pages['service-metadata'],

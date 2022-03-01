@@ -1,0 +1,112 @@
+---
+title: 对象元数据
+description: 定义对象的基本属性。
+---
+
+## 对象 .object.yml
+
+定义对象名称、显示名称、对象的基本信息，以及功能开关。
+
+```yaml
+name: contracts
+enable_api: true
+enable_audit: true
+enable_chatter: false
+enable_events: false
+enable_files: true
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: true
+enable_share: true
+enable_tasks: false
+enable_trash: true
+enable_workflow: true
+enable_enhanced_lookup: true
+icon: contract
+is_enable: true
+label: 合同
+version: 2
+```
+
+## 字段 .field.yml
+
+定义字段名称、字段类型以及具体属性。
+
+```yaml
+name: await_proceeds
+type: summary
+data_type: number
+filterable: false
+group: 收款信息
+hidden: true
+index: false
+is_name: false
+is_wide: false
+label: 收款累计(待收款)
+omit: false
+precision: 18
+readonly: true
+required: false
+scale: 2
+searchable: false
+sort_no: 500
+sortable: true
+summary_field: amount
+summary_filters:
+  - field: contract_receipts_state
+    operation: '='
+    value: unreceived
+summary_object: finance_receive
+summary_type: sum
+```
+
+## 列表视图 .listview.yml
+
+定义对象的列表显示，包括：显示的列、过滤条件、排序规则、默认搜索字段。
+
+```yaml
+name: all
+label: 所有合同
+columns:
+  - field: 'no'
+    width: '150'
+    wrap: true
+  - field: name
+    width: '220'
+    wrap: true
+  - field: contract_type
+    width: '150'
+    wrap: true
+  - field: amount
+    width: '150'
+    wrap: true
+  - field: signed_date
+    width: '150'
+    wrap: false
+  - field: owner
+    width: '150'
+    wrap: false
+  - field: created
+    width: '150'
+    wrap: false
+filter_fields:
+  - contract_type
+  - signed_date
+  - othercompany
+  - instance_state
+  - owner
+filter_scope: space
+filters:
+  - is_default: true
+    field: instance_state
+    operation: <>
+    value:
+      - terminated
+    is_required: false
+shared: true
+show_count: false
+sort:
+  - field_name: 'no'
+    order: desc
+```

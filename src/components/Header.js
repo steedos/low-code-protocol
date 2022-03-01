@@ -197,14 +197,14 @@ export function Header({ hasNav = false, navIsOpen, onNavToggle, title, section 
             <div className="relative flex items-center">
               <Link href="/">
                 <a
-                  className="mr-3 flex-none w-[2.0625rem] overflow-hidden md:w-auto"
+                  className="mr-3 flex-none overflow-hidden md:w-auto"
                   onContextMenu={(e) => {
                     e.preventDefault()
                     Router.push('/brand')
                   }}
                 >
-                  {/* <span className="sr-only">企业级低代码平台协议</span> */}
-                  <h1 className="inline-block text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">企业级低代码平台协议</h1>
+                  {/* <span className="sr-only">低代码平台协议</span> */}
+                  <h1 className="inline-block text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">低代码平台协议</h1>
                   {/* <Logo className="w-auto h-5" /> */}
                 </a>
               </Link>

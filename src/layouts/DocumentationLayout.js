@@ -10,16 +10,16 @@ export function DocumentationLayout(props) {
 
   return (
     <>
-      <Title suffix={router.pathname === '/' ? undefined : '企业级低代码平台协议'}>
+      <Title suffix={router.pathname === '/' ? undefined : '低代码平台协议'}>
         {props.layoutProps.meta.metaTitle || props.layoutProps.meta.title}
       </Title>
       <Head>
-        <meta key="twitter:card" name="twitter:card" content="summary" />
+        {/* <meta key="twitter:card" name="twitter:card" content="summary" />
         <meta
           key="twitter:image"
           name="twitter:image"
           content={`https://tailwindcss.com${socialSquare}`}
-        />
+        /> */}
       </Head>
       <SidebarLayout nav={documentationNav} {...props} />
     </>

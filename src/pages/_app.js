@@ -65,29 +65,30 @@ export default function App({ Component, pageProps, router }) {
 
   return (
     <>
-      <Title suffix="Tailwind CSS">{meta.metaTitle || meta.title}</Title>
+      <Title suffix="Low Code Protocol">{meta.metaTitle || meta.title}</Title>
       <Head>
-        <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
-        <meta key="twitter:site" name="twitter:site" content="@tailwindcss" />
+        <meta charSet="utf-8"/>
+        {/* <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
+        <meta key="twitter:site" name="twitter:site" content="@tailwindcss" /> */}
         <meta key="twitter:description" name="twitter:description" content={description} />
-        <meta
+        {/* <meta
           key="twitter:image"
           name="twitter:image"
           content={`https://tailwindcss.com${socialCardLarge}`}
-        />
-        <meta key="twitter:creator" name="twitter:creator" content="@tailwindcss" />
+        /> */}
+        {/* <meta key="twitter:creator" name="twitter:creator" content="@tailwindcss" /> */}
         <meta
           key="og:url"
           property="og:url"
-          content={`https://tailwindcss.com${router.pathname}`}
+          content={`https://low-code-protocol.com${router.pathname}`}
         />
         <meta key="og:type" property="og:type" content="article" />
         <meta key="og:description" property="og:description" content={description} />
-        <meta
+        {/* <meta
           key="og:image"
           property="og:image"
           content={`https://tailwindcss.com${socialCardLarge}`}
-        />
+        /> */}
         <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/feeds/feed.xml" />
         <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/feeds/atom.xml" />
         <link rel="alternate" type="application/json" title="JSON Feed" href="/feeds/feed.json" />

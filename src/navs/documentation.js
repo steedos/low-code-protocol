@@ -11,6 +11,7 @@ export const documentationNav = {
     pages['package'],
     pages['metadata'],
     pages['formular'],
+    pages['automation'],
     pages['trigger'],
     pages['services'],
     pages['page'],
@@ -21,6 +22,10 @@ export const documentationNav = {
   '元数据': [
     pages['metadata-object'],
     pages['metadata-permissions'],
+    pages['metadata-ui'],
+    pages['metadata-automation'],
+    pages['metadata-bpm'],
+    pages['metadata-report'],
   ],
   '内核微服务': [
     pages['service-package'],

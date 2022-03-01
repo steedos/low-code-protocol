@@ -14,4 +14,7 @@ export const documentationNav = {
     },
     // pages['editor-setup'],
   ],
+  'Metadata': [
+    pages['metadata'],
+  ]
 }

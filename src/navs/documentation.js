@@ -10,6 +10,7 @@ export const documentationNav = {
     pages['overview'],
     pages['package'],
     pages['metadata'],
+    pages['formular'],
     pages['trigger'],
     pages['services'],
     pages['page'],

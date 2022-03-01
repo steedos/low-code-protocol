@@ -1,0 +1,178 @@
+---
+title: 公式
+description: 公式引擎可以帮助非程序员快速实现一些简单的业务逻辑，类似Excel公式。
+---
+
+## 公式实例
+
+```js
+Total_Pay = 
+IF(Total_Hours__c <= 40, Total_Hours__c * Hourly_Rate__c, 
+40 * Hourly_Rate__c + 
+(Total_Hours__c - 40) * Overtime_Rate__c)
+```
+
+## 跨对象引用
+
+公式在服务端执行，因此可以在公式中引用当前记录相关表中的数据。
+
+例如以下语法可以引用付款记录对应的合同记录对应的客户名称。
+
+```js
+  payment.contract.account.name
+```
+
+## 公式引擎的应用场景
+
+- 字段默认值： 在用户创建记录时向自定义字段应用一个值。使用公式可以定义默认值。用户可以更改默认值。默认值可以由使用您指定的值、合并字段或表达式的公式确定。
+- 公式字段： 使用您指定的值、合并字段或表达式。自动计算自定义字段的值。用户不能更改公式字段的值。
+- 验证规则： 防止用户在标准/自定义字段中输入无效值。验证规则可以基于公式，并在用户输入无效值时，向用户显示出错消息。
+- 字段更新： 自动将字段值更改为您指定的值。公式中可以包括其他值、合并字段或表达式。可以将字段更新设置为因工作流规则或批准过程而发生。
+- 工作流规则： 定义记录触发工作流规则时必须满足的条件。
+- 批准过程： 定义记录必须满足才能进入批准过程的条件。
+- 批准步骤： 定义记录必须满足才能进入批准步骤的条件。
+- 报表：报表中的自动计算字段。
+
+## 公式中的数据类型
+
+公式的数据类型决定预期从公式返回的数据的类型。
+
+- 文本： 返回字符串。除公式输出外，若还要显示文本，请将该文本放入引号中。对文本、多行文本、网址、邮件地址和自动编号等字段使用文本数据类型。
+- 布尔： 返回 true（真） 或false（假）。该字段在记录详细信息页面和报表中显示为复选框。使用 true 作为选中值，使用 false 作为未选中值。
+- 金额：  只能输入数值内容，默认2位小数，也可以指定小数位数。
+- 日期： 返回代表日历中某一天的日期。当前日期可通过在公式中调用内部函数 TODAY() 获得。
+- 日期时间： 返回表示时间中某一时刻的数据。日期时间字段包括日期，还包括由小时、分钟和秒组成的一天中的时刻。您可以使用 NOW() 函数在公式中插入当前日期和时间。
+- 数字： 返回正负整数或小数（最多 18 位）。华炎魔方对公式字段使用四舍五入平分规则。例如，12.345 变为 12.35 和 -12.345 变为 -12.35。
+- 百分比： 返回后跟百分号的百分比格式数字（最多 18 位）。百分比数据存储为小数，值为除以 100 后得到的小数，即 90% 等于 0.90。
+
+
+## 公式中的运算符和函数
+
+以下是Salesforce公式提供的运算符和函数
+
+### Math Operators
+
+- `+` (Add)	Calculates the sum of two values.
+- `-` (Subtract)	Calculates the difference of two values.
+- `*` (Multiply)	Multiplies its values.
+- `/` (Divide)	Divides its values.
+- `^` (Exponentiation)	Raises a number to a power of a specified number.
+- `()` (Open Parenthesis and Close Parenthesis)	Specifies that the expressions within the open parenthesis and close parenthesis are evaluated first. All other expressions are evaluated using standard operator precedence.
+
+### Logical Operators
+
+- `= and ==` (Equal)	Evaluates if two values are equivalent. The = and == operators are interchangeable.
+- `<> and != (Not Equal)`	Evaluates if two values aren’t equivalent.
+- `<` (Less Than)	Evaluates if a value is less than the value that follows this symbol.
+- `>` (Greater Than)	Evaluates if a value is greater than the value that follows this symbol.
+- `<=` (Less Than or Equal)	Evaluates if a value is less than or equal to the value that follows this symbol.
+- `>=` (Greater Than or Equal)	Evaluates if a value is greater than or equal to the value that follows this symbol.
+- `&&` (AND)	Evaluates if two values or expressions are both true. Use this operator as an alternative to the logical function AND.
+- `||` (OR)	Evaluates if at least one of multiple values or expressions is true. Use this operator as an alternative to the logical function OR.
+
+### Text Operators
+
+- `& and +` (Concatenate)	Connects two or more strings.
+
+### Date and Time Functions
+
+- ADDMONTHS	Returns the date that is the indicated number of months before or after a specified date. If the specified date is the last day of the month, the resulting date is the last day of the resulting month. Otherwise, the result has the same date component as the specified date.
+- DATE	Returns a date value from year, month, and day values you enter. Salesforce displays an error on the detail page if the value of the DATE function in a formula field is an invalid date, such as February 29 in a non-leap year.
+- DATEVALUE	Returns a date value for a date/time or text expression.
+- DATETIMEVALUE	Returns a year, month, day, and GMT time value.
+- DAY	Returns a day of the month in the form of a number between 1 and 31.
+- HOUR	Returns the local time hour value without the date in the form of a number from 1 through 24.
+- MILLISECOND	Returns a milliseconds value in the form of a number from 0 through 999.
+- MINUTE	Returns a minute value in the form of a number from 0 through 60.
+- MONTH	Returns the month, a number between 1 (January) and 12 (December) in number format of a given date.
+- NOW	Returns a date/time representing the current moment.
+- SECOND	Returns a seconds value in the form of a number from 0 through 60.
+- TIMENOW	Returns a time value in GMT representing the current moment. Use this function instead of the NOW function if you only want to track time, without a date.
+- TIMEVALUE	Returns the local time value without the date, such as business hours.
+- TODAY	Returns the current date as a date data type.
+- WEEKDAY	Returns the day of the week for the given date, using 1 for Sunday, 2 for Monday, through 7 for Saturday.
+- YEAR	Returns the four-digit year in number format of a given date.
+
+### Logical Functions
+
+- AND	Returns a TRUE response if all values are true; returns a FALSE response if one or more values are false.
+- BLANKVALUE	Determines if an expression has a value and returns a substitute expression if it doesn’t. If the expression has a value, returns the value of the expression.
+- CASE	Checks a given expression against a series of values. If the expression is equal to a value, returns the corresponding result. If it isn't equal to any values, it returns the else_result.
+- IF	Determines if expressions are true or false. Returns a given value if true and another value if false.
+- ISBLANK	Determines if an expression has a value and returns TRUE if it does not. If it contains a value, this function returns FALSE.
+- ISCLONE	Checks if the record is a clone of another record and returns TRUE if one item is a clone. Otherwise, returns FALSE.
+- ISNEW	Checks if the formula is running during the creation of a new record and returns TRUE if it is. If an existing record is being updated, this function returns FALSE.
+- ISNULL Determines if an expression is null (blank) and returns TRUE if it is. If it contains a value, this function returns FALSE.
+
+### Math Functions
+
+- ABS	Calculates the absolute value of a number. The absolute value of a number is the number without its positive or negative sign.
+- CEILING	Rounds a number up to the nearest integer, away from zero if negative.
+- DISTANCE	Calculates the distance between two locations in miles or kilometers.
+- EXP	Returns a value for e raised to the power of a number you specify.
+- FLOOR	Returns a number rounded down to the nearest integer, towards zero if negative.
+- GEOLOCATION	Returns a geolocation based on the provided latitude and longitude. Must be used with the DISTANCE function.
+- LN	Returns the natural logarithm of a specified number. Natural logarithms are based on the constant e value of 2.71828182845904.
+- LOG	Returns the base 10 logarithm of a number.
+- MAX	Returns the highest number from a list of numbers.
+- MCEILING	Rounds a number up to the nearest integer, towards zero if negative.
+- MFLOOR	Rounds a number down to the nearest integer, away from zero if negative.
+- MIN	Returns the lowest number from a list of numbers.
+- MOD	Returns a remainder after a number is divided by a specified divisor.
+- ROUND	Returns the nearest number to a number you specify, constraining the new number by a specified number of digits.
+- SQRT	Returns the positive square root of a given number.
+
+### Text Functions
+
+- BEGINS	Determines if text begins with specific characters and returns TRUE if it does. Returns FALSE if it doesn't.
+- BR	Inserts a line break in a string of text.
+- CASESAFEID	Converts a 15-character ID to a case-insensitive 18-character ID.
+- CONTAINS	Compares two arguments of text and returns TRUE if the first argument contains the second argument. If not, returns FALSE.
+- FIND	Returns the position of a string within a string of text represented as a number.
+- GETSESSIONID	Returns the user’s session ID.
+- HTMLENCODE	Encodes text and merge field values for use in HTML by replacing characters that are reserved in HTML, such as the greater-than sign (>), with HTML entity equivalents, such as &gt;.
+- HYPERLINK	Creates a link to a URL specified that is linkable from the text specified.
+- IMAGE	Inserts an image with alternate text and height and width specifications.
+- INCLUDES	Determines if any value selected in a multi-select picklist field equals a text literal you specify.
+- ISPICKVAL	Determines if the value of a picklist field is equal to a text literal you specify.
+- JSENCODE	Encodes text and merge field values for use in JavaScript by inserting escape characters, such as a backslash (\), before unsafe JavaScript characters, such as the apostrophe (').
+- JSINHTMLENCODE	Encodes text and merge field values for use in JavaScript inside HTML tags by replacing characters that are reserved in HTML with HTML entity equivalents and inserting escape characters before unsafe JavaScript characters. JSINHTMLENCODE(someValue) is a convenience function that is equivalent to JSENCODE(HTMLENCODE((someValue)). That is, JSINHTMLENCODE first encodes someValue with HTMLENCODE, and then encodes the result with JSENCODE.
+- LEFT	Returns the specified number of characters from the beginning of a text string.
+- LEN	Returns the number of characters in a specified text string.
+- LOWER	Converts all letters in the specified text string to lowercase. Any characters that are not letters are unaffected by this function. Locale rules are applied if a locale is provided.
+- LPAD	Inserts characters you specify to the left-side of a text string.
+- MID	Returns the specified number of characters from the middle of a text string given the starting position.
+- RIGHT	Returns the specified number of characters from the end of a text string.
+- RPAD	Inserts characters that you specify to the right-side of a text string.
+- SUBSTITUTE	Substitutes new text for old text in a text string.
+- TEXT	Converts a percent, number, date, date/time, or currency type field into text anywhere formulas are used. Also, converts picklist values to text in approval rules, approval step rules, workflow rules, escalation rules, assignment rules, auto-response rules, validation rules, formula fields, field updates, and custom buttons and links.
+- TRIM	Removes the spaces and tabs from the beginning and end of a text string.
+- UPPER	Converts all letters in the specified text string to uppercase. Any characters that are not letters are unaffected by this function. Locale rules are applied if a locale is provided.
+- URLENCODE	Encodes text and merge field values for use in URLs by replacing characters that are illegal in URLs, such as blank spaces, with the code that represent those characters as defined in RFC 3986, Uniform Resource Identifier (URI): Generic Syntax. For example, blank spaces are replaced with %20, and exclamation points are replaced with %21.
+- VALUE	Converts a text string to a number.
+
+### Summary Functions
+The following functions are available with summary, matrix, and joined reports.
+
+- PARENTGROUPVAL	This function returns the value of a specified parent grouping. A “parent” grouping is any level above the one containing the formula. You can use this function only in custom summary formulas and at grouping levels for reports, but not at summary levels.
+- PREVGROUPVAL	This function returns the value of a specified previous grouping. A “previous” grouping is one that comes before the current grouping in the report. Choose the grouping level and increment. The increment is the number of columns or rows before the current summary. The default is 1; the maximum is 12. You can use this function only in custom summary formulas and at grouping levels for reports, but not at summary levels.
+
+### Advanced Functions
+
+- CURRENCYRATE	Returns the conversion rate to the corporate currency for the given currency ISO code. If the currency is invalid, returns 1.0.
+- GETRECORDIDS	Returns an array of strings in the form of record IDs for the selected records in a list, such as a list view or related list.
+- IMAGEPROXYURL	Securely retrieves external images and prevents unauthorized requests for user credentials.
+- INCLUDE	Returns content from an s-control snippet. Use this function to reuse common code in many s-controls.
+- ISCHANGED	Compares the value of a field to the previous value and returns TRUE if the values are different. If the values are the same, this function returns FALSE.
+- JUNCTIONIDLIST	Returns a JunctionIDList based on the provided IDs.
+- LINKTO	Returns a relative URL in the form of a link (href and anchor tags) for a custom s-control or Salesforce page.
+- PREDICT	Returns an Einstein Discovery prediction for a record based on the specified record ID or for a list of fields and their values.
+- REGEX	Compares a text field to a regular expression and returns TRUE if there is a match. Otherwise, it returns FALSE. A regular expression is a string used to describe a format of a string according to certain syntax rules.
+- REQUIRESCRIPT	Returns a script tag with source for a URL you specify. Use this function when referencing the Lightning Platform AJAX Toolkit or other JavaScript toolkits.
+- URLFOR	Returns a relative URL for an action, s-control, Visualforce page, or a file in a static resource archive in a Visualforce page.
+- VLOOKUP	Returns a value by looking up a related value on a custom object similar to the VLOOKUP() Excel function.
+
+## 参考
+
+- [Salesforce Formular](https://help.salesforce.com/s/articleView?id=sf.customize_formuladef.htm&type=5)
+- [Steedos Formular Functions](https://www.steedos.cn/docs/admin/functions)

@@ -13,12 +13,48 @@ description: 软件包是低代码平台产出的最小单位，由元数据、�
 - 依赖的软件包
 - 依赖的外部软件包
 
+示例：
+
+```json
+// https://github.com/trailheadapps/functions-recipes/blob/main/functions/03_Context_SalesforceSDK_JS/package.json
+{
+  "name": "salesforcesdk-js-function",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "author": "salesforce.com",
+  "description": "This function takes a payload containing account details, and creates the record. It then uses a SOQL query to return the newly created Account.",
+  "license": "CC0-1.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git"
+  },
+  "engines": {
+    "node": "^14.0"
+  },
+  "scripts": {
+    "lint": "eslint . --ext .js --config .eslintrc",
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^8.8.0",
+    "mocha": "^9.1.3",
+    "sinon": "^13.0.1"
+  }
+}
+```
+
 ## 软件包内容
+
+软件包由大量的配置文件、微代码（触发器）和微服务（函数）组成。
 
 - 元数据
 - 触发器
 - 微服务
 - 微页面
+
+示例：[Salesforce Package Sample](https://github.com/trailheadapps/functions-recipes/tree/main/force-app/main/default)
 
 ## 源码版本管理
 
@@ -28,18 +64,21 @@ description: 软件包是低代码平台产出的最小单位，由元数据、�
 
 元数据使用可视化工具设计，通过VS Code同步工具同步为代码。
 
-## 微代码的开发与调试
+## 触发器的开发与调试
 
-微代码使用代码编辑器（例如VS Code）编写。微代码 deploy 到 metadata service 后执行。
+触发器使用代码编辑器（例如VS Code）编写。
 
-- 触发器在 Record Service 中执行。
-- 前端微代码在浏览器中执行。
+- 触发器 deploy 到 metadata service 后，在 Record Service 中执行。
+- 触发器的运行环境需支持单步追踪与调试功能。
 
-> 微代码的运行环境需支持单步追踪与调试功能。
+## 函数的开发与调试
 
-## 微服务的开发与调试
+函数独立部署与运行，可以使用任何语言开发。
 
-微服务独立部署与运行，可以使用任何语言开发。
+- 需支持本地开发与调试。
+- 函数支持跨语言编写。
+- 基于 Nodejs 编写的函数，可以 deploy 到服务端的 Package Service 中运行。
+- 其他语言编写的函数，独立部署，并注册到函数中心。
 
 ## 打包、发布
 
@@ -50,3 +89,4 @@ description: 软件包是低代码平台产出的最小单位，由元数据、�
 ## 参考资料
 
 - [Salesforce 2GP Managed Packages](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_comparison.htm)
+- [Salesforce Function Package Sample](https://github.com/trailheadapps/functions-recipes/tree/main/functions/03_Context_SalesforceSDK_JS)

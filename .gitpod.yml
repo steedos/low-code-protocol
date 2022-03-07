@@ -9,5 +9,8 @@ ports:
 tasks:
   - init: yarn install && yarn run build
     command: yarn run start
+  - name: GitRebase
+    init: git config --global pull.rebase false
+
 
 

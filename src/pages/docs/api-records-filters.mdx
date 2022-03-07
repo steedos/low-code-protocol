@@ -1,15 +1,15 @@
 ---
 title: 过滤条件规范
-description: 如何定义数据过滤条件，用于查询和操作华炎魔方中定义范围内的数据。
+description: 如何定义数据过滤条件，用于查询或操作指定范围内的数据。
 ---
 
 ## 基于 OData Query $filter
 
-华炎魔方数据过滤条件功能基于 [基于 OData Query $filter](https://docs.oasis-open.org/odata/odata/v4.01/os/part1-protocol/odata-v4.01-os-part1-protocol.html#sec_SystemQueryOptionfilter)，并实现了一套使用数组格式定义过滤条件的语法规范。
+基于 [OData Query $filter](https://docs.oasis-open.org/odata/odata/v4.01/os/part1-protocol/odata-v4.01-os-part1-protocol.html#sec_SystemQueryOptionfilter) 实现过滤条件功能，同时支持一套使用数组格式定义过滤条件的语法规范。
 
 ## 数组格式规范
 
-华炎魔方使用数组格式定义过滤条件，这些过滤条件最终会转成 [OData Query $filter](https://docs.oasis-open.org/odata/odata/v4.01/os/part1-protocol/odata-v4.01-os-part1-protocol.html#sec_SystemQueryOptionfilter)。
+使用数组格式定义过滤条件，这些过滤条件最终会转成 [OData Query $filter](https://docs.oasis-open.org/odata/odata/v4.01/os/part1-protocol/odata-v4.01-os-part1-protocol.html#sec_SystemQueryOptionfilter)。
 
 ### 基本运算符
 

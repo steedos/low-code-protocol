@@ -17,6 +17,7 @@ export const documentationNav = {
     pages['event'],
     pages['page'],
     pages['standard-objects'],
+    pages['driver'],
     pages['sync'],
     pages['designer'],
   ],
@@ -46,10 +47,6 @@ export const documentationNav = {
     pages['service-report'],
     pages['service-node-red'],
   ],
-  'API': [
-    pages['api-metadata'],
-    pages['api-records'],
-  ],
   '可视化设计工具': [
     pages['designer-object'],
     pages['designer-amis'],
@@ -63,6 +60,11 @@ export const documentationNav = {
   '元数据同步工具': [
     pages['sync-cli'],
     pages['sync-vscode'],
+  ],
+  '应用开发规范': [
+    pages['api-metadata'],
+    pages['api-records'],
+    pages['objectql'],
   ],
   '用户界面': [
     pages['ui-login'],

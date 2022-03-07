@@ -1,0 +1,79 @@
+---
+title: 字段属性
+description: 字段的基本属性。
+---
+
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | 字段名称 |
+| label | string | 字段显示名称 |
+| is_name | boolean | 将当前字段叫标记为name字段，用于选择数据时的显示名称 |
+| column_name | string | 数据库字段名 |
+| object | string | 字段所属对象 |
+| type | string | 字段类型 |
+| sort_no | integer | 排序号, 默认值100 |
+| group | string | 分组名称 |
+| defaultValue | ['string', 'boolean', 'array', 'integer'] | 默认值 |
+| allowedValues | ['string', 'boolean', 'array'] | 允许的值 |
+| multiple | boolean | 支持多选 |
+| required | boolean | 是否必填 |
+| is_wide | boolean | 是否宽字段，如果为true，则在详细页面，一个字段占一行 |
+| readonly | boolean | 是否只读 |
+| hidden | boolean | 是否隐藏 |
+| omit | boolean | 忽略此字段 |
+| index | boolean | 创建索引 |
+| searchable | boolean | 允许搜索 |
+| sortable | boolean | 允许排序 |
+| precision | integer | 数值类型字段的最大长度，默认值18 |
+| scale | integer | 数值类型的小数位数，默认值2 |
+| reference_to | ['string', 'array'] | 引用的对象 |
+| reference_to_field | string | 引用的对象的字段，按照此字段去查找相关记录 |
+| modal_mode | string | lookup字段弹出框模式 ：'dialog' |
+| show_as_qr | boolean | 显示为二维码 |
+| table_schema | ['string', 'object'] | lookup字段弹出框表格定义，可以定义为列表视图名称或列表属性 |
+| rows | integer | 多行文本默认行数 |
+| firstOption | boolean | (疑似被废除) |
+| options | undefined | 字段选项 |
+| description | string | 字段描述 |
+| filterable | boolean | 过滤器默认字段 |
+| inlineHelpText | string | 提示文本 |
+| unique | boolean | 唯一 |
+| optionsFunction | string | 字段选项函数名称 |
+| min | ['integer', 'string'] | 最小长度。支持字符串，数字，金额，日期类型字段 |
+| max | ['integer', 'string'] | 最大长度。支持字符串，数字，金额，日期类型字段 |
+| blackbox | boolean | 不校验字段类型 |
+| disabled | boolean | 禁用 |
+| reference_sort | object | 排序方式 |
+| reference_limit | number | 一次最多显示数据 |
+| is_company_only | boolean | 本公司 |
+| is_company_limited | ['boolean', 'string'] | 本公司 |
+| system | string |  |
+| depend_on | array | 依赖的字段 |
+| defaultIcon | string | 默认的图标 |
+| showIcon | boolean | 是否显示图标 |
+| primary | boolean | 主键 |
+| generated | boolean | 自增 |
+| fieldDBType | string | 字段数据库类型 |
+| collection | string | 对应对象名 |
+| language | string | 模板名 |
+| create | boolean | 关联时是否允许创建 |
+| regEx | object | 正则表达式 |
+| formula | string | 公式 |
+| data_type | string | 数据类型 |
+| summary_object | string | 要汇总的对象 |
+| summary_type | string | 汇总类型 |
+| summary_field | string | 要聚合的字段 |
+| summary_filters | ['array', 'string'] | 要汇总的子表记录的过滤条件 |
+| formula_blank_value | string | 空白字段处理，zeroes表示将空白字段视为零，blanks表示将空白字段视为空白，默认为zeroes |
+| filters | ['array', 'string'] | 过滤条件 |
+| filtersFunction | string | 过滤条件函数名称 |
+| write_requires_master_read | boolean | 设置主记录上创建、编辑或删除子记录所需的最低访问级别。 |
+| relatedList | boolean | 用于表示是否在相关表的详细页面中作为子表显示 |
+| picklist | string | 指定字段的选项列表值集 |
+| visible_on | string | 函数表达式，控制是否显示此字段 |
+
+部分属性补充说明：
+
+| 属性名 | 属性含义 |
+|----|----|
+| write_requires_master_read | 此字段仅适用于master_detail字段类型。true--允许具有'读取'访问权限的用户创建、编辑或删除子记录。false = 允许具有'读取/写入'访问权限的用户创建、编辑或删除子记录的权限。此设置比 true 更严格，并且是默认值。 |

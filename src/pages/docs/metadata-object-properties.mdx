@@ -1,0 +1,62 @@
+---
+title: 对象属性
+description: 对象的基本属性。
+---
+
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name	| string |	对象名称 |
+| internal	| boolean |	内置对象 |
+| table_name	| string |	数据库表名称 |
+| extend	| string |	要继承的对象标识 |
+| label	| string |	对象显示名称 |
+| icon	| string |	对象图标 |
+| enable_search	| boolean |	允许搜索 |
+| is_enable	| boolean |	是否启用，如果为false，则对象不可见 |
+| enable_files	| boolean |	允许上传附件 |
+| enable_tasks	| boolean |	允许创建任务 |
+| enable_notes	| boolean |	允许创建备忘 |
+| enable_events	| boolean |	允许创建事件 |
+| enable_api	| boolean |	TODO... |
+| enable_share	| boolean |	允许分享 |
+| enable_instances	| boolean |	允许查看申请单 |
+| enable_chatter	| boolean |	允许留言 |
+| enable_audit	| boolean |	允许记录字段历史 |
+| enable_trash	| boolean |	允许假删除 |
+| enable_space_global	| boolean |	允许数据夸工作区使用 |
+| enable_tree	| boolean |	启用树状结构显示记录 |
+| enable_enhanced_lookup	| boolean |	是否启用增强lookup模式 |
+| parent_field	| string |	树状结构父字段，默认为parent |
+| children_field	| string |	树状结构子节点字段，默认为children |
+| enable_approvals	| boolean |	历史步骤 |
+| enable_follow	| boolean |	允许关注 |
+| enable_workflow	| boolean |	允许对象流程同步 |
+| enable_web_forms	| boolean |	允许在线表单 |
+| enable_inline_edit	| boolean |	允许单个字段编辑 |
+| is_view	| boolean |	此对象是否对应数据库中的视图 |
+| hidden	| boolean |	是否隐藏对象 |
+| description	| string |	对象描述 |
+| sidebar	| object |	TODO |
+| custom	| boolean |	创建的实体表是否加默认的前缀，默认前缀为：c_${spaceId}_ |
+| owner	| string |	对象拥有者 |
+| methods	| object |	对象可执行的方法，用于odata接口 |
+| fields	| object |	对象字段 |
+| list_views	| object |	对象列表视图 |
+| paging	| object |	对象页面 |
+| actions	| object |	对象按钮 |
+| permission_set	| object |	对象权限 |
+| triggers	| object |	对象触发器（旧写法） |
+| calendar	| object |	对象日历（旧写法） |
+| listeners	| object |	（疑似废除了） |
+| form	| object |	对象表单事件 |
+| relatedList	| array |	主表想在详细页显示的相关子表 |
+| version	| number |	对象版本, 默认1.0 |
+
+
+部分属性补充说明：
+
+| 属性名 | 属性含义 |
+|----|----|
+| icon | 对象图标对应 salesforce 中的 [Standard Icons](https://www.lightningdesignsystem.com/icons/#standard) |
+| enable_trash |	如果为true,则开启回收站功能，此对象数据删除后，会进入回收站。如果为false，则直接删除 |
+| enable_enhanced_lookup | 当开启增强lookup模式时，指向该对象的lookup字段会弹出窗口显示可选项！ |

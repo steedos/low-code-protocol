@@ -23,11 +23,17 @@ export const documentationNav = {
   ],
   '元数据': [
     pages['metadata-object'],
-    pages['metadata-permissions'],
+    pages['metadata-field-type'],
     pages['metadata-ui'],
+    pages['metadata-permissions'],
     pages['metadata-automation'],
     pages['metadata-bpm'],
     pages['metadata-report'],
+  ],
+  '应用开发规范': [
+    pages['api-metadata'],
+    pages['api-records'],
+    pages['objectql'],
   ],
   '平台微服务': [
     pages['service-message'],
@@ -60,11 +66,6 @@ export const documentationNav = {
   '元数据同步工具': [
     pages['sync-cli'],
     pages['sync-vscode'],
-  ],
-  '应用开发规范': [
-    pages['api-metadata'],
-    pages['api-records'],
-    pages['objectql'],
   ],
   '用户界面': [
     pages['ui-login'],

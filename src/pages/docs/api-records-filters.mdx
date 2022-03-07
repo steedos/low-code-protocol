@@ -1,0 +1,103 @@
+---
+title: 过滤条件规范
+description: 如何定义数据过滤条件，用于查询和操作华炎魔方中定义范围内的数据。
+---
+
+## 基于 OData Query $filter
+
+华炎魔方数据过滤条件功能基于 [基于 OData Query $filter](https://docs.oasis-open.org/odata/odata/v4.01/os/part1-protocol/odata-v4.01-os-part1-protocol.html#sec_SystemQueryOptionfilter)，并实现了一套使用数组格式定义过滤条件的语法规范。
+
+## 数组格式规范
+
+华炎魔方使用数组格式定义过滤条件，这些过滤条件最终会转成 [OData Query $filter](https://docs.oasis-open.org/odata/odata/v4.01/os/part1-protocol/odata-v4.01-os-part1-protocol.html#sec_SystemQueryOptionfilter)。
+
+### 基本运算符
+
+* "=": 等于
+* "!=": 不等于
+* ">": 大于
+* ">=": 大于等于
+* "<": 小于
+* "<=": 小于等于
+* "startswith": 以...开始
+* "contains": 包含...
+* "notcontains": 不包含...
+* "between": 范围
+
+### 数组类型字段
+
+运算符为"="时，条件自动按"or"裂变连接成多个筛选条件，类似实现了"in"操作功能，所以下两种写法结果相同：
+
+```javascript
+[["status", "in", ["closed","open"]]]
+
+[ [ "status", "=", "closed" ], "or", [ "status", "=", "open" ] ]
+```
+
+
+运算符为"!="时，条件自动按"and"裂变连接成多个筛选条件，所以下两种写法结果相同：
+
+```javascript
+[["status", "not in", ["closed","open"]]]
+
+[ [ "status", "!=", "closed" ], "and", [ "status", "!=", "open" ] ]
+```
+
+
+运算符为"between"时，条件自动转换成">="及"<="运算符对应的筛选条件，以下各组效果相同：
+
+```javascript
+[["age", "between", [20,30]]] 等效于 [ [ "age", ">=", 20 ], "and", [ "age", "<=", 30 ] ]
+
+[["age", "between", [null,30]]] 等效于 [ [ "age", "<=", 30 ] ]
+
+[["age", "between", [20,null]]] 等效于 [ [ "age", ">=", 20 ] ]
+```
+
+> between只支持数值及日期时间类型，且过滤值必须是两个元素的数组格式
+
+
+其他情况一律自动按"or"裂变连接成多个筛选条件
+
+```javascript
+[["tag", "contains", ["start","end"]]] 等效于 [ [ "tag", "contains", "start" ], "or", [ "tag", "contains", "end" ] ]
+```
+
+### “非”(not)操作
+
+可以在当前筛选条件的基础上取反，例如：
+
+```javascript
+["not", ["value", "=", 3]]
+```
+
+### “与(and)”、“或(or)”操作
+
+多个过滤器可以通过“与(and)”、“或(or)”操作进行组合，例如：
+
+```javascript
+[ [ "value", ">", 3 ], "and", [ "value", "<", 7 ] ]
+
+[ [ "value", ">", 7 ], "or", [ "value", "<", 3 ] ]
+```
+
+如果不指定“与(and)”、“或(or)”操作，系统默认按照“与(and)”操作执行过滤。所以下两种写法结果相同：
+
+```javascript
+[ [ "value", ">", 3 ], "and", [ "value", "<", 7 ] ]
+
+[ [ "value", ">", 3 ], [ "value", "<", 7 ] ]
+```
+
+### 示例
+
+查询分部名称包含 ‘华炎’ 的记录
+
+```javascript
+{
+  company(filters: ["name","contains","华炎"]){
+    _id,
+    name,
+  } 
+}
+```

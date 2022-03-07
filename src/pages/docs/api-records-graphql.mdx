@@ -1,0 +1,510 @@
+---
+title: GraphQL API 向导
+description: 如何通过 GraphQL API，查询和操作华炎魔方中的数据。
+---
+
+## graphql 控制台
+
+可以在浏览器端访问 GraphQL 控制台，查询和操作华炎魔方中的数据。访问网址为:  ${服务器地址}/graphql
+
+GraphQL接口内置权限控制，执行查询前必须先登录华炎魔方，当前查询的访问权限为当前登录的账户。
+
+ ![](https://console.steedos.cn/api/files/images/BTmifmnQCm98HdZ7L)
+
+## 接口验证
+
+调用接口前，首先需要先进行接口的身份验证。华炎魔方采用API Key来作为 Token，可以使您更加方便地进行接口调用。不仅如此，您还可以实现单点登录、验证登录状态以及注销等功能，让您的使用更加地灵活与便捷。
+
+### 获取 api key
+
+由于接口验证是以 API Key 作为 Token 进行验证，因此需要先获取 API Key。可以在设置-高级设置-API Key菜单下，获取用户的API Key。
+
+### 设置 header
+
+获取到 API Key 之后设置在请求头 Header 当中就可以进行接口调用了。
+
+```javascript
+Authorization : Bearer apikey,${apikey}
+```
+
+其中 ${apikey} 替换为获取到的 API Key
+
+
+## 查询数据
+
+### 查询对象和字段
+
+输入对象名称和字段名称，可以查询对象中的所有记录。例如以下查询可以查询分部信息。
+
+```javascript
+{
+  company{
+    _id,
+    name,
+    admins
+  } 
+}
+```
+
+
+查询结果
+
+```javascript
+{
+  "data": {
+    "company": [
+      {
+        "_id": "CqY8Dy4MCFgXCbMjT",
+        "name": "华炎软件",
+        "admins": [
+          "60f6a630d5d0f30031bba318"
+        ]
+      },
+      {
+        "_id": "EX4Ro64TjLaMnves8",
+        "name": "华炎网络",
+        "admins": [
+          "60f6a630d5d0f30031bba318"
+        ]
+      }
+    ]
+  }
+}
+```
+
+
+### 查询参数：翻页
+
+您可以定义一个`skip`要跳过多少条记录，以及一个查询要返回多少条记录`top`。
+
+如下查询将仅返回第二条记录：
+
+```javascript
+query{
+  space_users(top:1, skip:1){
+    name,
+    mobile
+  }
+}
+```
+
+
+### 查询参数：排序
+
+您可以定义如何用`sort`对结果进行排序。
+
+关键字`desc`表示降序，关键字`asc`表示升序。
+
+示例：按字段`name`降序排序
+
+```javascript
+query{
+  space_users(sort:"name asc"){
+    name,
+    mobile
+  }
+}
+```
+
+### 查询参数：过滤
+
+您可以添加 `filters` 筛选特定记录。示例：查询分部名称包含 ‘华炎’ 的记录。过滤条件详情请见下方 ”查询过滤条件详解“。
+
+```javascript
+query{
+  company(filters: ["name","contains","华炎"]){
+    _id,
+    name,
+  } 
+}
+```
+
+### 扩展查询相关表
+
+对于 lookup 和 master/detail 类型字段，使用 ${field_api_name}__expand 语法，可以扩展查询相关表中的数据。如果相关表字段是多选类型，返回的也是数组数据。
+
+```javascript
+{
+  company{
+    _id,
+    name,
+    admins__expand{
+      name
+      mobile
+    }
+  } 
+}
+```
+
+
+返回结果
+
+```javascript
+{
+  "data": {
+    "company": [
+      {
+        "_id": "CqY8Dy4MCFgXCbMjT",
+        "name": "华炎软件",
+        "admins__expand": [
+          {
+            "_id": "60f6a630d5d0f30031bba318",
+            "name": "管理员",
+            "mobile": "18600000000"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+
+### 返回格式化数据
+
+对于 boolean , select , date , datetime , lookup类型字段，使用 _display{ field_api_name } 语法，可以格式化查询到的数据。
+
+其中 0 、null 、false  值格式化后为空字符串。
+
+```javascript
+query{
+  space_users(top:1, skip:1){
+    name,
+    # boolean null
+    email_verified
+    # boolean false
+    mobile_verified
+    # boolean true
+    is_supplier
+    # lookup  单选
+    organization
+    # lookup  多选
+    organizations_parents
+    # select
+    locale
+    # number
+    sort_no
+    # date
+    last_logon
+    # datetime
+	created
+    
+    _display{
+      email_verified
+      mobile_verified
+      is_supplier
+      organization
+      organizations_parents
+      locale
+      sort_no
+      last_logon
+      created
+    }
+  }
+}
+```
+
+
+返回结果
+
+```javascript
+{
+  "data": {
+    "space_users": [
+      {
+        "name": "ldx_test2_app",
+        "email_verified": null,
+        "mobile_verified": false,
+        "is_supplier": true,
+        "organization": "dZM6e9zgdrrk8rPZZ",
+        "organizations_parents": [
+          "dZM6e9zgdrrk8rPZZ",
+          "EzrZricSyxyJARRut",
+          "3bJaD7L8jjbYW4vY8",
+          "z4KogJQ26nFpJeui8"
+        ],
+        "locale": "zh-cn",
+        "sort_no": 1,
+        "last_logon": "1634028562052",
+        "created": "1618108487329",
+        "_display": {
+          "email_verified": "",
+          "mobile_verified": "",
+          "is_supplier": "√",
+          "organization": "教育部门/部门1-1-1/部门1-1-1-1",
+          "organizations_parents": "教育部门,教育部门/部门1-1-1,教育部门/部门1-1-1/部门1-1-1-1,星陨阁",
+          "locale": "简体中文",
+          "sort_no": 1,
+          "last_logon": "2021-10-12",
+          "created": "2021-04-11 10:34"
+        }
+      }
+    ]
+  }
+}
+```
+
+
+### 查询相关子表
+
+当其他表与当前表关联时，可以同时查询相关的子表信息。
+
+
+查询语法
+
+```javascript
+_related_${object_api_name}_${field_api_name}
+```
+
+
+例如以下查询可以查询当前分部中的人员清单，也就是人员对象（space_users）中，company_ids 字段与 company 绑定的记录信息。
+
+```javascript
+{
+  company{
+    _id,
+    name,
+    admins__expand{
+      _id
+      name
+      mobile
+    }
+    space_users: _related_space_users_company_ids {
+      name
+      mobile
+    }
+  } 
+}
+```
+
+注意：为了提升返回结果的可读性，这里给返回结果起了一个别名： space_users
+
+
+返回结果
+
+```javascript
+{
+  "data": {
+    "company": [
+      {
+        "_id": "CqY8Dy4MCFgXCbMjT",
+        "name": "华炎软件",
+        "admins__expand": [
+          {
+            "_id": "60f6a630d5d0f30031bba318",
+            "name": "管理员",
+            "mobile": "18600000000"
+          }
+        ],
+        "space_users": [
+          {
+            "name": "人员1",
+            "mobile": "18600000000"
+          },
+          {
+            "name": "人员2",
+            "mobile": "18600000000"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+
+## 修改数据
+
+### 新增数据
+
+当调用 GraphQL API 新增数据时，系统会首先验证当前用户是否有对应的新增权限。
+
+新增数据使用 `mutation`  语法
+
+```javascript
+mutation {
+  tasks__insert(doc:{name:"Task One", assignees: []}) {
+    name
+    _id
+  }
+}
+```
+
+其中，`tasks`代表要插入记录的对象名称，`{name:"Task One", assignees: ["61e8c77201a2bd02d8dd46ee"]}`代表要插入的JSON数据
+
+关键字`__insert`表示通过 GraphQL API 在 Steedos 上插入一条记录。
+
+结果如下：
+
+```javascript
+{
+  "data": {
+    "tasks__insert": {
+      "name": "Task One",
+      "_id": "5cb98489d09a343e14daae95"
+    }
+  }
+}
+```
+
+
+### 修改数据
+
+当调用 GraphQL API 修改数据时，系统会首先验证当前用户是否有对应的修改权限。
+
+示例：
+
+```javascript
+mutation {
+  tasks__update(_id:"5cb98489d09a343e14daae95", doc:{name:"Task Important"}) {
+    name
+    _id
+  }
+}
+```
+
+
+其中，`tasks`代表要编辑记录的对象名称，`_id`的值`5cb98489d09a343e14daae95`代表要编辑的记录的`_id`，`{name:"Task Important"}`代表要更新的JSON数据。
+
+关键字`__update`表示通过 GraphQL API 在 Steedos 上编辑一条记录。
+
+结果如下：
+
+```javascript
+{
+  "data": {
+    "tasks__update": {
+      "name": "Task Important",
+      "_id": "5cb98489d09a343e14daae95"
+    }
+  }
+}
+```
+
+
+### 删除数据
+
+当调用 GraphQL API 删除数据时，系统会首先验证当前用户是否有对应的删除权限。
+
+示例：
+
+```javascript
+mutation {
+  tasks__delete(_id:"5cb98489d09a343e14daae95")
+}
+```
+
+ n 其中，`tasks`代表要删除记录的对象名，`_id`的值`5cb98489d09a343e14daae95`代表要删除的记录的`_id`
+
+关键字`__delete`表示通过 GraphQL API 在 Steedos 上删除一条记录。
+
+结果如下：
+
+```javascript
+{
+  "data": {
+    "tasks__delete": 1
+  }
+}
+```
+
+
+
+## 查询过滤条件详解
+
+华炎魔方使用数组格式定义过滤条件。
+
+### 基本运算符
+
+* "=": 等于
+* "!=": 不等于
+* ">": 大于
+* ">=": 大于等于
+* "<": 小于
+* "<=": 小于等于
+* "startswith": 以...开始
+* "contains": 包含...
+* "notcontains": 不包含...
+* "between": 范围
+
+
+### 数组类型字段
+
+
+运算符为"="时，条件自动按"or"裂变连接成多个筛选条件，类似实现了"in"操作功能，所以下两种写法结果相同：
+
+```javascript
+[["status", "in", ["closed","open"]]]
+
+[ [ "status", "=", "closed" ], "or", [ "status", "=", "open" ] ]
+```
+
+
+运算符为"!="时，条件自动按"and"裂变连接成多个筛选条件，所以下两种写法结果相同：
+
+```javascript
+[["status", "not in", ["closed","open"]]]
+
+[ [ "status", "!=", "closed" ], "and", [ "status", "!=", "open" ] ]
+```
+
+
+运算符为"between"时，条件自动转换成">="及"<="运算符对应的筛选条件，以下各组效果相同：
+
+```javascript
+[["age", "between", [20,30]]] 等效于 [ [ "age", ">=", 20 ], "and", [ "age", "<=", 30 ] ]
+
+[["age", "between", [null,30]]] 等效于 [ [ "age", "<=", 30 ] ]
+
+[["age", "between", [20,null]]] 等效于 [ [ "age", ">=", 20 ] ]
+```
+
+> between只支持数值及日期时间类型，且过滤值必须是两个元素的数组格式
+
+
+其他情况一律自动按"or"裂变连接成多个筛选条件
+
+```javascript
+[["tag", "contains", ["start","end"]]] 等效于 [ [ "tag", "contains", "start" ], "or", [ "tag", "contains", "end" ] ]
+```
+
+### “非”(not)操作
+
+可以在当前筛选条件的基础上取反，例如：
+
+```javascript
+["not", ["value", "=", 3]]
+```
+
+### “与(and)”、“或(or)”操作
+
+多个过滤器可以通过“与(and)”、“或(or)”操作进行组合，例如：
+
+```javascript
+[ [ "value", ">", 3 ], "and", [ "value", "<", 7 ] ]
+
+[ [ "value", ">", 7 ], "or", [ "value", "<", 3 ] ]
+```
+
+如果不指定“与(and)”、“或(or)”操作，系统默认按照“与(and)”操作执行过滤。所以下两种写法结果相同：
+
+```javascript
+[ [ "value", ">", 3 ], "and", [ "value", "<", 7 ] ]
+
+[ [ "value", ">", 3 ], [ "value", "<", 7 ] ]
+```
+
+### 示例
+
+查询分部名称包含 ‘华炎’ 的记录
+
+```javascript
+{
+  company(filters: ["name","contains","华炎"]){
+    _id,
+    name,
+  } 
+}
+```
+
+参考：[GraphQL](https://graphql.org/)

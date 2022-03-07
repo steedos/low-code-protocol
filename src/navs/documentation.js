@@ -11,14 +11,9 @@ export const documentationNav = {
     pages['package'],
     pages['metadata'],
     pages['formular'],
-    pages['automation'],
-    pages['trigger'],
-    pages['services'],
-    pages['event'],
-    pages['page'],
     pages['standard-objects'],
-    pages['driver'],
-    pages['sync'],
+    pages['automation'],
+    pages['devops'],
     pages['designer'],
   ],
   '元数据': [
@@ -30,10 +25,18 @@ export const documentationNav = {
     pages['metadata-bpm'],
     pages['metadata-report'],
   ],
-  '应用开发规范': [
+  '软件包开发': [
     pages['api-metadata'],
     pages['api-records'],
     pages['objectql'],
+    pages['trigger'],
+    pages['services'],
+    pages['event'],
+    pages['page'],
+  ],
+  'DevOps': [
+    pages['sync-cli'],
+    pages['sync-vscode'],
   ],
   '平台微服务': [
     pages['service-message'],
@@ -46,6 +49,7 @@ export const documentationNav = {
     pages['service-package'],
     pages['service-metadata'],
     pages['service-records'],
+    pages['driver'],
   ],
   '应用微服务': [
     pages['service-bpm'],
@@ -62,10 +66,6 @@ export const documentationNav = {
     pages['designer-report'],
     pages['designer-process'],
     pages['designer-flows'],
-  ],
-  '元数据同步工具': [
-    pages['sync-cli'],
-    pages['sync-vscode'],
   ],
   '用户界面': [
     pages['ui-login'],

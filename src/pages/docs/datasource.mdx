@@ -21,9 +21,17 @@ description: 低代码平台内核应与数据源无关，需要设计一套通�
 
 ## 数据源驱动
 
-针对每一种数据库，需编写相应的数据源驱动。数据源驱动负责与数据源交互，将 [ObjectQL](./objectql) 语法转换为数据源可识别的语法，并执行。
+针对每一种数据库，需编写相应的数据源驱动。
 
-```
+驱动负责将 [ObjectQL](./objectql) 语法转换为数据源可识别的语法，并与数据源交互。
+
+数据源驱动还需要考虑数据库事务的执行。
+
+### 驱动定义
+
+定义一个数据源，通常需要实现以下函数：
+
+```js
 export interface Driver {
 
     databaseVersion?: string;
@@ -54,3 +62,7 @@ export interface Driver {
     _makeNewID?(tableName?: string): any
 }
 ```
+
+### 驱动注册
+
+平台需提供数据源驱动注册入口，可通过编写插件的形式扩展数据源驱动。

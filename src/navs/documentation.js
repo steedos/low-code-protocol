@@ -24,6 +24,7 @@ export const documentationNav = {
     pages['formular'],
     pages['metadata-ui'],
     pages['metadata-permissions'],
+    pages['metadata-amis'],
     pages['metadata-automation'],
     pages['metadata-bpm'],
     pages['metadata-report'],

@@ -7,8 +7,8 @@ ports:
     visibility: public
 
 tasks:
-  - init: yarn install && yarn run build
-    command: yarn run start
+  - init: yarn install
+    command: yarn run dev
   - name: GitRebase
     init: git config --global pull.rebase false
 

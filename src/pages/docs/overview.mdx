@@ -5,13 +5,23 @@ description: 本协议以Salesforce Developer Experience (DX)为原型，设计�
 
 import SteedosPackages from './diagrams/Steedos Packages.drawio.svg'
 
-## 设计原则
+## 协议内容
 
 本协议研究和制定低代码平台的底层技术规范，包括并不限于元数据规范、API规范、公式引擎规范、触发器规范、微服务规范、微前端规范、测试规范、软件包规范、DevOps流程规范。
 
-本协议是低代码平台的底层协议，与平台无关，开发语言无关，无数据库无关。
+## 设计原则
 
-## 总体设计
+本协议是低代码平台的底层协议，需遵循以下原则。
+
+- 微内核设计，内核只包含三个核心微服务：
+  - [软件包服务](./service-package)
+  - [Metadata 服务](./service-metadata)
+  - [Records 服务](./service-records)
+- 与开发语言无关，可以使用任何语言实现以上三个微内核。
+- 设计一套 [数据源](./datasource) 模型，内核不依赖具体的数据库。
+- 通过插件形式扩展元数据的能力，例如接入多种报表引擎、流程引擎。
+
+## 源码驱动
 
 低代码DevOps平台由源码驱动，将低代码可视化工具融入到传统开发流程中，因而程序员可以在熟悉的环境中工作，并充分利用现有的DevOps平台和效率工具。
 

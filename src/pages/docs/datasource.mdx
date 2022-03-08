@@ -1,4 +1,56 @@
 ---
 title: 数据源
-description: 负责与数据库或第三方数据源交互，将ObjectQL语法转换为数据源可识别的语法，并提交给数据源执行。
+description: 低代码平台内核应与数据源无关，需要设计一套通用的数据接口标准，可以随时接入新的数据源。
 ---
+
+低代码平台的元数据驱动，使得跨数据库开发成为可能。基于低代码平台开发的软件包，理论上可以运行于不同的数据库架构上。
+
+## 常见的数据源
+
+通常需要支持以下类型的数据源：
+
+- SQL 数据库：MySQL, PostgreSQL, SQL Server, Oracle, ...
+- NoSQL 数据库： MongoDB, Elastic Search, ...
+- 大数据
+- OData API: 例如基于 OData 协议连接 Salesforce、SAP
+- 基于多租户需求，编写特定驱动。
+
+## 跨数据库查询语法
+
+为实现跨数据库架构，需要定义一套跨数据库的查询语法，详见 [ObjectQL](./objectql)。
+
+## 数据源驱动
+
+针对每一种数据库，需编写相应的数据源驱动。数据源驱动负责与数据源交互，将 [ObjectQL](./objectql) 语法转换为数据源可识别的语法，并执行。
+
+```
+export interface Driver {
+
+    databaseVersion?: string;
+    config?: SteedosDriverConfig;
+    connect();
+    close();
+    getSupportedColumnTypes(): SteedosFieldDBType[];
+    find(tableName: string, query: SteedosQueryOptions, userId?: SteedosIDType): any;
+    aggregate?(tableName: string, query: SteedosQueryOptions, externalPipeline: any, userId?: SteedosIDType): any;
+    findOne(tableName: string, id: SteedosIDType, query: SteedosQueryOptions, userId?: SteedosIDType): any;
+    insert(tableName: string, doc: Dictionary<any>, userId?: SteedosIDType): any;
+    update(tableName: string, id: SteedosIDType | SteedosQueryOptions, doc: Dictionary<any>, userId?: SteedosIDType): any;
+    updateOne(tableName: string, id: SteedosIDType | SteedosQueryOptions, doc: Dictionary<any>, userId?: SteedosIDType): any;
+    updateMany?(tableName: string, queryFilters: SteedosQueryFilters, doc: Dictionary<any>, userId?: SteedosIDType): any;
+    delete(tableName: string, id: SteedosIDType | SteedosQueryOptions, userId?: SteedosIDType): any;
+    directUpdate(tableName: string, id: SteedosIDType | SteedosQueryOptions, doc: Dictionary<any>, userId?: SteedosIDType): any;
+    directFind(tableName: string, query: SteedosQueryOptions, userId?: SteedosIDType): any;
+    directInsert(tableName: string, doc: Dictionary<any>, userId?: SteedosIDType): any;
+    directDelete(tableName: string, id: SteedosIDType | SteedosQueryOptions, userId?: SteedosIDType): any;
+    directAggregate?(tableName: string, query: SteedosQueryOptions, externalPipeline: any, userId?: SteedosIDType): any;
+    directAggregatePrefixalPipeline?(tableName: string, query: SteedosQueryOptions, prefixalPipeline: any, userId?: SteedosIDType): any;
+    count(tableName: string, query: SteedosQueryOptions, userId?: SteedosIDType): any;
+    dropEntities?(): any;
+    registerEntities?(objects: Dictionary<SteedosObjectType>): any;
+    dropTables?(): any;
+    createTables?(objects: Dictionary<SteedosObjectType>): any;
+    init(objects: Dictionary<SteedosObjectType>): any;
+    _makeNewID?(tableName?: string): any
+}
+```

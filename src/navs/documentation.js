@@ -54,23 +54,23 @@ export const documentationNav = {
     pages['sync-cli'],
     pages['sync-vscode'],
   ],
+  '核心微服务': [
+    pages['service-package'],
+    pages['service-metadata'],
+    pages['service-records'],
+  ],
+  '插件扩展微服务': [
+    pages['service-bpm'],
+    pages['service-amis'],
+    pages['service-report'],
+    pages['service-node-red'],
+  ],
   '平台微服务': [
     pages['service-message'],
     pages['service-logging'],
     pages['service-tracing'],
     pages['service-metrics'],
     pages['service-auditing'],
-  ],
-  '核心微服务': [
-    pages['service-package'],
-    pages['service-metadata'],
-    pages['service-records'],
-  ],
-  '应用微服务': [
-    pages['service-bpm'],
-    pages['service-amis'],
-    pages['service-report'],
-    pages['service-node-red'],
   ],
   '用户界面': [
     pages['ui-login'],

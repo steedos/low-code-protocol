@@ -11,6 +11,7 @@ export const documentationNav = {
     pages['datasource'],
     pages['metadata'],
     pages['designer'],
+    pages['permissions'],
     pages['automation'],
     pages['code'],
     pages['package'],

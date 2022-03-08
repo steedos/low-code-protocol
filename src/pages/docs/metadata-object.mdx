@@ -29,7 +29,60 @@ label: 合同
 version: 2
 ```
 
-更多属性请参考[对象属性](./metadata-object-properties)
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name	| string |	对象名称 |
+| internal	| boolean |	内置对象 |
+| table_name	| string |	数据库表名称 |
+| extend	| string |	要继承的对象标识 |
+| label	| string |	对象显示名称 |
+| icon	| string |	对象图标 |
+| enable_search	| boolean |	允许搜索 |
+| is_enable	| boolean |	是否启用，如果为false，则对象不可见 |
+| enable_files	| boolean |	允许上传附件 |
+| enable_tasks	| boolean |	允许创建任务 |
+| enable_notes	| boolean |	允许创建备忘 |
+| enable_events	| boolean |	允许创建事件 |
+| enable_api	| boolean |	TODO... |
+| enable_share	| boolean |	允许分享 |
+| enable_instances	| boolean |	允许查看申请单 |
+| enable_chatter	| boolean |	允许留言 |
+| enable_audit	| boolean |	允许记录字段历史 |
+| enable_trash	| boolean |	允许假删除 |
+| enable_space_global	| boolean |	允许数据夸工作区使用 |
+| enable_tree	| boolean |	启用树状结构显示记录 |
+| enable_enhanced_lookup	| boolean |	是否启用增强lookup模式 |
+| parent_field	| string |	树状结构父字段，默认为parent |
+| children_field	| string |	树状结构子节点字段，默认为children |
+| enable_approvals	| boolean |	历史步骤 |
+| enable_follow	| boolean |	允许关注 |
+| enable_workflow	| boolean |	允许对象流程同步 |
+| enable_web_forms	| boolean |	允许在线表单 |
+| enable_inline_edit	| boolean |	允许单个字段编辑 |
+| is_view	| boolean |	此对象是否对应数据库中的视图 |
+| hidden	| boolean |	是否隐藏对象 |
+| description	| string |	对象描述 |
+| sidebar	| object |	TODO |
+| custom	| boolean |	创建的实体表是否加默认的前缀，默认前缀为：c_${spaceId}_ |
+| owner	| string |	对象拥有者 |
+| methods	| object |	对象可执行的方法，用于odata接口 |
+| fields	| object |	对象字段 |
+| list_views	| object |	对象列表视图 |
+| paging	| object |	对象页面 |
+| actions	| object |	对象按钮 |
+| permission_set	| object |	对象权限 |
+| form	| object |	对象表单事件 |
+| relatedList	| array |	主表想在详细页显示的相关子表 |
+| version	| number |	对象版本, 默认1.0 |
+
+
+补充说明：
+
+| 属性名 | 属性含义 |
+|----|----|
+| icon | 对象图标对应 salesforce 中的 [Standard Icons](https://www.lightningdesignsystem.com/icons/#standard) |
+| enable_trash |	如果为true,则开启回收站功能，此对象数据删除后，会进入回收站。如果为false，则直接删除 |
+| enable_enhanced_lookup | 当开启增强lookup模式时，指向该对象的lookup字段会弹出窗口显示可选项！ |
 
 ## 字段 .field.yml
 
@@ -63,7 +116,79 @@ summary_object: finance_receive
 summary_type: sum
 ```
 
-更多属性请参考[字段属性](./metadata-object-field-properties)
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | 字段名称 |
+| label | string | 字段显示名称 |
+| is_name | boolean | 将当前字段叫标记为name字段，用于选择数据时的显示名称 |
+| column_name | string | 数据库字段名 |
+| object | string | 字段所属对象 |
+| type | string | 字段类型 |
+| sort_no | integer | 排序号, 默认值100 |
+| group | string | 分组名称 |
+| defaultValue | string, boolean, array, integer | 默认值 |
+| allowedValues | string, boolean, array | 允许的值 |
+| multiple | boolean | 支持多选 |
+| required | boolean | 是否必填 |
+| is_wide | boolean | 是否宽字段，如果为true，则在详细页面，一个字段占一行 |
+| readonly | boolean | 是否只读 |
+| hidden | boolean | 是否隐藏 |
+| omit | boolean | 忽略此字段 |
+| index | boolean | 创建索引 |
+| searchable | boolean | 允许搜索 |
+| sortable | boolean | 允许排序 |
+| precision | integer | 数值类型字段的最大长度，默认值18 |
+| scale | integer | 数值类型的小数位数，默认值2 |
+| reference_to | string, array | 引用的对象 |
+| reference_to_field | string | 引用的对象的字段，按照此字段去查找相关记录 |
+| modal_mode | string | lookup字段弹出框模式 ：'dialog' / 'drawer' |
+| show_as_qr | boolean | 显示为二维码 |
+| table_schema | string, object | lookup字段弹出框表格定义，可以定义为列表视图名称或列表属性 |
+| rows | integer | 多行文本默认行数 |
+| options | undefined | 字段选项 |
+| description | string | 字段描述 |
+| filterable | boolean | 过滤器默认字段 |
+| inlineHelpText | string | 提示文本 |
+| unique | boolean | 唯一 |
+| optionsFunction | string | 字段选项函数名称 |
+| min | integer, string | 最小长度。支持字符串，数字，金额，日期类型字段 |
+| max | integer, string | 最大长度。支持字符串，数字，金额，日期类型字段 |
+| blackbox | boolean | 不校验字段类型 |
+| disabled | boolean | 禁用 |
+| reference_sort | object | 排序方式 |
+| reference_limit | number | 一次最多显示数据 |
+| is_company_only | boolean | 本公司 |
+| is_company_limited | boolean, string | 本公司 |
+| depend_on | array | 依赖的字段 |
+| defaultIcon | string | 默认的图标 |
+| showIcon | boolean | 是否显示图标 |
+| primary | boolean | 主键 |
+| generated | boolean | 自增 |
+| fieldDBType | string | 字段数据库类型 |
+| collection | string | 对应对象名 |
+| language | string | 模板名 |
+| create | boolean | 关联时是否允许创建 |
+| regEx | object | 正则表达式 |
+| formula | string | 公式 |
+| data_type | string | 数据类型 |
+| summary_object | string | 要汇总的对象 |
+| summary_type | string | 汇总类型 |
+| summary_field | string | 要聚合的字段 |
+| summary_filters | array, string | 要汇总的子表记录的过滤条件 |
+| formula_blank_value | string | 空白字段处理 |
+| filters | array, string | 过滤条件 |
+| filtersFunction | string | 过滤条件函数名称 |
+| write_requires_master_read | boolean | 设置主记录上创建、编辑或删除子记录所需的最低访问级别。 |
+| relatedList | boolean | 用于表示是否在相关表的详细页面中作为子表显示 |
+| picklist | string | 指定字段的选项列表值集 |
+| visible_on | string | 函数表达式，控制是否显示此字段 |
+
+补充说明：
+
+| 属性名 | 属性含义 |
+|----|----|
+| formula_blank_value | zeroes表示将空白字段视为零，blanks表示将空白字段视为空白，默认为zeroes |
+| write_requires_master_read | 此字段仅适用于master_detail字段类型。true--允许具有'读取'访问权限的用户创建、编辑或删除子记录。false = 允许具有'读取/写入'访问权限的用户创建、编辑或删除子记录的权限。此设置比 true 更严格，并且是默认值。 |
 
 ## 列表视图 .listview.yml
 
@@ -115,4 +240,20 @@ sort:
     order: desc
 ```
 
-更多属性请参考[列表视图属性](./metadata-object-listview-properties)
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | API 名称 |
+| label | string | 视图显示名称 |
+| type | string | 列表显示类型，默认为grid |
+| filter_scope | string | 范围 |
+| columns | array | 列表显示的字段 |
+| mobile_columns | array | 手机模式下列表显示的字段 |
+| extra_columns | array | 额外在列表显示的字段 |
+| sort | array | 排序 |
+| filters | array, string | 过滤条件 |
+| filter_fields | array | 过滤的字段 |
+| sort_no | number | 显示顺序，从小到大 |
+| options | object | 额外选项 |
+| show_count | boolean | 显示条目数 |
+| shared | boolean | 是否共享 |
+| scrolling_mode | string | 滚动条样式 |

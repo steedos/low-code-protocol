@@ -4,11 +4,63 @@ description: 定义权限相关元数据
 ---
 
 
-## 概览
+## 简档 .profile.yml
 
-- 简档
-- 权限集
-- 对象权限
-- 字段权限
-- 限制规则
-- 共享规则
+简档只约定了一个名称，定义了简档之后，就可以在对象权限中定义此简档对具体对象的访问权限。
+
+一个用户只能属于一个简档。元数据中不能指定具体用户的具体简档。系统管理员可以在用户管理界面中设置用户的简档。
+
+系统有4个默认简档：
+
+* admin： 系统管理员，默认对所有对象有最高权限
+* user： 普通用户，通常对大部分对象拥有增删改权限
+* customer： 外部客户，默认无权限
+* supplier： 外部供应商，默认无权限
+
+```yaml
+name: user
+license: platform
+```
+
+## 权限集 .permissionset.yml
+
+权限集只约定了一个名称，定义了权限集之后，就可以在对象权限中定义此权限集对具体对象的访问权限。
+
+一个用户可以拥有多个权限集，最终权限为叠加之后的结果。
+
+元数据中未约定权限集并未绑定到具体用户，系统管理员可以在设置界面中配置适用此权限集的用户清单。
+
+```yaml
+name: contract_manager
+label: 合同管理员
+type: permission_set
+```
+
+## 对象权限 .permission.yml
+
+设定某一个简档（或权限集）对当前对象的访问权限。
+
+```yaml
+name: 合同.用户
+allowCreate: true
+allowDelete: true
+allowEdit: true
+allowRead: true
+modifyAllRecords: false
+modifyCompanyRecords: false
+permission_set_id: user
+viewAllRecords: false
+viewCompanyRecords: false
+```
+
+## 字段权限
+
+设定某一个简档（或权限集）对当前对象下的字段的访问权限。
+
+## 限制规则
+
+在对象上配置限制规则来收缩用户对业务对象记录级的查看权限，该规则并不是基于简档（或权限集）来配置，但是可以在指定条目条件中判断当前用户所属简档（或权限集）。
+
+## 共享规则
+
+在对象上配置共享规则来放大用户对业务对象记录级的查看权限，该规则并不是基于简档（或权限集）来配置，但是可以在指定条目条件中判断当前用户所属简档（或权限集）。

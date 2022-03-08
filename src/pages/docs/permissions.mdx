@@ -23,9 +23,13 @@ import SteedosPermissions from './diagrams/Steedos Permissions.drawio.svg'
 
 - admin 管理员
 - user 用户
-- organization_admin 分部管理员
 - customer 客户
 - supplier 供应商
+
+### 内置权限集
+
+- organization_admin 分部管理员
+- workflow_admin 流程管理员
 
 ### 自定义简档/权限集
 
@@ -40,7 +44,7 @@ import SteedosPermissions from './diagrams/Steedos Permissions.drawio.svg'
 
 ### 查看我的记录
 
-对象中的每一条记录都默认有一个 owner 字段，代表记录所有者。当用户拥有指定对象 `我的记录` 权限时，表示用户可以访问指定对象中，所有 `owner = ${currentUserId}` 的记录。
+对象中的每一条记录都默认有一个 owner 字段，代表记录所有者。当用户拥有指定对象 `允许查看` 权限时，表示用户可以访问指定对象中，所有 `owner = ${currentUserId}` 的记录。
 
 ### 查看分部记录
 

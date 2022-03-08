@@ -12,3 +12,207 @@ description: 定义界面相关元数据
 - 自定义按钮
 - 自定义记录详情页
 - 自定义微页面
+
+## 应用
+### 应用 .app.yml
+可以设置应用的名称、显示名称、应用图标，以及在应用中显示的对象、选项卡清单。
+```yaml
+name: 合同
+code: contracts
+description: 管理合同及收付款。
+icon_slds: contract_line_item
+mobile: true
+mobile_objects:
+    - contracts
+    - finance_invoice
+    - finance_receive
+    - finance_receipt
+    - finance_payment
+    - contract_types
+oauth2_enabled: false
+oauth2_logout_enabled: false
+objects:
+    - contracts
+    - finance_invoice
+    - finance_receive
+    - finance_receipt
+    - finance_payment
+    - contract_types
+saml_enabled: false
+saml_logout_enabled: false
+sort: 50
+tabs:
+    - contract_analysis
+visible: true
+```
+### 应用属性
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| _id | string | 应用的唯一标识。 |
+| url | string | 应用地址 |
+| name | string | 应用显示名称。 |
+| code | string | 应用的唯一标识。 |
+| description | string | 应用描述。 |
+| icon | string | 应用图标。 |
+| icon_slds | string | 应用图标。 |
+| sort | number | 排序 |
+| tabs | array | 用于指定此应用下的选项卡 |
+| objects | array | 用于指定此应用下有多少对象。 |
+| mobile_objects | array | 用于指定此应用在手机上显示的对象。 |
+| admin_menus | array | 管理员菜单 |
+| visible | boolean | 启用 |
+| is_new_window | boolean | 新窗口打开 |
+| mobile | boolean | 在手机端显示 |
+| oauth2_enabled | boolean | 启用OAuth2认证 |
+| oauth2_logout_enabled | boolean | 启用OAuth2单点注销 |
+| saml_enabled | boolean | 启用SAML |
+| saml_logout_enabled | boolean | 启用SAML单点注销 |
+| is_use_iframe | boolean | 使用iframe打开 |
+| is_use_ie | boolean | 使用IE打开(需使用Steedos桌面客户端) |
+
+
+## 选项卡
+### 选项卡.tab.yml
+选项卡可以绑定到一个对象，也可以绑定到一个网址或是自定义页面。
+```yaml
+name: contract_analysis
+desktop: true
+icon: dashboard
+label: 合同分析
+mobile: true
+page: contract_analysis
+type: page
+```
+### 选项卡属性
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| label | string | 显示名称 |
+| name | string | API 名称 |
+| icon | string | 图标 |
+| parent | string | 上级选项卡 |
+| type | string | 类型 |
+| mobile | boolean | 显示在手机菜单中 |
+| desktop | boolean | 显示在桌面菜单中 |
+| frame_height | number | 选项卡框架的高度 |
+| has_sidebar | boolean | 显示侧边栏面板 |
+| object | string | 对象 |
+| url | string | 外部链接 |
+| is_new_window | boolean | 在新窗口打开 |
+| page | string | 页面 |
+| action_overrides | string | 分配给选项卡的操作替代列表 |
+| description | string | 描述 |
+| is_system | boolean | 系统 |
+
+## 列表视图
+### 列表视图.listview.yml  
+定义对象的列表显示，包括：显示的列、过滤条件、排序规则、默认搜索字段。
+```yaml
+name: all
+label: 所有合同
+columns:
+  - field: 'no'
+    width: '150'
+    wrap: true
+  - field: name
+    width: '220'
+    wrap: true
+  - field: contract_type
+    width: '150'
+    wrap: true
+  - field: amount
+    width: '150'
+    wrap: true
+  - field: signed_date
+    width: '150'
+    wrap: false
+  - field: owner
+    width: '150'
+    wrap: false
+  - field: created
+    width: '150'
+    wrap: false
+filter_fields:
+  - contract_type
+  - signed_date
+  - othercompany
+  - instance_state
+  - owner
+filter_scope: space
+filters:
+  - is_default: true
+    field: instance_state
+    operation: <>
+    value:
+      - terminated
+    is_required: false
+shared: true
+show_count: false
+sort:
+  - field_name: 'no'
+    order: desc
+```
+### 列表视图属性
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | API 名称 |
+| label | string | 视图显示名称 |
+| type | string | 列表显示类型，默认为grid |
+| filter_scope | string | 范围 |
+| columns | array | 列表显示的字段 |
+| mobile_columns | array | 手机模式下列表显示的字段 |
+| extra_columns | array | 额外在列表显示的字段 |
+| sort | array | 排序 |
+| filters | array, string | 过滤条件 |
+| filter_fields | array | 过滤的字段 |
+| sort_no | number | 显示顺序，从小到大 |
+| options | object | 额外选项 |
+| show_count | boolean | 显示条目数 |
+| shared | boolean | 是否共享 |
+| scrolling_mode | string | 滚动条样式 |
+
+## 页面布局
+### 对象名.页面布局.layout.yml
+定义对象的记录显示，包括：所属简档、操作按钮、显示的字段、相关子表。
+```
+name: customer
+buttons:
+  - button_name: standard_new
+  - button_name: standard_edit
+  - button_name: standard_delete
+fields:
+  - field_name: name
+    is_required: true
+  - field_name: start
+  - field_name: end
+label: 客户
+object_name: events
+profiles:
+  - customer
+related_lists:
+  - related_field_fullname: tasks.related_to
+    field_names:
+      - name
+      - due_date
+      - state
+      - priority
+      - assignees
+      - related_to
+    sort_order: asc
+    page_size: 5
+type: record
+```
+### 页面布局属性
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | API 名称 |
+| label | string | 页面布局名 |
+| object_name | string | 对象 |
+| profiles | array | 简档 |
+| buttons | grid | 操作按钮 |
+| fields | grid | 字段 |
+| related_lists | grid | 相关子表 |
+
+## 自定义按钮
+
+## 自定义记录详情页
+## 自定义微页面

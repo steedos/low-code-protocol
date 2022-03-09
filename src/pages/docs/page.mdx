@@ -11,9 +11,48 @@ description: 支持使用代码形式编写自定义控件，并进一步开发�
 - 提供可视化工具
 - 需要支持自定义控件
 
+## 微页面元数据
+
+```yml
+name: contract-list
+object_api_name: contracts
+type: page/record-detail
+profile: user
+render: amis
+data: amisJson
+```
+
 ## 微页面引擎
 
 - [Baidu Amis](https://github.com/baidu/amis)，使用 json 开发自定义页面，并提供可视化设计工具。
+
+## 注册微页面引擎
+
+```
+Builder.registerPageRender('amis', AmisRenderComponent)
+```
+
+## 注册自定义组件
+
+```
+Builder.registerComponent('map', MapComponent)
+```
+
+## 渲染页面
+
+### 渲染记录详情页
+
+首先根据用户的简档，自动找到对应的page。通过接口返回前端。
+
+```
+GET /api/page/recordPage?object_api_name=?&record_id=?
+```
+
+如果未获取到自定义页面，则使用默认的渲染引擎。
+
+```
+Builder.renderPage('amis', amisJson, {objectApiName: 'xxx', recordId: 'yyy'});
+```
 
 ## 参考
 

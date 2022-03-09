@@ -7,17 +7,22 @@ import React, { useState, useEffect } from 'react';
 // Register amis render 
 const Amis = props => {
   const {schema, data} = props;
-
+  
   return (
     <>
+      <Head>  
+        <title>Amis</title>
+        <link rel="stylesheet" href="https://unpkg.com/amis@1.8.0-beta.2/sdk/sdk.css" />
+      </Head>
       <div id="amis-root"></div>
       <Script 
         src="https://unpkg.com/amis@1.8.0-beta.2/sdk/sdk.js" 
         onLoad={() => {
-          let amis = amisRequire('amis/embed');
-          amis.embed('#amis-root', schema, data);
+          setTimeout(() => {
+            let amis = amisRequire('amis/embed');
+            amis.embed('#amis-root', schema, data);
+          }, 1000);
         }}/>
-      <link rel="stylesheet" href="https://unpkg.com/amis@1.8.0-beta.2/sdk/sdk.css" />
     </>
   )
 }

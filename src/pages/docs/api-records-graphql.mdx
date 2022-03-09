@@ -323,7 +323,9 @@ _related_${object_api_name}_${field_api_name}
 
 当调用 GraphQL API 新增数据时，系统会首先验证当前用户是否有对应的新增权限。
 
-新增数据使用 `mutation`  语法
+#### 新增单条数据
+
+使用 `mutation.{object_api_name}__insert` 语法，传入 `doc` 参数值。
 
 ```javascript
 mutation {
@@ -334,9 +336,9 @@ mutation {
 }
 ```
 
-其中，`tasks`代表要插入记录的对象名称，`{name:"Task One", assignees: []}`代表要插入的JSON数据
+其中，`tasks` 代表要插入记录的对象名称，`{name:"Task One", assignees: []}` 代表要插入的JSON数据。
 
-关键字`__insert`表示通过 GraphQL API 在系统中插入一条记录。
+关键字 `__insert` 表示通过 GraphQL API 在系统中插入一条记录。
 
 结果如下：
 
@@ -351,12 +353,43 @@ mutation {
 }
 ```
 
+#### 新增多条数据
+
+使用 `mutation.{object_api_name}__insert_many` 语法，传入 `docs` 参数值。
+
+```javascript
+mutation {
+  tasks__insert_many(docs:[{name:"Task One", assignees: []}]) {
+    name
+    _id
+  }
+}
+```
+
+其中， `tasks` 代表要插入记录的对象名称，`[{name:"Task One", assignees: []}]` 代表要插入的JSON数据。
+
+关键字 `__insert_many` 表示通过 GraphQL API 在系统中插入多条记录。
+
+结果如下：
+
+```javascript
+{
+  "data": {
+    "tasks__insert_many": [{
+      "name": "Task One",
+      "_id": "5cb98489d09a343e14daae95"
+    }]
+  }
+}
+```
 
 ### 修改数据
 
 当调用 GraphQL API 修改数据时，系统会首先验证当前用户是否有对应的修改权限。
 
-示例：
+#### 修改单条数据
+
+使用 `mutation.{object_api_name}__update` 语法，传入 `_id` 和 `doc` 参数值。
 
 ```javascript
 mutation {
@@ -367,10 +400,9 @@ mutation {
 }
 ```
 
+其中，`tasks`代表要修改记录的对象名称，`_id` 的值 `5cb98489d09a343e14daae95` 代表要修改的记录的 `_id`，`{name:"Task Important"}` 代表要更新的JSON数据。
 
-其中，`tasks`代表要编辑记录的对象名称，`_id`的值`5cb98489d09a343e14daae95`代表要编辑的记录的`_id`，`{name:"Task Important"}`代表要更新的JSON数据。
-
-关键字`__update`表示通过 GraphQL API 在系统中更新一条记录。
+关键字`__update`表示通过 GraphQL API 在系统中修改一条记录。
 
 结果如下：
 
@@ -385,12 +417,45 @@ mutation {
 }
 ```
 
+#### 修改多条数据
+
+使用 `mutation.{object_api_name}__update_many` 语法，传入 `filters` 和 `doc` 参数值。
+
+```javascript
+mutation {
+  tasks__update_many(filters: ["name","contains","Important"], doc:{important: true}) {
+    name
+    _id
+    important
+  }
+}
+```
+
+其中，`tasks` 代表要修改记录的对象名称，`filters` 的值代表要修改的数据范围的过滤条件，`{important: true}` 代表要更新的JSON数据。
+
+关键字 `__update_many` 表示通过 GraphQL API 在系统中修改多条记录。
+
+结果如下：
+
+```javascript
+{
+  "data": {
+    "tasks__update_many": [{
+      "name": "Task Important",
+      "_id": "5cb98489d09a343e14daae95",
+      "important": true
+    }]
+  }
+}
+```
 
 ### 删除数据
 
 当调用 GraphQL API 删除数据时，系统会首先验证当前用户是否有对应的删除权限。
 
-示例：
+#### 删除单条数据
+
+使用 `mutation.{object_api_name}__delete` 语法，传入 `_id` 参数值。
 
 ```javascript
 mutation {
@@ -398,7 +463,7 @@ mutation {
 }
 ```
 
- n 其中，`tasks`代表要删除记录的对象名，`_id`的值`5cb98489d09a343e14daae95`代表要删除的记录的`_id`
+其中，`tasks` 代表要删除记录的对象名，`_id` 的值 `5cb98489d09a343e14daae95` 代表要删除的记录的`_id`
 
 关键字`__delete`表示通过 GraphQL API 在系统中删除一条记录。
 
@@ -411,5 +476,31 @@ mutation {
   }
 }
 ```
+
+#### 删除多条数据
+
+使用 `mutation.{object_api_name}__delete_many` 语法，传入 `filters` 参数值。
+
+```javascript
+mutation {
+  tasks__delete_many(filters: ["name","contains","Important"]) 
+}
+```
+
+其中，`tasks`代表要删除记录的对象名称，`filters` 的值代表要删除的数据范围的过滤条件。
+
+关键字 `__delete_many` 表示通过 GraphQL API 在系统中删除多条记录。
+
+结果如下：
+
+```javascript
+{
+  "data": {
+    "tasks__delete_many": 1
+  }
+}
+```
+
+> 返回值 `1` 表示成功删除的数据条数。
 
 参考：[GraphQL](https://graphql.org/)

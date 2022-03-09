@@ -98,16 +98,54 @@ mobile: contract-list
 - [AppSmith](https://github.com/appsmithorg/appsmith)
 - [ToolJet](https://github.com/ToolJet/ToolJet)
 
+
+### 注册自定义组件
+
+```js
+import { Builder } from '@builder.io/react'
+ 
+// Register our heading component for use in
+// the visual editor
+const Heading = props => (
+  <h1 className="my-heading">{props.title}</h1>
+)
+ 
+Builder.registerComponent(Heading, {
+  name: 'Heading',
+  inputs: [{ name: 'title', type: 'text' }]
+})
+```
+
 ### 注册微页面引擎
 
 ```js
-Builder.registerRenderEngine('amis', AmisRenderComponent)
-```
+import { Builder } from '@builder.io/react'
 
-### 微页面引擎注册自定义组件
+// Register amis render 
+const Amis = props => {
+  const {schema, data} = props;
 
-```js
-Builder.registerComponent('amis', 'map', MapComponent)
+  return (
+    <>
+      <div id="amis-root"></div>
+      <Script 
+        src="https://unpkg.com/amis@1.8.0-beta.2/sdk/sdk.js" 
+        onLoad={() => {
+          let amis = amisRequire('amis/embed');
+          amis.embed('#amis-root', schema, data);
+        }}/>
+      <link rel="stylesheet" href="https://unpkg.com/amis@1.8.0-beta.2/sdk/sdk.css" />
+    </>
+  )
+}
+ 
+Builder.registerComponent(Amis, {
+  name: 'Amis',
+  inputs: [
+    { name: 'schema', type: 'object' },
+    { name: 'data', type: 'object' },
+  ]
+})
 ```
 
 ## 渲染页面

@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "@badrap/bar-of-progress": "^0.1.1",
+    "@builder.io/react": "^1.1.50",
     "@docsearch/react": "1.0.0-alpha.27",
     "@headlessui/react": "^0.0.0-insiders.336faab",
     "@juggle/resize-observer": "^3.2.0",
@@ -26,6 +27,7 @@
     "@svgr/webpack": "^5.5.0",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/typography": "^0.5.0",
+    "amis": "^1.8.0-beta.2",
     "autoprefixer": "^10.4.0",
     "brotli-size": "^4.0.0",
     "clean-css": "^4.2.3",

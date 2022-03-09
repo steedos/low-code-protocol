@@ -89,6 +89,8 @@ mobile: contract-list
 
 ## 微页面引擎
 
+系统提供标准的页面接口，可通过插件扩展的方式支持不同的微页面引擎。
+
 - [Baidu Amis](https://github.com/baidu/amis)
 - [Alibaba Formliy](https://github.com/alibaba/formily)
 - [Redash](https://github.com/getredash/redash)
@@ -131,7 +133,7 @@ if (renderEngine == 'amis') {
 ## API
 
 ```
-GET /api/page/:type?app=xxx&objectApiName=yyy&recordId=zzz
+GET /api/page/:renderEngine/:type?app=xxx&objectApiName=yyy&recordId=zzz
 ```
 
 ## 参考

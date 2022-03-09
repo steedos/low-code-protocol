@@ -66,14 +66,10 @@ version: 2
 | custom	| boolean |	创建的实体表是否加默认的前缀，默认前缀为：c_${spaceId}_ |
 | owner	| string |	对象拥有者 |
 | methods	| object |	对象可执行的方法，用于odata接口 |
-| fields	| object |	对象字段 |
-| list_views	| object |	对象列表视图 |
 | paging	| object |	对象页面 |
-| actions	| object |	对象按钮 |
-| permission_set	| object |	对象权限 |
 | form	| object |	对象表单事件 |
 | relatedList	| array |	主表想在详细页显示的相关子表 |
-| version	| number |	对象版本, 默认1.0 |
+| version	| number |	对象版本, 默认2.0 |
 
 
 补充说明：
@@ -154,7 +150,7 @@ summary_type: sum
 | blackbox | boolean | 不校验字段类型 |
 | disabled | boolean | 禁用 |
 | reference_sort | object | 排序方式 |
-| reference_limit | number | 一次最多显示数据 |
+| reference_limit | number | 数据最多显示数量 |
 | is_company_only | boolean | 本公司 |
 | is_company_limited | boolean, string | 本公司 |
 | depend_on | array | 依赖的字段 |

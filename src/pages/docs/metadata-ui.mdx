@@ -12,7 +12,7 @@ description: 定义界面相关元数据
 - 自定义按钮
 
 ## 应用
-### 应用 .app.yml
+应用.app.yml  
 可以设置应用的名称、显示名称、应用图标，以及在应用中显示的对象、选项卡清单。
 ```yaml
 name: 合同
@@ -43,7 +43,7 @@ tabs:
     - contract_analysis
 visible: true
 ```
-### 应用属性
+
 | 属性名 | 属性值类型 | 属性含义 |
 |----|----|----|
 | _id | string | 应用的唯一标识。 |
@@ -70,7 +70,7 @@ visible: true
 
 
 ## 选项卡
-### 选项卡.tab.yml
+选项卡.tab.yml  
 选项卡可以绑定到一个对象，也可以绑定到一个网址或是自定义页面。
 ```yaml
 name: contract_analysis
@@ -81,7 +81,7 @@ mobile: true
 page: contract_analysis
 type: page
 ```
-### 选项卡属性
+
 | 属性名 | 属性值类型 | 属性含义 |
 |----|----|----|
 | label | string | 显示名称 |
@@ -102,7 +102,7 @@ type: page
 | is_system | boolean | 系统 |
 
 ## 列表视图
-### 列表视图.listview.yml  
+列表视图.listview.yml    
 定义对象的列表显示，包括：显示的列、过滤条件、排序规则、默认搜索字段。
 ```yaml
 name: all
@@ -149,7 +149,7 @@ sort:
   - field_name: 'no'
     order: desc
 ```
-### 列表视图属性
+
 | 属性名 | 属性值类型 | 属性含义 |
 |----|----|----|
 | name | string | API 名称 |
@@ -169,7 +169,7 @@ sort:
 | scrolling_mode | string | 滚动条样式 |
 
 ## 页面布局
-### 对象名.页面布局.layout.yml
+对象名.页面布局.layout.yml  
 定义对象的记录显示，包括：所属简档、操作按钮、显示的字段、相关子表。
 ```
 name: customer
@@ -199,7 +199,7 @@ related_lists:
     page_size: 5
 type: record
 ```
-### 页面布局属性
+
 | 属性名 | 属性值类型 | 属性含义 |
 |----|----|----|
 | name | string | API 名称 |
@@ -211,3 +211,57 @@ type: record
 | related_lists | grid | 相关子表 |
 
 ## 自定义按钮
+自定义按钮分为 按钮.button.js 和 按钮.button.yml 两个文件。
+```
+buttons
+├── 按钮.button.js
+└── 按钮.button.yml
+```
+示例：详细记录页”确认“按钮，在指定条件下显示此按钮，点击此按钮新建指定对象的一条记录。  
+sure.button.js 文件  
+```
+module.exports = {
+    sure: function(object_name, record_id) {
+        var record = this.record;
+        var initialValues = {
+            name: record.name,
+            state: '试用'
+        }
+        SteedosUI.showModal(stores.ComponentRegistry.components.ObjectForm, {
+            name: `standard_new_form`,
+            objectApiName: 'hmc__c',
+            title: '确认',
+            initialValues
+        }, null, {
+            iconPath: '/assets/icons'
+        });
+    },
+    sureVisible: function(object_name, record_id, permissions, record) {
+        if (record.rz_state === "待入职" && record.instance_state === 'approved') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+```
+sure.button.yml 文件  
+```
+name: sure
+is_enable: true
+label: 确认
+'on': record_only
+type: script
+visible: true
+```
+
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | API 名称 |
+| label | string | 显示名称 |
+| object | string | 所属对象 |
+| is_enable | boolean | 启用 |
+| visible | boolean | 可见 |
+| 'on' | string | 显示位置 |
+| type | string | 类型 |
+| todo | code | 执行的脚本 |

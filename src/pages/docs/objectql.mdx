@@ -4,7 +4,7 @@ description: ObjectQL 是面向对象的跨数据库查询语法。基于ObjectQ
 ---
 
 ## 添加数据
-
+提供了一种添加数据的方法
 ### insert
 添加单条记录。该函数会触发配置的触发器函数： beforeInsert 、afterInsert 。添加 “任务” 等特殊记录后会发送通知给指定人员。
 - **使用**： insert(doc, userSession?)
@@ -63,6 +63,7 @@ result==> {
 | modified	| 修改时间	| no (系统会自动维护） |
 
 ## 修改数据
+提供了两种修改数据的方法
 ### update
 更新单条记录。该函数会触发配置的触发器函数： beforeUpdate 、afterUpdate 。更新 “任务” 等特殊记录后会发送通知给指定人员。
 - **使用**： update(id, doc, userSession?)
@@ -128,6 +129,7 @@ result==> {
 ```
 
 ## 删除数据
+提供了两种删除数据的方法
 ### delete
 删除单条记录。该函数会触发配置的触发器函数： beforeDelete、afterDelete 。
 - **使用**： delete(id, userSession?)
@@ -163,6 +165,7 @@ console.log('result==>',result)
 ```
 
 ## 查找数据
+提供了六种查找数据的方法
 ### find
 查找多条记录。该函数会触发配置的触发器函数： beforeFind、afterFind 。
 - **使用**： find(query, userSession?)

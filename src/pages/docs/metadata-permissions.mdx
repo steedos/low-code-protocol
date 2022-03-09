@@ -58,14 +58,78 @@ viewAllRecords: false
 viewCompanyRecords: false
 ```
 
-## 字段权限
+## 字段权限 .permission.yml
 
-设定某一个简档（或权限集）对当前对象下的字段的访问权限。
+设定某一个简档（或权限集）对当前对象下的字段的访问权限，与对象权限共用配置文件，相关配置保存在`field_permissions`属性中。
 
-## 限制规则
+```yaml
+name: 合同.用户
+allowCreate: true
+allowDelete: true
+allowEdit: true
+allowRead: true
+modifyAllRecords: false
+modifyCompanyRecords: false
+permission_set_id: user
+viewAllRecords: false
+viewCompanyRecords: false
+field_permissions:
+  - field: name
+    readable: true
+    editable: true
+  - field: owner
+    readable: false
+    editable: true
+  - field: created
+    readable: true
+    editable: false
+  - field: created_by
+    readable: true
+    editable: false
+  - field: modified
+    readable: true
+    editable: false
+  - field: modified_by
+    readable: true
+    editable: false
+  - field: locked
+    readable: false
+    editable: false
+  - field: company_id
+    readable: false
+    editable: false
+  - field: company_ids
+    readable: false
+    editable: false
+  - field: instance_state
+    readable: false
+    editable: false
+  - field: amount__c
+    readable: true
+    editable: true
+```
 
-在对象上配置限制规则来收缩用户对业务对象记录级的查看权限，该规则并不是基于简档（或权限集）来配置，但是可以在指定条目条件中判断当前用户所属简档（或权限集）。
+## 限制规则 .restrictionRule.yml
 
-## 共享规则
+在对象上配置限制规则来收缩用户对业务对象记录级的查看权限，满足此过滤条件的记录，用户始终禁止查看。
+该规则并不是基于简档（或权限集）来配置，但是可以在指定条目条件中判断当前用户所属简档（或权限集）。
 
-在对象上配置共享规则来放大用户对业务对象记录级的查看权限，该规则并不是基于简档（或权限集）来配置，但是可以在指定条目条件中判断当前用户所属简档（或权限集）。
+```yaml
+name: test
+entry_criteria: '{{$user.roles.indexOf(‘salesman‘) > -1}}'
+object_name: contracts__c
+record_filter: '{{[[“profile__c“, “=“, “customer“], “or“, [“owner“, “=“, $user.userId]]}}'
+```
+
+## 共享规则 .shareRule.yml
+
+在对象上配置共享规则来放大用户对业务对象记录级的查看权限，满足此规则的记录，用户始终可以查看。
+该规则并不是基于简档（或权限集）来配置，但是可以在指定条目条件中判断当前用户所属简档（或权限集）。
+
+```yaml
+name: test
+active: true
+entry_criteria: '{{$user.roles.indexOf(‘salesman‘) > -1}}'
+object_name: contracts__c
+record_filter: '{{[[“company_id“, “=“, $user.company_id],[“profile__c“, “=“, “customer“]]}}'
+```

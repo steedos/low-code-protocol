@@ -24,7 +24,8 @@ data: amisJson
 
 ## 微页面引擎
 
-- [Baidu Amis](https://github.com/baidu/amis)，使用 json 开发自定义页面，并提供可视化设计工具。
+- [Baidu Amis](https://github.com/baidu/amis)
+- [Alibaba Formliy](https://github.com/alibaba/formily)
 
 ## 注册微页面引擎
 
@@ -48,11 +49,15 @@ Builder.registerComponent('map', MapComponent)
 GET /api/page/recordPage?objectApiName=?&recordId=?
 ```
 
-如果未获取到自定义页面，则使用默认的渲染引擎。
+如果未获取到自定义页面，则使用默认的页面。
 
 ```
-Builder.renderPage('amis', amisJson, {objectApiName: 'xxx', recordId: 'yyy'});
+Builder.renderPage(pageId, {objectApiName: 'xxx', recordId: 'yyy'});
 ```
+
+此函数会根据页面对应的渲染引擎，进一步调用 renderComponent 渲染页面。
+
+
 
 ## 参考
 

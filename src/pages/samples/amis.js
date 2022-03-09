@@ -93,9 +93,9 @@ function AmisPage() {
         }
     }
     if (process.browser) 
-      return <BuilderComponent model="page" content={pageJson} />
+      return <BuilderComponent model="page" content={pageJson} data={{}}/>
     else 
-      return (<div>Server</div>)
+      return null
 }
   
 export default AmisPage

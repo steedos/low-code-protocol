@@ -4,9 +4,13 @@ description: ObjectQL 是面向对象的跨数据库查询语法。基于ObjectQ
 ---
 
 ## 添加数据
+
 提供了一种添加数据的方法
+
 ### insert
+
 添加单条记录。该函数会触发配置的触发器函数： beforeInsert 、afterInsert 。添加 “任务” 等特殊记录后会发送通知给指定人员。
+
 - **使用**： insert(doc, userSession?)
 - **参数**：
    - doc: `Dictionary<any>` 您希望插入的数据。
@@ -63,9 +67,13 @@ result==> {
 | modified	| 修改时间	| no (系统会自动维护） |
 
 ## 修改数据
-提供了两种修改数据的方法
+
+支持两种修改数据的方法，以direct前缀表示直接执行修改操作不触发触发器。
+
 ### update
+
 更新单条记录。该函数会触发配置的触发器函数： beforeUpdate 、afterUpdate 。更新 “任务” 等特殊记录后会发送通知给指定人员。
+
 - **使用**： update(id, doc, userSession?)
 - **参数**：
    - id: number | string 您希望变更数据的id。
@@ -97,7 +105,9 @@ result==> {
 ```
 
 ### directUpdate
+
 更新单条记录。不会触发执行相关触发器函数。
+
 - **使用**： directUpdate(id, doc, userSession?)
 - **参数**：
     - id: number | string 您希望变更数据的id。
@@ -129,7 +139,9 @@ result==> {
 ```
 
 ## 删除数据
-提供了两种删除数据的方法
+
+支持两种删除数据的方法，以direct前缀表示直接执行删除操作不触发触发器。
+
 ### delete
 删除单条记录。该函数会触发配置的触发器函数： beforeDelete、afterDelete 。
 - **使用**： delete(id, userSession?)
@@ -148,7 +160,9 @@ console.log('result==>',result)
 ```
 
 ### directDelete
+
 删除单条记录。不会触发执行相关触发器函数。
+
 - **使用**： directDelete(id, userSession?)
 - **参数**：
     - id: number | string 您希望删除数据的id。
@@ -165,7 +179,9 @@ console.log('result==>',result)
 ```
 
 ## 查找数据
+
 提供了六种查找数据的方法
+
 ### find
 查找多条记录。该函数会触发配置的触发器函数： beforeFind、afterFind 。
 - **使用**： find(query, userSession?)
@@ -208,7 +224,9 @@ result==> [
 ```
 
 ### findOne
+
 查找单条记录。该函数会触发配置的触发器函数： afterFindOne、beforeFind 。
+
 - **使用**： findOne(id, query, userSession?)
 - **参数**：
     - id: number | string 您希望查询单条记录的id。
@@ -237,7 +255,9 @@ result==> {
 ```
 
 ### directFind
+
 查找多条记录。不会触发执行相关触发器函数。
+
 - **使用**： directFind(query, userSession?)
 - **参数**：
     - query: SteedosQueryOptions 查询数据相关参数[json]。
@@ -273,6 +293,7 @@ result==> [
 ```
 
 ### aggregate
+
 查找聚合记录。该函数会触发配置的触发器函数： beforeAggregate、afterAggregate 。  
 聚合：聚合操作处理数据记录并返回计算结果。聚合操作将来自多个文档的值组合在一起，并且可以对分组的数据执行各种操作以返回单个结果。
 - **使用**： aggregate(query, externalPipeline ,userSession?)
@@ -306,6 +327,7 @@ console.log('result==>',result)
 ```
 
 ### directAggregate
+
 查找聚合记录。不会触发执行相关触发器函数。  
 聚合：聚合操作处理数据记录并返回计算结果。聚合操作将来自多个文档的值组合在一起，并且可以对分组的数据执行各种操作以返回单个结果。
 - **使用**： directAggregate(query, externalPipeline ,userSession?)
@@ -317,6 +339,7 @@ console.log('result==>',result)
 - **返回值**：聚合记录数组。
 
 ```
+
 // 示例1：
 const objectql = require('@steedos/objectql');
 // contacts: 联系人对象
@@ -344,8 +367,10 @@ console.log('result==>',result)
 ```
 
 ### toConfig
+
 - 使用： toConfig()
 - 返回值：对象配置详情。
+
 ```
 const objectql = require('@steedos/objectql');
 const objectApiName = "contracts";
@@ -378,80 +403,29 @@ const result = await objectql.getObject(objectApiName).toConfig();
 */
 ```
 
-## 查询过滤条件详解
-使用数组格式定义过滤条件。
-### 基本运算符
-- "=": 等于
-- "!=": 不等于
-- ">": 大于
-- ">=": 大于等于
-- "<": 小于
-- "<=": 小于等于
-- "startswith": 以...开始
-- "contains": 包含...
-- "notcontains": 不包含...
-- "between": 范围
+## 查询过滤条件
 
-### 数组类型字段
-运算符为"="时，条件自动按"or"裂变连接成多个筛选条件，类似实现了"in"操作功能，所以下两种写法结果相同：
-```
-[["status", "in", ["closed","open"]]]
-[ [ "status", "=", "closed" ], "or", [ "status", "=", "open" ] ]
-```
+请参考 [过滤条件规范](/docs/api-records-filters)。
 
-运算符为"!="时，条件自动按"and"裂变连接成多个筛选条件，所以下两种写法结果相同：
-```
-[["status", "not in", ["closed","open"]]]
-[ [ "status", "!=", "closed" ], "and", [ "status", "!=", "open" ] ]
-```
+## 关于参数userSession
 
-运算符为"between"时，条件自动转换成">="及"<="运算符对应的筛选条件，以下各组效果相同：
-```
-[["age", "between", [20,30]]] 等效于 [ [ "age", ">=", 20 ], "and", [ "age", "<=", 30 ] ]
-[["age", "between", [null,30]]] 等效于 [ [ "age", "<=", 30 ] ]
-[["age", "between", [20,null]]] 等效于 [ [ "age", ">=", 20 ] ]
-```
-> between只支持数值及日期时间类型，且过滤值必须是两个元素的数组格式
-
-其他情况一律自动按"or"裂变连接成多个筛选条件
-```
-[["tag", "contains", ["start","end"]]] 
-等效于 
-[ [ "tag", "contains", "start" ], "or", [ "tag", "contains", "end" ] ]
-```
-
-### “非”(not)操作
-可以在当前筛选条件的基础上取反，例如：
-```
-["not", ["value", "=", 3]]
-```
-
-### “与(and)”、“或(or)”操作
-多个过滤器可以通过“与(and)”、“或(or)”操作进行组合，例如：
-```
-[ [ "value", ">", 3 ], "and", [ "value", "<", 7 ] ]
-[ [ "value", ">", 7 ], "or", [ "value", "<", 3 ] ]
-```
-
-如果不指定“与(and)”、“或(or)”操作，系统默认按照“与(and)”操作执行过滤。所以下两种写法结果相同：
-```
-[ [ "value", ">", 3 ], "and", [ "value", "<", 7 ] ]
-[ [ "value", ">", 3 ], [ "value", "<", 7 ] ]
-```
-
-### 关于参数userSession
 以上函数都可以传入可选参数userSession，该参数表示当前登录用户信息，如果传入了该参数，相关操作函数只会执行当前登录用户有权限执行的数据操作。  
 比如 **insert(doc, userSession?)**函数，如果未传入userSession，则不进行权限校验，直接执行数据插入操作；反之会根据传入的userSession做相关权限校验，只有当前用户对当前对象有新建权限时才会执行数据插入操作。  
 **update(id, doc, userSession?)**函数也类似，如果未传入userSession，则不进行权限校验，直接执行数据更新操作，反之会根据传入的userSession做相关权限校验，只有当前用户对当前对象及要编辑的记录有编辑权限时才会更新数据。  
 再比如 **find(query, userSession?)**函数，如果未传入userSession，则不进行权限校验，直接返回所有满足过滤条件的数据；反之会根据传入的userSession做相关权限校验，只会返回当前登录用户有权限查看的数据。
 
-### 关于direct前缀函数
+## 关于direct前缀函数
+
 以上函数可以分为两种：一种以direct前缀命名，一种不以direct前缀。  
 以direct前缀命名：执行direct函数意味着直接操作数据库记录，并不会触发执行相关触发器函数，也不会触发执行任何工作流规则、公式字段或累计汇总字段重新计算等。  
 不以direct前缀命名：相关操作**insert/update/find**等执行完成后，会进一步触发执行该对象上配置的相关触发器函数，比如beforeUpdate,afterUpdate等触发器函数；然后会进一步触发执行满足条件的工作流规则；接着还会进一步触发关联的公式字段及累计汇总字段重新计算。  
 
 ## 示例
+
+下面例举了一些实际编程场景下调用ObjectQL相关函数的用法。
+
 ### 触发器中使用ObjectQL示例
+
 ```
 const auth = require("@steedos/auth");
 const generatHtml = (doc)=>{
@@ -480,7 +454,9 @@ module.exports = {
     }
 }
 ```
+
 ### Router中使用ObjectQL示例
+
 ```
 const express = require("express");
 const router = express.Router();

@@ -157,15 +157,7 @@ Builder.registerComponent(Amis, {
 如果未获取到自定义页面，则使用默认的页面。
 
 ```js
-Builder.renderPage(renderEngine, schema, {objectApiName: 'xxx', recordId: 'yyy'});
-```
-
-此函数应根据页面对应的渲染引擎，进一步调用 renderComponent 渲染页面。例如：
-
-```js
-if (renderEngine == 'amis') {
-    AmisRenderComponent(schema, {objectApiName: 'xxx', recordId: 'yyy'})
-}
+<BuilderComponent model="page" content={pageSchema} data={initialData}/>
 ```
 
 ## API

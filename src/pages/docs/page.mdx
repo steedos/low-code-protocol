@@ -18,8 +18,8 @@ name: contract-list
 object_api_name: contracts
 type: page/record-detail
 profile: user
-render: amis
-data: amisJson
+renderEngine: amis
+schema: amisSchema
 ```
 
 ## 微页面引擎
@@ -29,14 +29,14 @@ data: amisJson
 
 ## 注册微页面引擎
 
-```
-Builder.registerPageRender('amis', AmisRenderComponent)
+```js
+Builder.registerRenderEngine('amis', AmisRenderComponent)
 ```
 
-## 注册自定义组件
+## 微页面引擎注册自定义组件
 
-```
-Builder.registerComponent('map', MapComponent)
+```js
+Builder.registerComponent('amis', 'map', MapComponent)
 ```
 
 ## 渲染页面
@@ -51,11 +51,17 @@ GET /api/page/recordPage?objectApiName=?&recordId=?
 
 如果未获取到自定义页面，则使用默认的页面。
 
-```
-Builder.renderPage(pageId, {objectApiName: 'xxx', recordId: 'yyy'});
+```js
+Builder.renderPage(renderEngine, schema, {objectApiName: 'xxx', recordId: 'yyy'});
 ```
 
-此函数会根据页面对应的渲染引擎，进一步调用 renderComponent 渲染页面。
+此函数应根据页面对应的渲染引擎，进一步调用 renderComponent 渲染页面。例如：
+
+```js
+if (renderEngine == 'amis') {
+    AmisRenderComponent(schema, {objectApiName: 'xxx', recordId: 'yyy'})
+}
+```
 
 
 

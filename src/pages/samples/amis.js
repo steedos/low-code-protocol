@@ -18,10 +18,9 @@ const Amis = props => {
       <Script 
         src="https://unpkg.com/amis@1.8.0-beta.2/sdk/sdk.js" 
         onLoad={() => {
-          setTimeout(() => {
-            let amis = amisRequire('amis/embed');
-            amis.embed('#amis-root', schema, data);
-          }, 1000);
+          /*global amisRequire */
+          let amis = amisRequire('amis/embed');
+          amis.embed('#amis-root', schema, data);
         }}/>
     </>
   )

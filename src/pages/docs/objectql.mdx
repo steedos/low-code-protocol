@@ -5,7 +5,7 @@ description: ObjectQL 是面向对象的跨数据库查询语法。基于ObjectQ
 
 ## 添加数据
 
-提供了两种添加数据的方法
+支持添加单条数据和批量添加数据，以direct前缀表示直接执行相关操作不触发触发器。
 
 ### insert
 
@@ -95,10 +95,14 @@ const doc = {
 await objectql.getObject(objectApiName).insert(doc);
 ```
 
+### insertMany
+
+### directInsertMany
+
 
 ## 修改数据
 
-支持两种修改数据的方法，以direct前缀表示直接执行修改操作不触发触发器。
+支持修改单条数据和批量修改数据，以direct前缀表示直接执行相关操作不触发触发器。
 
 ### update
 
@@ -168,9 +172,13 @@ result==> {
 */
 ```
 
+### updateMany
+
+### directUpdateMany
+
 ## 删除数据
 
-支持两种删除数据的方法，以direct前缀表示直接执行删除操作不触发触发器。
+支持删除单条数据和批量删除数据，以direct前缀表示直接执行相关操作不触发触发器。
 
 ### delete
 删除单条记录。该函数会触发配置的触发器函数： beforeDelete、afterDelete 。
@@ -207,6 +215,10 @@ const result = await objectql.getObject(objectApiName).directDelete(id);
 console.log('result==>',result)
 // result==> 1
 ```
+
+### deleteMany
+
+### directDeleteMany
 
 ## 查找数据
 

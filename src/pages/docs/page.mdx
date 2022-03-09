@@ -13,13 +13,55 @@ description: 支持使用代码形式编写自定义控件，并进一步开发�
 
 ## 微页面元数据
 
+.page.yml
+
 ```yml
 name: contract-list
-object_api_name: contracts
-type: page/record-detail
-profile: user
+objectApiName: contracts
+type: app/record/list
 renderEngine: amis
 schema: amisSchema
+isDefault: true
+```
+
+.pageAssignment.yml
+
+```yml
+app: contract
+profile: user
+recordType: null
+page: contract-list
+mobile: true
+```
+
+### Set Org Default 
+
+```
+app: null
+profile: null
+recordType: null
+desktop: contract-list-desktop
+mobile: contract-list
+```
+
+### Set App Default 
+
+```
+app: contract
+profile: null
+recordType: null
+desktop: contract-list-desktop
+mobile: contract-list
+```
+
+### Set App Profile Default 
+
+```
+app: contract
+profile: user
+recordType: null
+desktop: contract-list-desktop
+mobile: contract-list
 ```
 
 ## 微页面引擎

@@ -13,18 +13,41 @@ description: 支持使用代码形式编写自定义控件，并进一步开发�
 
 ## 微页面元数据
 
-.page.yml
+### 微页面 .page.yml
 
 ```yml
-name: contract-list
+name: `pageApiName`
 objectApiName: contracts
 type: app/record/list/form
 renderEngine: amis
-schema: amisSchema
+schema: `pageApiName`.amis.json
 isDefault: true
 ```
 
-.pageAssignment.yml
+### Amis Schema .amis.json
+
+.amis.json 独立保存，以便在 VS Code 中直接设计Schema。
+
+```json
+{
+  "type": "page",
+  "title": "标题",
+  "remark": {
+    "title": "标题",
+    "body": "这是一段描述问题，注意到了没，还可以设置标题。而且只有点击了才弹出来。",
+    "icon": "question-mark",
+    "placement": "right",
+    "trigger": "click",
+    "rootClose": true
+  },
+  "body": "内容部分. 可以使用 \\${var} 获取变量。如: `\\$date`: ${date}",
+  "aside": "边栏部分",
+  "toolbar": "工具栏",
+  "initApi": "/amis/api/mock2/page/initData"
+}
+```
+
+### 页面分配 .pageAssignment.yml
 
 ```yml
 app: contract
@@ -34,9 +57,9 @@ page: contract-list
 mobile: true
 ```
 
-### Set Org Default 
+#### Record To Set Org Default 
 
-```
+```yml
 app: null
 profile: null
 recordType: null
@@ -44,9 +67,9 @@ desktop: contract-list-desktop
 mobile: contract-list
 ```
 
-### Set App Default 
+#### Record To Set App Default 
 
-```
+```yml
 app: contract
 profile: null
 recordType: null
@@ -54,7 +77,7 @@ desktop: contract-list-desktop
 mobile: contract-list
 ```
 
-### Set App Profile Default 
+#### Record To Set App Profile Default 
 
 ```
 app: contract

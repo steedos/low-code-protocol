@@ -150,14 +150,21 @@ Builder.registerComponent(Amis, {
 
 ## 渲染页面
 
-### 渲染记录详情页
-
-首先根据用户的简档，自动找到对应的page。通过接口返回前端。
-
-如果未获取到自定义页面，则使用默认的页面。
+使用 [BuilderComponent](https://github.com/BuilderIO/builder/tree/main/packages/react) 控件渲染页面
 
 ```js
-<BuilderComponent model="page" content={pageSchema} data={initialData}/>
+<BuilderComponent 
+  model="page" 
+  content={pageSchema} 
+  data={{
+    objectApiName: 'space_users',
+    _id: 'bar'
+  }}
+  context={{
+    beforeRender: () => alert('Ready... Go!'),
+    lodash: lodash,
+  }}
+  />
 ```
 
 ## API

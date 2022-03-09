@@ -22,6 +22,24 @@ name: user
 license: platform
 ```
 
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | API 名称 |
+| label | string | 显示名称 |
+| type | string | 类别 |
+| license | string | 许可证 |
+| assigned_apps | array | 授权应用 |
+| users | array | 成员 |
+| is_system | boolean | 系统 |
+| password_history | string | 强制密码历史。默认值3 |
+| max_login_attempts | string | 最大无效登录尝试次数。默认值10 |
+| lockout_interval | string | 锁定有效期间。默认值15 |
+| enable_MFA | boolean | 多重身份验证(需要开启短信服务) |
+| logout_other_clients | boolean | 单例登录 |
+| login_expiration_in_days | number | 登录到期时间(天) |
+| phone_logout_other_clients | boolean | 手机App单例登录 |
+| phone_login_expiration_in_days | number | 手机App登录到期时间(天) |
+
 ## 权限集 .permissionset.yml
 
 权限集只约定了一个名称，定义了权限集之后，就可以在对象权限中定义此权限集对具体对象的访问权限。
@@ -40,6 +58,16 @@ type: permission_set
 
 * organization_admin： 分部管理员，用于为分部管理员额外增加权限。
 * workflow_admin： 流程管理员，用于为流程管理员额外增加权限。
+
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | API 名称 |
+| label | string | 显示名称 |
+| type | string | 类别 |
+| license | string | 许可证 |
+| assigned_apps | array | 授权应用 |
+| users | array | 成员 |
+| is_system | boolean | 系统 |
 
 ## 对象权限 .permission.yml
 

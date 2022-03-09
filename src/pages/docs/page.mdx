@@ -18,7 +18,7 @@ description: 支持使用代码形式编写自定义控件，并进一步开发�
 ```yml
 name: contract-list
 objectApiName: contracts
-type: app/record/list
+type: app/record/list/form
 renderEngine: amis
 schema: amisSchema
 isDefault: true
@@ -87,10 +87,6 @@ Builder.registerComponent('amis', 'map', MapComponent)
 
 首先根据用户的简档，自动找到对应的page。通过接口返回前端。
 
-```
-GET /api/page/recordPage?objectApiName=?&recordId=?
-```
-
 如果未获取到自定义页面，则使用默认的页面。
 
 ```js
@@ -105,7 +101,11 @@ if (renderEngine == 'amis') {
 }
 ```
 
+## API
 
+```
+GET /api/page/:type?app=xxx&objectApiName=yyy&recordId=zzz
+```
 
 ## 参考
 

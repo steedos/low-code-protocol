@@ -33,7 +33,14 @@ export const documentationNav = {
     pages['api-metadata'],
     pages['api-records'],
   ],
-  '可视化开发': [
+  '软件包开发': [
+    pages['objectql'],
+    pages['trigger'],
+    pages['services'],
+    pages['event'],
+    pages['page'],
+  ],
+  '可视化工具': [
     pages['designer-object'],
     pages['designer-formular'],
     pages['designer-code'],
@@ -42,13 +49,6 @@ export const documentationNav = {
     pages['designer-report'],
     pages['designer-process'],
     pages['designer-flows'],
-  ],
-  '软件包开发': [
-    pages['objectql'],
-    pages['trigger'],
-    pages['services'],
-    pages['event'],
-    pages['page'],
   ],
   'DevOps': [
     pages['sync-cli'],

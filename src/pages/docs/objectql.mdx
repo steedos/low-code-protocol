@@ -70,7 +70,7 @@ result==> {
 
 添加单条记录。不会触发执行相关触发器函数。
 
-- **使用**： insert(doc, userSession?)
+- **使用**： directInsert(doc, userSession?)
 - **参数**：
    - doc: `Dictionary<any>` 您希望插入的数据。
    - userSession: `SteedosUserSession` 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
@@ -92,13 +92,84 @@ const doc = {
     created: now,
     modified: now
 };
-await objectql.getObject(objectApiName).insert(doc);
+await objectql.getObject(objectApiName).directInsert(doc);
 ```
 
 ### insertMany
 
+添加多条记录。该函数会触发配置的触发器函数： beforeInsert 、afterInsert 。添加 “任务” 等特殊记录后会发送通知给指定人员。
+
+- **使用**： insertMany(docs, userSession?)
+- **参数**：
+   - docs: `Dictionary<any>` 您希望插入的数据。
+   - userSession: `SteedosUserSession` 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
+- **返回值**： 插入成功后的数据。
+
+```
+const { spaceId, userId } = this
+const objectql = require('@steedos/objectql');
+const objectApiName = "contacts";
+var now = new Date();
+const docs = [
+    {
+        name: '小白',
+        space: spaceId,
+        owner: userId,
+        created_by: userId,
+        modified_by: userId,
+        created: now,
+        modified: now
+    },
+    {
+        name: '大白',
+        space: spaceId,
+        owner: userId,
+        created_by: userId,
+        modified_by: userId,
+        created: now,
+        modified: now
+    }
+];
+await objectql.getObject(objectApiName).insertMany(docs);
+```
+
 ### directInsertMany
 
+添加多条记录。不会触发执行相关触发器函数。
+
+- **使用**： directInsertMany(docs, userSession?)
+- **参数**：
+   - docs: `Dictionary<any>` 您希望插入的数据。
+   - userSession: `SteedosUserSession` 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
+- **返回值**： 插入成功后的数据。
+
+```
+const { spaceId, userId } = this
+const objectql = require('@steedos/objectql');
+const objectApiName = "contacts";
+var now = new Date();
+const docs = [
+    {
+        name: '小白',
+        space: spaceId,
+        owner: userId,
+        created_by: userId,
+        modified_by: userId,
+        created: now,
+        modified: now
+    },
+    {
+        name: '大白',
+        space: spaceId,
+        owner: userId,
+        created_by: userId,
+        modified_by: userId,
+        created: now,
+        modified: now
+    }
+];
+await objectql.getObject(objectApiName).directInsertMany(docs);
+```
 
 ## 修改数据
 
@@ -174,7 +245,45 @@ result==> {
 
 ### updateMany
 
+更新多条记录。该函数会触发配置的触发器函数： beforeUpdate 、afterUpdate 。更新 “任务” 等特殊记录后会发送通知给指定人员。
+
+- **使用**： updateMany(filters, doc, userSession?)
+- **参数**：
+   - filters: array 过滤条件，过滤出符合条件的数据记录。
+   - doc: `Dictionary<any>` 您希望更新的数据记录字段。
+   - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
+- **返回值**： 更新成功后的数据。
+
+```
+const objectql = require('@steedos/objectql');
+const objectApiName = "contacts";
+const filters = ["name","contains","Important"];
+const doc = {
+    important: true,
+};
+await objectql.getObject(objectApiName).updateMany(filters, doc);
+```
+
 ### directUpdateMany
+
+更新多条记录。不会触发执行相关触发器函数。
+
+- **使用**： directUpdateMany(filters, doc, userSession?)
+- **参数**：
+   - filters: array 过滤条件，过滤出符合条件的数据记录。
+   - doc: `Dictionary<any>` 您希望更新的数据记录字段。
+   - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
+- **返回值**： 更新成功后的数据。
+
+```
+const objectql = require('@steedos/objectql');
+const objectApiName = "contacts";
+const filters = ["name","contains","Important"];
+const doc = {
+    important: true,
+};
+await objectql.getObject(objectApiName).directUpdateMany(filters, doc);
+```
 
 ## 删除数据
 
@@ -218,11 +327,41 @@ console.log('result==>',result)
 
 ### deleteMany
 
+批量删除数据。 该函数会触发配置的触发器函数： beforeDelete、afterDelete 。
+
+- **使用**： deleteMany(filters, userSession?)
+- **参数**：
+    - filters: array 过滤条件，过滤出符合条件的数据记录。
+    - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
+- **返回值**： 成功：1，  失败：其它。
+
+```
+const objectql = require('@steedos/objectql');
+const objectApiName = "contacts";
+const filters = ["name","contains","Important"];
+await objectql.getObject(objectApiName).deleteMany(filters);
+```
+
 ### directDeleteMany
+
+批量删除数据。不会触发执行相关触发器函数。
+
+- **使用**： directDeleteMany(filters, userSession?)
+- **参数**：
+    - filters: array 过滤条件，过滤出符合条件的数据记录。
+    - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
+- **返回值**： 成功：1，  失败：其它。
+
+```
+const objectql = require('@steedos/objectql');
+const objectApiName = "contacts";
+const filters = ["name","contains","Important"];
+await objectql.getObject(objectApiName).directDeleteMany(filters);
+```
 
 ## 查找数据
 
-提供了六种查找数据的方法
+提供了五种查找数据的方法和一种查看对象配置详情的方法
 
 ### find
 
@@ -231,11 +370,11 @@ console.log('result==>',result)
 - **使用**： find(query, userSession?)
 - **参数**：
     - query: SteedosQueryOptions 查询数据相关参数[json]。
-    - fields: Array字段名数组 , 选填。 例如：['字段名1', '字段名2']
-    - filters: SteedosQueryFilters查询条件数组, 选填
-    - sort: string排序规则, 选填
-    - top: number返回记录数, 选填
-    - skip: number跳过记录数，通常用于分页显示, 选填。
+        - fields: Array字段名数组 , 选填。 例如：['字段名1', '字段名2']
+        - filters: SteedosQueryFilters查询条件数组, 选填
+        - sort: string排序规则, 选填
+        - top: number返回记录数, 选填
+        - skip: number跳过记录数，通常用于分页显示, 选填。
     - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
 - **返回值**： 记录数组。未找到时返回空数组[]。
 
@@ -275,7 +414,7 @@ result==> [
 - **参数**：
     - id: number | string 您希望查询单条记录的id。
     - query: SteedosQueryOptions 查询数据相关参数[json]。
-    - fields: Array字段名数组, 选填。 例如：['字段名1', '字段名2']
+        - fields: Array字段名数组, 选填。 例如：['字段名1', '字段名2']
     - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
 - **返回值**： 单条记录[json]。
 
@@ -305,11 +444,11 @@ result==> {
 - **使用**： directFind(query, userSession?)
 - **参数**：
     - query: SteedosQueryOptions 查询数据相关参数[json]。
-    - fields: Array字段名数组 , 选填。 例如：['字段名1', '字段名2']
-    - filters: SteedosQueryFilters查询条件数组, 选填
-    - sort: string排序规则, 选填
-    - top: number返回记录数, 选填
-    - skip: number跳过记录数，通常用于分页显示, 选填。
+        - fields: Array字段名数组 , 选填。 例如：['字段名1', '字段名2']
+        - filters: SteedosQueryFilters查询条件数组, 选填
+        - sort: string排序规则, 选填
+        - top: number返回记录数, 选填
+        - skip: number跳过记录数，通常用于分页显示, 选填。
     - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
 - **返回值**：记录数组。未找到时返回空数组[]。
 
@@ -345,7 +484,7 @@ result==> [
 - **使用**： aggregate(query, externalPipeline ,userSession?)
 - **参数**：
     - query: SteedosQueryOptions 查询数据相关参数[json]。
-    - filters: SteedosQueryFilters查询条件数组, 选填
+        - filters: SteedosQueryFilters查询条件数组, 选填
     - externalPipeline: ArrayMongodb ggregation Pipeline
     - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
 - **返回值**：聚合记录数组。
@@ -380,7 +519,7 @@ console.log('result==>',result)
 - **使用**： directAggregate(query, externalPipeline ,userSession?)
 - **参数**：
     - query: SteedosQueryOptions 查询数据相关参数[json]。
-    - filters: SteedosQueryFilters查询条件数组, 选填
+        - filters: SteedosQueryFilters查询条件数组, 选填
     - externalPipeline: ArrayMongodb ggregation Pipeline
     - userSession: SteedosUserSession 当前用户登录信息，非必填;  如果未传入userSession，则不进行权限校验。
 - **返回值**：聚合记录数组。

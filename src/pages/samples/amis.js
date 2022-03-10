@@ -57,9 +57,8 @@ function AmisPage() {
         }
       };
     const amisData = {
-      name: 'Hello'
     }
-    const pageJson={
+    const pageSchema={
         "data":{
            "blocks":[
               {
@@ -79,7 +78,7 @@ function AmisPage() {
                        "flexDirection":"column",
                        "alignItems":"stretch",
                        "position":"relative",
-                       "marginTop":"20px",
+                       "margin":"20px",
                        "lineHeight":"normal",
                        "height":"auto",
                        "textAlign":"center"
@@ -92,8 +91,9 @@ function AmisPage() {
            ]
         }
     }
+    const pageData = {}
     if (process.browser) 
-      return <BuilderComponent model="page" content={pageJson} data={{}}/>
+      return <BuilderComponent model="page" content={pageSchema} data={pageData}/>
     else 
       return null
 }

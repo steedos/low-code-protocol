@@ -57,7 +57,7 @@ page: contract-list
 mobile: true
 ```
 
-#### Record To Set Org Default 
+#### 设置为组织默认页面
 
 ```yml
 app: null
@@ -67,7 +67,7 @@ desktop: contract-list-desktop
 mobile: contract-list
 ```
 
-#### Record To Set App Default 
+#### 设置为App默认页面
 
 ```yml
 app: contract
@@ -77,7 +77,7 @@ desktop: contract-list-desktop
 mobile: contract-list
 ```
 
-#### Record To Set App Profile Default 
+#### 设置为简档用户默认页面
 
 ```
 app: contract
@@ -149,21 +149,62 @@ Builder.registerComponent(Amis, {
 
 ## 渲染页面
 
-使用 [BuilderComponent](https://github.com/BuilderIO/builder/tree/main/packages/react) 控件渲染页面
+使用 [BuilderComponent](https://github.com/BuilderIO/builder/tree/main/packages/react) 控件渲染页面。
+
+Amis 集成示例
+
+- [源码](https://github.com/steedos/low-code-protocol/blob/main/src/pages/samples/amis.js)
+- [运行效果](../samples/amis)
 
 ```js
-<BuilderComponent 
-  model="page" 
-  content={pageSchema} 
-  data={{
+const pageSchema={
+  "data":{
+    "blocks":[
+      {
+        "@type":"@builder.io/sdk:Element",
+        "@version":2,
+        "id":"2b290abc4e4042498645863f53ee6815",
+        "component":{
+          "name":"Amis",
+          "options":{
+              "schema": amisSchema,
+              "data": amisData
+          }
+        },
+        "responsiveStyles":{
+          "large":{
+              "display":"flex",
+              "flexDirection":"column",
+              "alignItems":"stretch",
+              "position":"relative",
+              "margin":"20px",
+              "lineHeight":"normal",
+              "height":"auto",
+              "textAlign":"center"
+          }
+        }
+      }
+    ],
+    "inputs":[
+    ]
+  }
+}
+const pageData = {
     objectApiName: 'space_users',
     _id: 'bar'
-  }}
-  context={{
-    beforeRender: () => alert('Ready... Go!'),
-    lodash: lodash,
-  }}
-  />
+  }
+const pageContext = {
+  beforeRender: () => alert('Ready... Go!'),
+  lodash: lodash,
+}
+return (
+  <BuilderComponent 
+    model="page" 
+    content={pageSchema} 
+    data={pageData}
+    context={pageContext}
+    />
+)
 ```
 
 ## API

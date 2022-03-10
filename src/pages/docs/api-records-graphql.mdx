@@ -271,7 +271,7 @@ _related_${object_api_name}_${field_api_name}
       name
       mobile
     }
-    space_users: _related_space_users_company_ids {
+    space_users: _related_space_users_company_ids(filters: ["job_number","=","10"]) {
       name
       mobile
     }
@@ -300,11 +300,7 @@ _related_${object_api_name}_${field_api_name}
         ],
         "space_users": [
           {
-            "name": "人员1",
-            "mobile": "18600000000"
-          },
-          {
-            "name": "人员2",
+            "name": "小明",
             "mobile": "18600000000"
           }
         ]

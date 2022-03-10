@@ -86,6 +86,35 @@ viewAllRecords: false
 viewCompanyRecords: false
 ```
 
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | 名称 |
+| permission_set_id | string | 权限集 |
+| object_name | string | 对象 |
+| allowRead | boolean | 允许查看 |
+| allowCreate | boolean | 允许创建 |
+| allowEdit | boolean | 允许修改 |
+| allowDelete | boolean | 允许删除 |
+| viewAllRecords | boolean | 查看所有记录 |
+| modifyAllRecords | boolean | 修改所有记录 |
+| viewCompanyRecords | boolean | 查看本分部 |
+| modifyCompanyRecords | boolean | 修改本分部 |
+| viewAssignCompanysRecords | array | 查看指定分部 |
+| modifyAssignCompanysRecords | array | 修改指定分部 |
+| allowReadFiles | boolean | 允许查看附件 |
+| allowCreateFiles | boolean | 允许创建附件 |
+| allowEditFiles | boolean | 允许修改附件 |
+| allowDeleteFiles | boolean | 允许删除附件 |
+| viewAllFiles | boolean | 查看所有附件 |
+| modifyAllFiles | boolean | 修改所有附件 |
+| disabled_list_views | array | 禁用对象列表视图 |
+| disabled_actions | array | 禁用操作按钮 |
+| unreadable_fields | array | 不可见字段 |
+| uneditable_fields | array | 不可编辑字段 |
+| unrelated_objects | array | 禁用关联对象 |
+| uneditable_related_list | array | 关联对象只读 |
+| field_permissions | object | 字段权限 |
+
 ## 字段权限 .permission.yml
 
 设定某一个简档（或权限集）对当前对象下的字段的访问权限，与对象权限共用配置文件，相关配置保存在`field_permissions`属性中。
@@ -137,6 +166,12 @@ field_permissions:
     editable: true
 ```
 
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| field | string | 字段 Api 名称 |
+| readable | boolean | 允许查看 |
+| editable | boolean | 允许编辑 |
+
 ## 限制规则 .restrictionRule.yml
 
 在对象上配置限制规则来收缩用户对业务对象记录级的查看权限，满足此过滤条件的记录，用户始终禁止查看。
@@ -148,6 +183,16 @@ entry_criteria: '{{$user.roles.indexOf(‘salesman‘) > -1}}'
 object_name: contracts__c
 record_filter: '{{[[“profile__c“, “=“, “customer“], “or“, [“owner“, “=“, $user.userId]]}}'
 ```
+
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | Api 名称 |
+| object_name | string | 对象 |
+| active | boolean | 启用 |
+| entry_criteria | string | 指定条目条件 |
+| record_filter | string | 记录过滤器 |
+| description | string | 描述 |
+| is_system | boolean | 系统 |
 
 ## 共享规则 .shareRule.yml
 
@@ -161,3 +206,13 @@ entry_criteria: '{{$user.roles.indexOf(‘salesman‘) > -1}}'
 object_name: contracts__c
 record_filter: '{{[[“company_id“, “=“, $user.company_id],[“profile__c“, “=“, “customer“]]}}'
 ```
+
+| 属性名 | 属性值类型 | 属性含义 |
+|----|----|----|
+| name | string | Api 名称 |
+| object_name | string | 对象 |
+| active | boolean | 启用 |
+| entry_criteria | string | 指定条目条件 |
+| record_filter | string | 记录过滤器 |
+| description | string | 描述 |
+| is_system | boolean | 系统 |

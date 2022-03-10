@@ -148,16 +148,142 @@ NumberOfEmployees^4
 
 计算旧值与新值的差值，并除以新值。
 
-### Logical Operators
+### 逻辑运算符
 
-- `= and ==` (Equal)	Evaluates if two values are equivalent. The = and == operators are interchangeable.
-- `<> and != (Not Equal)`	Evaluates if two values aren’t equivalent.
-- `<` (Less Than)	Evaluates if a value is less than the value that follows this symbol.
-- `>` (Greater Than)	Evaluates if a value is greater than the value that follows this symbol.
-- `<=` (Less Than or Equal)	Evaluates if a value is less than or equal to the value that follows this symbol.
-- `>=` (Greater Than or Equal)	Evaluates if a value is greater than or equal to the value that follows this symbol.
-- `&&` (AND)	Evaluates if two values or expressions are both true. Use this operator as an alternative to the logical function AND.
-- `||` (OR)	Evaluates if at least one of multiple values or expressions is true. Use this operator as an alternative to the logical function OR.
+#### = 与 ==（等于）
+
+计算两个值是否相等。= 和 == 运算符可以互换。
+
+**使用：** `表达式1=表达式2 或表达式1 == 表达式2`，用合并字段、表达式或其他数值替换每个表达式。
+
+**返回值：** 布尔
+
+```javascript
+ExpiringDate = CreatedDate + 5
+```
+
+如果到期日等于记录的创建日期与五天之和返回 true。
+
+```javascript
+IF(Probability = 1, ROUND(Amount*0.02, 2), 0)
+```
+
+此公式计算佣金金额，具有 100% 可能性的业务机会按 2% 计算佣金。所有其他业务机会的佣金值为零。
+
+具有 90% Probability（可能性）的业务机将无法获得佣金。
+
+具有 100% Probability（可能性）和 100,000 美元 Amount（金额）的业务机会将获得 2,000 美元的佣金。
+
+> 不要使用此函数进行空比较，如 MyDateTime__c == null。而应使用[ISBLANK](#ISBLANK)。
+
+
+<h4 class="group flex whitespace-pre-wrap -ml-4 pl-4" id="<> 与 !=（不等于）">&lt;&gt; 与 !=（不等于）</h4>
+
+计算两个值是否不相等。
+
+**使用：** `表达式1 <> 表达式2` 或 `表达式1 != 表达式2`，用合并字段、表达式或其他数值替换每个表达式。
+
+**返回值：** 布尔
+
+```javascript
+IF(Maint_Amount__c + Services_Amount__c <> Amount, "DISCOUNTED", "FULL PRICE")
+```
+
+如果产品的维护金额和服务金额之和不等于产品金额，此公式将在产品上显示“DISCOUNTED”（已折扣金额）。否则，显示“FULL PRICE”（全价）。请注意，本示例对 Maint Amount（维护金额）和 Services Amount（服务金额）使用两个自定义金额字段。
+
+> 不要使用此函数进行空比较，如 MyDateTime__c != null。而应使用[ISBLANK](#ISBLANK)。
+
+<h4 class="group flex whitespace-pre-wrap -ml-4 pl-4" id="<（小于）">&lt;（小于）</h4>
+
+计算一个值是否小于此符号后面的值。
+
+**使用：** `值1 < 值2`，用合并字段、表达式或其他数值替换每个值。
+
+**返回值：** 布尔
+
+```javascript
+IF(AnnualRevenue < 1000000, 1, 2)
+```
+
+将值“1”赋予小于一百万的收入，将值“2”赋予大于一百万的收入。
+
+#### >（大于）
+
+计算一个值是否大于此符号后面的值。
+
+**使用：** `值1 > 值2`，用合并字段、表达式或其他数值替换每个值。
+
+**返回值：** 布尔
+
+```javascript
+IF(commission__c > 1000000, "High Net Worth", "General")
+```
+
+将“High Net Worth”（高资产净值）值赋予大于一百万的佣金。请注意，这是使用佣金自定义字段的文本公式字段。
+
+<h4 class="group flex whitespace-pre-wrap -ml-4 pl-4" id="<=（小于或等于）">&lt;=（小于或等于）</h4>
+
+计算一个值是否小于或等于此符号后面的值。
+
+**使用：** `值1 <= 值2`，用合并字段、表达式或其他数值替换每个值。
+
+**返回值：** 布尔
+
+```javascript
+IF(AnnualRevenue <= 1000000, 1, 2)
+```
+
+将值“1”赋予小于等于一百万的收入，将值“2”赋予大于一百万的收入。
+
+#### >=（大于或等于）
+
+计算一个值是否大于或等于此符号后面的值。
+
+**使用：** `值1 >= 值2`，用合并字段、表达式或其他数值替换每个值。
+
+**返回值：** 布尔
+
+```javascript
+IF(Commission__c >= 1000000, "YES", "NO")
+```
+
+将值“YES”（是）赋予大于或等于一百万的佣金。请注意，这是使用自定义货币字段 Commission（佣金）的文本公式字段。
+
+#### &&（与）
+
+评估两个值或表达式是否都为真。使用此运算符作为逻辑函数 AND 的备选。
+
+**使用：** `（逻辑1）&&（逻辑2）`，以及用您希望评估的值或表达式替换逻辑1 和逻辑2。
+
+**返回值：** 布尔
+
+```javascript
+IF((Price<100 && Quantity<5),“Small”, null)
+```
+
+如果价格小于 100 并且数量小于五，此公式显示 “Small”。否则此字段为空。
+
+#### ||（或）
+
+评估多个值或表达式中是否至少有一个为真。使用此运算符作为逻辑函数 OR 的备选。
+
+**使用：** `(逻辑1）||（逻辑2)`，用您希望评估的值或表达式替换任意数量的逻辑引用。
+
+**返回值：** 布尔
+
+```javascript
+IF(Priority = "High" || Status = "New", ROUND(NOW()-CreatedDate, 0), null)
+```
+
+如果个案 Status（状态）为“New”（新建）或 Priority（优先级）为“High”（高），则此公式返回个案未被处理的天数。如果个案是今天打开的，则该字段显示零。
+
+```javascript
+(Discount_Rate__c < 0) || (Discount_Rate__c > 0.40)
+```
+
+当自定义字段 Discount Rate（折扣率）的值不在 0 和 40% 之间时，此验证规则公式显示下面的错误消息：“Discount Rate cannot exceed 40%.”（折扣率不能超过 40%。)
+
+
 
 ### Text Operators
 

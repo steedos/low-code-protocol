@@ -18,6 +18,13 @@ export const documentationNav = {
     pages['devops'],
     pages['standard-objects'],
   ],
+  '软件包开发': [
+    pages['objectql'],
+    pages['trigger'],
+    pages['services'],
+    pages['page'],
+    pages['event'],
+  ],
   '元数据': [
     pages['metadata-object'],
     pages['metadata-field-type'],
@@ -32,13 +39,6 @@ export const documentationNav = {
   'API': [
     pages['api-metadata'],
     pages['api-records'],
-  ],
-  '软件包开发': [
-    pages['objectql'],
-    pages['trigger'],
-    pages['services'],
-    pages['event'],
-    pages['page'],
   ],
   '可视化工具': [
     pages['designer-object'],
@@ -65,17 +65,17 @@ export const documentationNav = {
     pages['service-report'],
     pages['service-node-red'],
   ],
-  '平台微服务': [
-    pages['service-message'],
-    pages['service-logging'],
-    pages['service-tracing'],
-    pages['service-metrics'],
-    pages['service-auditing'],
-  ],
-  '用户界面': [
-    pages['ui-login'],
-    pages['ui-record-view'],
-    pages['ui-list-view'],
-    pages['ui-amis'],
-  ],
+  // '平台微服务': [
+  //   pages['service-message'],
+  //   pages['service-logging'],
+  //   pages['service-tracing'],
+  //   pages['service-metrics'],
+  //   pages['service-auditing'],
+  // ],
+  // '用户界面': [
+  //   pages['ui-login'],
+  //   pages['ui-record-view'],
+  //   pages['ui-list-view'],
+  //   pages['ui-amis'],
+  // ],
 }

@@ -207,6 +207,20 @@ return (
 )
 ```
 
+## 在软件包中扩展自定义控件
+
+需要考虑用户在软件包中自定义控件，并且集成到设计器中。
+
+- 创建一个react项目
+- 开发控件，并编写 registerComponent
+- 通过webpack 打包成一个js文件。
+- 保存到软件包 `component-library/{libraryApiName}.component.js`
+- `component-library/{libraryApiName}.component.yml` 定义控件元数据
+- 元数据服务统一合并控件，并提供api下载控件js
+- 前端动态设计器和与渲染界面加载控件js
+
+可以参考此流程 [Mattermost Plugins](https://developers.mattermost.com/integrate/plugins/webapp/hello-world/)
+
 ## API
 
 ```
@@ -217,3 +231,4 @@ GET /api/page/:renderEngine/:type?app=xxx&objectApiName=yyy&recordId=zzz
 
 - [Salesforce Lightning](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/intro_lightning.htm)
 - [BuilderIO](https://github.com/BuilderIO/builder)
+- [Mattermost Plugins](https://developers.mattermost.com/integrate/plugins/webapp/hello-world/)

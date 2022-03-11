@@ -101,7 +101,7 @@ await objectql.getObject(objectApiName).directInsert(doc);
 
 - **使用**： insertMany(docs, userSession?)
 - **参数**：
-   - docs: `Dictionary<any>` 您希望插入的数据。
+   - docs: `Dictionary<any>[]` 您希望插入的数据。
    - userSession: `SteedosUserSession` 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
 - **返回值**： 插入成功后的数据。
 
@@ -139,7 +139,7 @@ await objectql.getObject(objectApiName).insertMany(docs);
 
 - **使用**： directInsertMany(docs, userSession?)
 - **参数**：
-   - docs: `Dictionary<any>` 您希望插入的数据。
+   - docs: `Dictionary<any>[]` 您希望插入的数据。
    - userSession: `SteedosUserSession` 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
 - **返回值**： 插入成功后的数据。
 
@@ -249,7 +249,7 @@ result==> {
 
 - **使用**： updateMany(filters, doc, userSession?)
 - **参数**：
-   - filters: array 过滤条件，过滤出符合条件的数据记录。
+   - filters: SteedosQueryFilters 过滤条件，过滤出符合条件的数据记录。
    - doc: `Dictionary<any>` 您希望更新的数据记录字段。
    - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
 - **返回值**： 更新成功后的数据。
@@ -270,7 +270,7 @@ await objectql.getObject(objectApiName).updateMany(filters, doc);
 
 - **使用**： directUpdateMany(filters, doc, userSession?)
 - **参数**：
-   - filters: array 过滤条件，过滤出符合条件的数据记录。
+   - filters: SteedosQueryFilters 过滤条件，过滤出符合条件的数据记录。
    - doc: `Dictionary<any>` 您希望更新的数据记录字段。
    - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
 - **返回值**： 更新成功后的数据。
@@ -295,7 +295,7 @@ await objectql.getObject(objectApiName).directUpdateMany(filters, doc);
 - **参数**：
     - id: number | string 您希望删除数据的id。
     - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
-- **返回值**： 成功：1，  失败：其它。
+- **返回值**： 成功：1，  失败：抛出报错信息。
 
 ```
 const objectql = require('@steedos/objectql');
@@ -314,7 +314,7 @@ console.log('result==>',result)
 - **参数**：
     - id: number | string 您希望删除数据的id。
     - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
-- **返回值**： 成功：1， 失败：其它。
+- **返回值**： 成功：1， 失败：抛出报错信息。
 
 ```
 const objectql = require('@steedos/objectql');
@@ -333,7 +333,7 @@ console.log('result==>',result)
 - **参数**：
     - filters: array 过滤条件，过滤出符合条件的数据记录。
     - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
-- **返回值**： 成功：1，  失败：其它。
+- **返回值**： 成功：1，  失败：抛出报错信息。
 
 ```
 const objectql = require('@steedos/objectql');
@@ -350,7 +350,7 @@ await objectql.getObject(objectApiName).deleteMany(filters);
 - **参数**：
     - filters: array 过滤条件，过滤出符合条件的数据记录。
     - userSession: SteedosUserSession 当前用户登录信息，非必填；如果未传入userSession，则不进行权限校验。
-- **返回值**： 成功：1，  失败：其它。
+- **返回值**： 成功：1，  失败：抛出报错信息。
 
 ```
 const objectql = require('@steedos/objectql');

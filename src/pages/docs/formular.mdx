@@ -283,30 +283,397 @@ IF(Priority = "High" || Status = "New", ROUND(NOW()-CreatedDate, 0), null)
 
 当自定义字段 Discount Rate（折扣率）的值不在 0 和 40% 之间时，此验证规则公式显示下面的错误消息：“Discount Rate cannot exceed 40%.”（折扣率不能超过 40%。)
 
+### 文本运算符
+
+#### &（串联）
+
+连接两个或两个以上字符串。
+
+**使用：** `字符串1&字符串2`，用合并字段、表达式或其他值替换每个字符串。
+
+**返回值：** 文本
+
+```javascript
+"Expense-" & Trip_Name__c & "-" & ExpenseNum__c
+```
+
+此公式在行程名称和支出编号前显示文本“Expense-”。这是使用支出编号自定义字段的文本公式字段。
 
 
-### Text Operators
+### 日期和时间函数
 
-- `& and +` (Concatenate)	Connects two or more strings.
+#### ADDMONTHS
 
-### Date and Time Functions
+返回的日期是，指定日期之前或之后的指定月数。如果剩余月的天数比起始月少，函数会返回剩余月的最后一天。否则，结果包含与指定日期相同的日组件。
 
-- ADDMONTHS	Returns the date that is the indicated number of months before or after a specified date. If the specified date is the last day of the month, the resulting date is the last day of the resulting month. Otherwise, the result has the same date component as the specified date.
-- DATE	Returns a date value from year, month, and day values you enter. Salesforce displays an error on the detail page if the value of the DATE function in a formula field is an invalid date, such as February 29 in a non-leap year.
-- DATEVALUE	Returns a date value for a date/time or text expression.
-- DATETIMEVALUE	Returns a year, month, day, and GMT time value.
-- DAY	Returns a day of the month in the form of a number between 1 and 31.
-- HOUR	Returns the local time hour value without the date in the form of a number from 1 through 24.
-- MILLISECOND	Returns a milliseconds value in the form of a number from 0 through 999.
-- MINUTE	Returns a minute value in the form of a number from 0 through 60.
-- MONTH	Returns the month, a number between 1 (January) and 12 (December) in number format of a given date.
-- NOW	Returns a date/time representing the current moment.
-- SECOND	Returns a seconds value in the form of a number from 0 through 60.
-- TIMENOW	Returns a time value in GMT representing the current moment. Use this function instead of the NOW function if you only want to track time, without a date.
-- TIMEVALUE	Returns the local time value without the date, such as business hours.
-- TODAY	Returns the current date as a date data type.
-- WEEKDAY	Returns the day of the week for the given date, using 1 for Sunday, 2 for Monday, through 7 for Saturday.
-- YEAR	Returns the four-digit year in number format of a given date.
+**使用：** `ADDMONTHS (date/datetime,number)` ,使用起始日期与添加的月数替换`date/datetime`和`number`。
+
+**参数：**
+
+* *日期、日期时间:* `date/datetime` 日期或日期时间，表示起始日期。
+* *数字:* `number` 数值，表示要增加的月数。
+
+**返回值：** 日期
+
+```javascript
+ADDMONTHS (StartDate, 5)
+```
+
+为开始日期添加 5 个月。例如，如果开始日期是 2017 年 9 月 20 日，结果日期是 2018 年 2 月 20 日；如果开始日期是 2017 年 9 月 30 日，结果日期是 2018 年 2 月 28 日。
+
+> 支持传入日期或日期时间类型的参数，但是返回值始终是日期类型，而不可能是日期时间类型。
+
+
+#### DATE
+
+从您输入的年、月和日值返回一个日期值。如果公式字段中的 DATE 函数值是无效日期，会返回错误信息。
+
+**使用：** `DATE(年,月,日)` ,用一个四位数字年份替换年，用一个两位数字月份替换月，用一个两位数字日期替换日。
+
+**参数：**
+
+* *年:* `number` 四位数字表示的年份。
+* *月:* `number` 表示月份值的数值。
+* *日:* `number` 表示日部分的数值。
+
+**返回值：** 日期
+
+```javascript
+DATE(2005, 1, 2)
+```
+
+创建一个 2005 年 1 月 2 日的日期字段。
+
+> 参数个数只能是三个，也不支持传入`2005-01-01`这种字符串。
+
+> 当传入的函数参数格式正确但是数值不符合规范时，并不会报错，而是会返回一个可能错误的值，比如如非闰年的DATE(2021,2,29)将返回2021-03-01，DATE(2021,121,29)将返回2031-01-29。
+
+
+#### DATEVALUE
+
+为日期、日期时间或文本表达式返回日期值。
+
+**使用：** DATEVALUE(表达式)
+
+**参数：** `date/datetime/text` 日期、日期时间或日期、日期时间格式的文本值的合并字段或表达式
+
+**返回值：** 日期
+
+```javascript
+DATEVALUE(ClosedDate)
+```
+
+基于结束日期时间字段值显示日期值，参数ClosedDate可以是日期、日期时间类型，也可以是日期、日期时间格式的字符串类型。
+
+```javascript
+DATEVALUE("2005-1-15 12:30")
+```
+
+以日期值形式返回“2005-01-15”。
+
+> - 如果该函数中所引用的字段不是有效的文本或日期时间字段，则该公式中的字段可能显示为异常字符串或错误信息，比如DATEVALUE("2005-111-15") 将返回NaN-NaN-NaN。  
+> - 当输入日期时，请将日期放在引号内，并使用如下格式：YYYY-MM-DD，即，四位数字年份、两位数字月份和两位数字日期。  
+> - 如果表达式不在有效的日期范围内（例如，MM 不在 01 和 12 之间），则该公式中的字段将显示“NaN-NaN-NaN”。  
+> - 该公式始终会返回utc（协调世界时间）0点值，且除非传入的参数明确带了时区信息，否则将始终使用用户的时区计算，比如DATEVALUE('2018-12-12 06:06:06')返回的是2018-12-11，而DATEVALUE('2018-12-12T06:06:06Z')返回的是2018-12-12。
+
+
+#### DATETIMEVALUE
+
+返回年份、月份、日和 GMT 时间值。
+
+**使用：** DATETIMEVALUE（表达式）
+
+**参数：** `text` 不带TZ字符的日期/日期时间格式的文本值、合并字段或表达式
+
+**返回值：** 日期时间
+
+```javascript
+DATETIMEVALUE(TEXT(ClosedDate))
+```
+
+基于结束日期字段值显示日期时间值，参数ClosedDate必须是日期类型，而不可以是日期时间类型， 因为如果ClosedDate是日期时间类型，TEXT(ClosedDate)返回的会是"2020-11-04 03:45:00Z"这种带Z的字符串。
+
+```javascript
+DATETIMEVALUE(SUBSTITUTE(TEXT(ClosedDate), "Z", ""))
+```
+
+基于结束日期字段值显示日期时间值，参数ClosedDate可以是日期类型，也可以是时间类型，因为此示例中把最后的Z字符清除掉了。
+
+```javascript
+DATETIMEVALUE("2005-11-15 17:00:00")
+```
+
+以日期和时间值形式返回“2005-11-15T17:00:00.000Z”（即utc时间2005 年 11 月 15 日17点整）。
+
+#### DAY
+
+以 1 与 31 之间的一个数字形式返回一个月中的某一天。
+
+**使用：** DAY(日期)
+
+**参数：** date 日期字段或值（如 TODAY()）
+
+**返回值：** 数值
+
+```javascript
+DAY(Code_Freeze__c)
+```
+
+返回您的自定义代码冻结日期中的日。请注意，这不适用于“日期时间”字段。
+
+> 只支持传入日期类型值，不支持“日期时间”类型值，也不支持字符串类型值。
+
+
+#### HOUR
+
+以 24数字格式（0\~23）返回GMT时区小时值。
+
+**使用：** `HOUR(datetime)` ,使用日期时间值或 DATETIMEVALUE() 等值替换 datetime，不支持传入字符串参数。
+
+**参数：** datetime 日期时间字段或值（如 NOW()）
+
+**返回值：** 数值
+
+```javascript
+HOUR(ClosedDate)
+```
+
+仅根据日期时间完结字段值显示其中的小时。
+
+```javascript
+HOUR(DATETIMEVALUE('2018-12-12 18:06:08'))
+```
+
+返回18，而不是10。
+
+#### MILLISECOND
+
+以 0 与 999 之间的数字形式，返回毫秒值。
+
+**使用：** `MILLISECOND(datetime)` ,使用日期时间值替换 datetime，例如 NOW()，不支持传入日期类型或字符串参数。
+
+**参数：** datetime 日期时间字段或值（如 NOW()）
+
+**返回值：** 数值
+
+```javascript
+MILLISECOND(DATETIMEVALUE(SUBSTITUTE(TEXT(ClosedDate), "Z", "")))
+```
+
+仅根据完结时间字段的值显示时间字段中的毫秒值。
+
+```javascript
+MILLISECOND(NOW())
+```
+
+返回当前时间的毫秒值，比如125。
+
+#### MINUTE
+
+以 0 与 60 之间的数字形式，返回分钟值。
+
+**使用：** `MINUTE(datetime)` ,使用日期时间值替换 datetime，例如 NOW()，不支持传入日期类型或字符串参数。
+
+**参数：** datetime 日期时间字段或值（如 NOW()）
+
+**返回值：** 数值
+
+```javascript
+MINUTE(DATETIMEVALUE(SUBSTITUTE(TEXT(ClosedDate), "Z", "")))
+```
+
+仅根据完结时间字段的值显示时间字段中的分钟值。
+
+```javascript
+MINUTE(NOW())
+```
+
+返回当前时间的分钟值，比如12。
+
+> MINUTE函数只授受datetime类型作为参数，不支持time,date,text类型作为参数，可以先用DATETIMEVALUE函数进行类型转换后再调用该函数。
+
+#### MONTH
+
+以给定日期的数字格式返回月份，即 1（一月）与 12（十二月）之间的一个数字。
+
+**使用：** `MONTH(日期)` ,用包含您希望返回其月份的日期的字段或表达式替换日期。
+
+**参数：** date 日期字段或值（如 TODAY()）
+
+**返回值：** 数值
+
+```javascript
+MONTH(SLAExpirationDate__c)
+```
+
+返回您的服务级协议到期的月份。本示例使用名为 SLA Expiration Date（SLA 到期日期）的自定义日期字段。
+
+```javascript
+MONTH(TODAY())
+```
+
+以数字格式返回当前月份。例如，对于月份“February”将返回值“2”。
+
+> MONTH函数只授受date类型作为参数，不支持time,datetime,text类型作为参数，可以先用DATEVALUE函数进行类型转换后再调用该函数。
+
+#### NOW
+
+返回表示当前时刻的日期时间。
+
+**使用：** `NOW()`
+
+**返回值：** 日期时间
+
+```javascript
+IF(Status = "Open", ROUND(NOW()-CreatedDate, 0), null)
+```
+
+此公式检查潜在客户是否未处理；如果是，则通过从当前日期和时间减去创建日期和时间来计算它未被处理的天数。结果是舍入为零小数位的未处理天数。如果潜在客户已处理，则此字段为空。
+
+
+> - 请勿删除括号。
+> - 保留括号为空。括号中不能包含值。
+> - 在 NOW 函数返回“日期时间”字段而不是“日期”字段。Created Date（创建日期）和 Last Modified Date（上次修改日期）为“日期/间”字段，而 Last Activity Date（上次活动日期）为“日期”字段。
+> - 如果您希望使用“日期”字段，请使用[TODAY](#TODAY)函数。
+> - 始终使用用户的时区计算日期和时间，该函数本身返回的是utc时间值，比如当前是北京时间2020-11-07 15:28，NOW()返回值为"2020-11-07T07:28:00Z"。
+> - 与函数 NOW 和其他“日期时间”字段一起使用加和减运算符，以返回一个代表天数的数字。例如，NOW() - CreatedDate 计算自一个记录创建日期以来的天数。在本示例中，公式字段数据类型为数字。
+> - 与 NOW 函数和数字一起使用加和减运算符，以返回一个日期和时间。例如，NOW() +5 计算当前时间之前五天的日期和时间。在本示例中，公式字段数据类型为“日期时间”。
+
+
+#### SECOND
+
+以 0 与 60 之间的数字形式，返回秒值。
+
+**使用：** `SECOND(datetime)`,使用日期时间值或 DATETIMEVALUE() 等值替换 datetime，不支持传入日期类型值或字符串参数。
+
+**参数：** datetime 日期时间字段或值（如 NOW()）
+
+**返回值：** 数值
+
+```javascript
+SECOND(ClosedDate)
+```
+
+仅根据完结时间字段的值显示其中的秒值。
+
+```javascript
+SECOND(DATETIMEVALUE('2018-12-12 18:06:08'))
+```
+
+返回 8。
+
+#### TIMENOW
+
+返回表示当前时刻的时间值 (GMT)。如果您仅想要跟踪时间，而非日期，使用此函数，而不是 NOW 函数。
+
+**使用：** `TIMENOW()`
+
+**返回值：** 时间
+
+```javascript
+IF(Rating="Hot", TEXT(TIMENOW()), TEXT(TIMEVALUE(CreatedDate)))
+```
+
+此公式会检查并了解潜在客户是否评级为“热门”；如果是，返回正确时间。否则，返回自某人创建潜在客户之后的时间。
+
+
+> - 请勿删除括号。  
+> - 保留括号为空。括号中不能包含值。  
+> - 如果您希望使用“日期”字段，请使用[TODAY](#TODAY)函数。  
+> - 显示的值为GMT时区值。  
+> - 因华炎魔方还未支持time类型字段，所以暂时只能用TEXT函数输出文本值。  
+
+
+#### TIMEVALUE
+
+返回没有日期的当地时间值，例如工作时间。
+
+**使用：** `TIMEVALUE(value)`,并使用时间格式的文本值、合并字段或表达式替换 value。
+
+**参数：** text 时间格式的字符串，如17:30:45.125
+
+**返回值：** 时间
+
+```javascript
+TEXT(TIMEVALUE("17:30:45.125"))
+```
+
+返回 "17:30:45.125"。
+
+> - 请勿对日期时间字段使用 TIMEVALUE。
+> - 因华炎魔方还未支持time类型字段，所以暂时只能用TEXT函数输出文本值。
+
+
+#### TODAY
+
+将当前日期返回为日期数据类型。
+
+**使用：** `TODAY()`
+
+**返回值：** 日期
+
+```javascript
+TODAY()-Sample_date_c
+```
+
+计算样本中还剩多少天。
+
+```javascript
+SampleDate < TODAY()
+```
+
+本示例可确保用户无法将 Sample Date（采样日期）更改为过去的日期。
+
+
+> - 请勿删除括号。
+> - 保留括号为空。括号中不能包含值。
+> - 使用含 TODAY 函数的“日期”字段而不是“日期时间”字段。Last Activity Date（上次活动日期）是“日期”字段；而 Created Date（创建日期）和 Last Modified Date（上次修改日期）为“日期时间”字段
+> - 如果您希望使用日期时间字段，请参阅[NOW](#NOW)函数。
+> - 始终使用用户的时区计算日期和时间，TODAY()返回的是当天GMT时区0点值。
+> - 与 TODAY 函数和其他“日期”字段一起使用加和减运算符，以返回一个代表天数的数字。例如，TODAY()-LastActivityDate 计算自上次活动日期后的天数。在本示例中，公式字段数据类型为数字。
+> - 与 TODAY 函数和数字一起使用加和减运算符，以返回一个日期。例如，TODAY() +5 计算今天之前五天的日期。在本示例中，公式字段数据类型为日期。
+
+
+#### WEEKDAY
+
+返返回指定日期是周几，用 1 表示周日，2 表示周一，以此类推，7 表示周六。
+
+**使用：** `WEEKDAY(date)`
+
+**参数：** date 日期字段或值（如 TODAY()）
+
+**返回值：** 数值
+
+```yaml
+WEEKDAY(customdate1__c)
+```
+
+使用 customdate1__c 返回指定日期的周数。
+
+> - 该函数只支持日期类型值，不支持日期时间或字符串类型值作为参数。
+> - 该函数与javascript编程语言的Date.getDay函数有差异，后者用0表示周日，1表示周一，以些类推，6表示周六。
+
+
+#### YEAR
+
+以给定日期的数字格式返回四位数字表示的年份。
+
+**使用：** `YEAR(日期)`，用包含您希望返回的年份的字段或表达式替换日期。
+
+**参数：** date 日期字段或值（如 TODAY()）
+
+**返回值：** 数值
+
+```yaml
+YEAR(TODAY() )- YEAR(Initial_Meeting__c )
+```
+
+返回自您与客户初次会面后的年数。本示例使用名为 Initial Meeting（初次会面）的自定义日期字段。
+
+> - 该函数只支持日期类型值，不支持日期时间或字符串类型值作为参数。
+> - 该函数与javascript编程语言的Date.getYear函数表现一致。
+
+
 
 ### Logical Functions
 

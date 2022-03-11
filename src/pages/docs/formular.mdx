@@ -673,36 +673,584 @@ YEAR(TODAY() )- YEAR(Initial_Meeting__c )
 > - 该函数只支持日期类型值，不支持日期时间或字符串类型值作为参数。
 > - 该函数与javascript编程语言的Date.getYear函数表现一致。
 
+### 逻辑函数
+
+#### AND
+
+如果所有的值均为真，则返回 TRUE（真）响应；如果一个或多个值为假，则返回 FALSE（假）响应。使用此函数作为运算符 && (AND) 的备选。
+
+**使用：** AND(逻辑1,逻辑2...)
+
+**参数：**
+
+* *逻辑表达式1:* `boolean` 您希望计算的返回布尔类型值的公式表达式1。
+* *逻辑表达式2:* `boolean` 您希望计算的返回布尔类型值的公式表达式2。
+* ... 更多返回布尔类型值的其他表达式。
+
+**返回值：** 布尔
+
+```javascript
+IF(AND(Price<1,Quantity<1),"Small", null)
+```
+
+如果价格和数量小于 1，此公式将显示“Small”。如果资产有大于 1 的价格或数量，则此字段为空。
+
+#### BLANKVALUE
+
+判断表达式是否具有值，如果没有值则返回一个置换表达式。如果表达式具有值，则返回表达式的值。
+
+**使用：** BLANKVALUE(表达式, 置换表达式)
+
+**参数：**
+
+* *表达式:* `text/number/date/datetime` 您希望计算的表达式，支持除布尔类型外的常用字段类型值。
+* *置换表达式:* `text/number/date/datetime` 您希望替换任何空白值的值，数据类型应该跟第一个参数一致，当不一致时将返回错误信息。
+
+**返回值：** 与传入的参数一样的数据类型
+
+```yaml
+BLANKVALUE(Department, "Undesignated")
+```
+
+如果部门字段包含值则此公式返回部门字段的值。如果部门字段为空，则此公式返回词语未指定。
+
+```yaml
+BLANKVALUE(Payment_Due_Date__c, StartDate + 5)
+```
+
+此公式返回当 Payment Due Date（付款到期日期）为空时，合同开始日期之后第五天的日期。Payment Due Date（付款到期日期）是自定义日期字段。
+
+> * 如果字段包含字符、空白或零，则字段不为空。例如，如果字段包含使用空格键插入的空格，则该字段不为空。
+> * 如果字段没有值，则使用 BLANKVALUE 函数返回指定置换表达式对应的值；如果您只想检查字段是否有值，则使用[ISBLANK](#ISBLANK)函数。
+> * 传入的两个参数值类型应该一样，否则公式将直接报错。
+> * 传入的参数不支持布尔类型值。
+> * 传入的参数不支持select字段类型值。
+> * 如果您对数值字段判断空值，比如`BLANKVALUE(Amount, 100)`，则字段没有值且配置将空白字段处理为空白时，该公式才返回第二个参数中的指定的置换表达式值，如果字段没有值且配置将空白字段处理为0时，则按0值返回而不是返回第二个参数中的指定表达式值。
+> * 因为我们的空白字段处理方式默认值是“将空白字段视为零”，所以低代码中要小心，不配置这个属性时，默认为按0值处理。零代码配置时问题不大，因为空白字段处理属性是必填的，不存在默认值问题。
+
+■ 该函数与[ISBLANK](/docs/admin/functions#isblank)很像，但是该函数会进一步返回字段值为空时的置换表达式对应的值，一般来说，如果您只是想判断字段值是否为空，应该使用后者而不是该函数。  
+■ 该函数不支持传入select字段类型参数，但是如果字段是单选的，可以先用TEXT函数选把select类型转换为text类型，比如`BLANKVALUE(TEXT(Leave__c), "error")`，多选的select字段类型无法使用BLANKVALUE函数。
+
+* 字段类型为 `text` 时：`BLANKVALUE(FieldName, "替换值")`
+* 字段类型为 `select` 时：`IF(ISBLANK(FieldName), 替换值, FieldName)`
+* 字段类型为 `number/currency` 时： `BLANKVALUE(FieldName, "替换值")`
+* 字段类型为 `date/datetime` 时： `BLANKVALUE(FieldName, "替换值")`
+* 字段类型为 `lookup/master_detail` 时： `BLANKVALUE(FieldName._id, "替换ID值")`
+* 字段类型为 `boolean` 时：`IF(FieldName, ValueA, ValueB)`
 
 
-### Logical Functions
+#### CASE
 
-- AND	Returns a TRUE response if all values are true; returns a FALSE response if one or more values are false.
-- BLANKVALUE	Determines if an expression has a value and returns a substitute expression if it doesn’t. If the expression has a value, returns the value of the expression.
-- CASE	Checks a given expression against a series of values. If the expression is equal to a value, returns the corresponding result. If it isn't equal to any values, it returns the else_result.
-- IF	Determines if expressions are true or false. Returns a given value if true and another value if false.
-- ISBLANK	Determines if an expression has a value and returns TRUE if it does not. If it contains a value, this function returns FALSE.
-- ISCLONE	Checks if the record is a clone of another record and returns TRUE if one item is a clone. Otherwise, returns FALSE.
-- ISNEW	Checks if the formula is running during the creation of a new record and returns TRUE if it is. If an existing record is being updated, this function returns FALSE.
-- ISNULL Determines if an expression is null (blank) and returns TRUE if it is. If it contains a value, this function returns FALSE.
+根据一系列值检查一个给定表达式。如果表达式等于其中一个值，则返回相应结果。如果它不等于任何值，则返回其他结果。
 
-### Math Functions
+**使用：** CASE(表达式,​值1, 结果1, 值2,​ 结果2,...,其他结果)，用要与所指定的每个值进行比较的字段或值替换表达式。必须用相等的值替换每个值和结果以返回结果项。当表达式不等于任何值时，用您希望返回的值替换其他结果。
 
-- ABS	Calculates the absolute value of a number. The absolute value of a number is the number without its positive or negative sign.
-- CEILING	Rounds a number up to the nearest integer, away from zero if negative.
-- DISTANCE	Calculates the distance between two locations in miles or kilometers.
-- EXP	Returns a value for e raised to the power of a number you specify.
-- FLOOR	Returns a number rounded down to the nearest integer, towards zero if negative.
-- GEOLOCATION	Returns a geolocation based on the provided latitude and longitude. Must be used with the DISTANCE function.
-- LN	Returns the natural logarithm of a specified number. Natural logarithms are based on the constant e value of 2.71828182845904.
-- LOG	Returns the base 10 logarithm of a number.
-- MAX	Returns the highest number from a list of numbers.
-- MCEILING	Rounds a number up to the nearest integer, towards zero if negative.
-- MFLOOR	Rounds a number down to the nearest integer, away from zero if negative.
-- MIN	Returns the lowest number from a list of numbers.
-- MOD	Returns a remainder after a number is divided by a specified divisor.
-- ROUND	Returns the nearest number to a number you specify, constraining the new number by a specified number of digits.
-- SQRT	Returns the positive square root of a given number.
+**参数：**
+
+* *表达式:* `text/number/currency/percent/date/datetime/select` 要与所指定的每个值进行比较的字段或值。
+* *值1:* `text/number/currency/percent/date/datetime` 第一个要与第一个参数值进行比较的值。
+* *结果1:* `text/number/currency/percent/date/datetime` 当第一个参数值等于参数“值1”时，函数返回该结果值。
+* *值2:* `text/number/currency/percent/date/datetime` 第二个要与第一个参数值进行比较的值。
+* *结果2:* `text/number/currency/percent/date/datetime` 当第二个参数值等于参数“值2”时，函数返回该结果值。
+* ...
+* *其他结果:* `text/number/currency/percent/date/datetime` 当表达式不等于之前参数中的任何值时，函数返回该结果值。
+
+**返回值：** 与传入的最后一个参数一样的数据类型
+
+***公式字段示例：***
+
+***1.个案未处理的天数***
+
+这是一个自定义公式字段 Days Open 的示例，使用该示例可根据个案未处理的天数显示不同的文本：
+
+```javascript
+CASE(Days_Open__c, 3,  "Reassign", 2, "Assign Task", "Maintain")
+```
+
+显示下面的文本：
+
+* 为任何三天未处理的个案显示“Reassign”（重新指定）。
+* 为任何有两天未处理的个案显示“Assign Task”（分配任务）。
+* 为所有其他个案显示“Maintain”（维护）。
+
+***2.上次活动的月份***
+
+此公式字段显示上次活动的月份，如果没有活动，则显示“None”（无）。
+
+```yaml
+CASE(MONTH(LastActivityDate),
+1, "January",
+2, "February",
+3, "March",
+4, "April",
+5, "May",
+6, "June",
+7, "July",
+8, "August",
+9, "September",
+10, "October",
+11, "November",
+12, "December",
+"None")
+```
+
+***默认值示例：***
+
+***1.折扣率***
+
+使用下面的默认值公式，可以根据业务机会创建人所在的部门在业务机会中插入另一个折扣率：
+
+```yaml
+CASE(User.Department,​​ "IT", 0.25, "Field", 0.15, 0)
+```
+
+在本示例中，该公式在“IT”部门的用户所创建的所有业务机会上插入了 25% 的折扣率，或在“Field”部门的人员所创建的所有业务机会上插入了 15% 的折扣率。如果创建者不属于其中任何一个部门，则折扣率为零。这是业务机会中使用标准用户字段 Department（部门）的自定义百分比字段。
+
+***2.产品语言***
+
+您可能希望将产品与其语言关联起来，以便用户了解要包含的文档或适配器的类型。使用下面的默认值公式可根据创建某产品的用户所属的国家自动设置该产品的语言。在本示例中，如果用户所属国家是“Japan”（日本），则默认值为“Japanese”（日语），如果用户所属国家是“US”（美国），则默认值为“English”（英语）。如果两者都不是，则会将默认值“unknown”（未知）插入产品语言字段。
+
+```yaml
+CASE($User.Country ,​​ "Japan", "Japanese", "US", "English","unknown")
+```
+
+■ 请确保您的`值1`、`值2`等表达式属于相同的数据类型，且必须与第一个参数值数据类型一致。  
+■ 请确保您的`结果1`、`结果2`等表达式以及最后的`其他结果`表达式属于相同的数据类型，但是不必与第一个参数值数据类型一致，且它们往往不一致。  
+■ CASE 函数中不能包含返回布尔类型，即真或假的参数值，而应当确保真或假表达式返回被支持的数据类型，例如：  
+`CASE(1, IF(ISPICKVAL(Term__c,"12"),​ 1, 0), 12 * Monthly_Commit__c,​​ IF(ISPICKVAL(Term__c,"24"), 1, 0),​​ 24 * Monthly_Commit__c, 0)`  
+在该公式中，Term（期限）是一个选项列表字段，当它包含表示真的值 1 时，将与“每月提交量”相乘。  
+■ 需包含其他结果值。  
+■ 如果任何表达式返回一个错误，那么，即使其他表达式返回的值正确，`CASE`函数也将返回一个错误。例如，在`CASE(Field__c,"Partner", "P",​ "Customer", "C", LEFT(Field__c, -5))` 公式中，即使其中字段的值是“Partner”（合作伙伴）或“Customer”（客户），该公式也会由于上一条语句不合逻辑而返回一个错误。  
+■ 如果 CASE 函数中的字段为空，它将返回其他结果值。例如，如果 Days Open（未处理天数）字段为空、0 或者 2 和 3 以外的任何值，`CASE(Days_Open__c, 3, "Reassign", 2,​ "Assign Task", "Maintain")`公式将显示“Maintain”（维护）。  
+■ 使用 CASE 函数可以确定选项列表值是否等于特定的值。例如，当 Term（期限）为 12 时，`CASE(Term__c, "12", 12*Monthly_Commit__c, "24",​ 24 * Monthly_Commit__c, 0)` 公式将 Monthly Commit（每月提交量）乘以 12；当 Term（期限）为 24 时，该公式将 Monthly Commit（每月提交量）乘以 24。否则，结果为零。
+
+> * CASE函数中的任何参数都不支持布尔类型值，这不只表示第一个参数及后续用于比较值的其他参数不能是布尔类型值，最后一个参数也一样不支持布尔类型值，也就是说整个函数的返回值不可能是布尔类型值。
+> * 表达式参数，即传入的第一个参数支持select字段，但是只支持单选的，如果传入多选的select将直接报错。
+
+#### IF
+
+确定表达式为真或为假。如果为真则返回一个给定值，如果为假则返回另一个值。
+
+**使用：** IF(逻辑测试, value_if_true, value_if_false)
+
+**参数：**
+
+* *逻辑表达式:* `boolean` 最终返回布尔类型值的逻辑表达式。
+* *value_if_true:* `text/number/currency/percent/date/datetime` 您希望当表达式为真时所返回的值，支持除布尔类型外的常用字段类型值。
+* *value_if_false:* `text/number/currency/percent/date/datetime` 您希望表达式为假时所返回的值，支持除布尔类型外的常用字段类型值。
+
+**返回值：** 第一个及第二参数中相同的数据类型
+
+***公式字段示例：***
+
+***1.付款逾期***
+
+```javascript
+IF(AND(Payment_Due_Date__c < TODAY(),​​Payment_Status__c = "UNPAID") , "PAYMENT OVERDUE", ​null)
+```
+
+此公式确定付款到期日期是否已过，以及付款状态是否为“UNPAID”（未付）。如果是，则返回文本“PAYMENT OVERDUE”（付款逾期）；如果不是，则保持该字段为空。本示例使用名为 Payment Due Date（付款到期日期）的自定义日期字段和一个名为 Payment Status（付款状态）的自定义文本字段。
+
+***2.插入税率***
+
+使用该默认值公式可根据用户所在城市设置资产的税率。使用以下默认值创建自定义百分比字段：
+
+```yaml
+IF($user.city = "Napa", 0.0750, IF($user.city = "Paso Robles", 0.0725,  IF($user.city = "Sutter Creek", 0.0725,   IF($user.city = "Los Olivos", 0.0750,    IF($user.city = "Livermore", 0.0875, null    )   )  ) ))
+```
+
+> * 请确保您的 value_if_true 和 value_if_false 表达式属于相同的数据类型，且不为布尔类型值。
+> * IF函数不支持返回值为布尔类型的情况，即第二个及第三个参数不能是布尔类型。
+
+#### ISBLANK
+
+判断表达式是否具有值，如果没有值则返回 TRUE（真）。如果它包含一个值，则该函数返回 FALSE（假）。
+
+**使用：** ISBLANK(表达式)
+
+**参数：** `text/number/date/datetime/select` 您希望计算的表达式。
+
+**返回值：** 布尔
+
+```yaml
+(IF(ISBLANK(Maint_Amount__c), 0, 1) + ​ IF(ISBLANK(Services_Amount__c), 0,1) + ​  IF(ISBLANK(Discount_Percent__c), 0, 1) + ​   IF(ISBLANK(Amount), 0, 1) +​    IF(ISBLANK(Timeline__c), 0, 1)) / 5
+```
+
+此公式可提取一组字段，并计算人员所用的百分比。此公式字段检查五个字段以查看它们是否为空。如果为空，则该字段计数为 0。对于任何包含一个值的字段计数“1”，且该总和除以五（计算的字段数）。此公式需要您选中“空白字段处理”下面的将空白字段视为空白选项，否则公式中的ISBLANK会始终返回FALSE。
+
+■ 请不要用`MyDateTime__c == null`这种表达式判断空值，而应该使用`ISBLANK(MyDateTime__c)`。  
+■ 如果字段包含字符、空白或零，则字段不为空。例如，如果字段包含使用空格键插入的空格，则该字段不为空。  
+■ 如果字段没有值，则使用 [BLANKVALUE](#BLANKVALUE) 函数返回指定表达式；如果您只想检查字段是否有值，则使用 ISBLANK 函数。    
+■ 如果您对数值字段使用该函数,比如`ISBLANK(Amount)`，则字段没有值且配置将空白字段处理为空白时，该函数才返回 TRUE。  
+■ 因为我们的空白字段处理方式默认值是“将空白字段视为零”，所以低代码中要小心，不配置这个属性时，默认为按0值处理。零代码配置时问题不大，因为空白字段处理属性是必填的，不存在默认值问题。  
+■ 对于select字段类型，单选多选语法是一样的，直接传入参数值即可。  
+
+> ISBLANK函数返回值为布尔类型，但是不支持参数值本身为布尔类型的情况。
+
+* 字段类型为 `text/select` 时：`ISBLANK(FieldName)`。
+* 字段类型为 `number/currency` 时： `ISBLANK(FieldName)`，但是只有配置将空白字段处理为空白时才有效，否则永远返回false。
+* 字段类型为 `date/datetime` 时： `ISBLANK(FieldName)`。
+* 字段类型为 `lookup/master_detail` 时： `ISBLANK(FieldName._id)`。
+* 字段类型为 `boolean` 时：`FieldName`。
+
+#### NOT
+
+对于 TRUE（真）返回 FALSE（假），对于 FALSE（假）返回 TRUE（真）。
+
+**使用：** NOT(逻辑表达式)
+
+**参数：** `boolean` 您希望计算的表达式。
+
+```javascript
+IF(NOT(Status = "Closed"), ROUND(NOW()-CreatedDate, 0), null)
+```
+
+检查变量是否未处理；如果是，则通过从当前日期和时间减去创建日期和时间来计算它未被处理的天数。结果是舍入为零小数位的未处理天数。如果变量已处理，则此字段为空。
+
+#### OR
+
+如果任何表达式为真，则返回 TRUE（真）。如果所有表达式均为假，则返回 FALSE（假）。使用此函数作为运算符 || (OR) 的备选。
+
+**使用：** OR(逻辑1,逻辑2...)
+
+**参数：**
+
+* *逻辑表达式1:* `boolean` 您希望计算的返回布尔类型值的公式表达式1。
+* *逻辑表达式2:* `boolean` 您希望计算的返回布尔类型值的公式表达式2。
+* ... 更多返回布尔类型值的其他表达式。
+
+**返回值：** 布尔
+
+```javascript
+IF(OR(Priority="High",Status="New"), ROUND(NOW()-CreatedDate, 0), null)
+```
+
+如果个案 Status（状态）为“New”（新建）或 Priority（优先级）为“High”（高），则此公式返回个案未被处理的天数。如果个案是今天打开的，则该字段显示零。
+
+### 数学函数
+
+#### ABS（绝对值）
+
+计算一个数字的绝对值。数字的绝对值是不含正、负号的数字。
+
+**使用：** ABS(数字)
+
+**参数：** `number` 带有您希望删除的符号的合并字段、表达式或其他数值。
+
+**返回值：** 数值
+
+```javascript
+ABS(ExpectedRevenue)
+```
+
+计算 Expected Revenue（预期收入）金额的正值，而无论其为正还是为负。
+
+#### CEILING
+
+将数字向上四舍五入为最接近的整数；如果是负数，先把正数部分舍入为最接近的整数然后加上负号前缀。
+
+**使用：** CEILING(数字)
+
+**参数：** `number` 您希望舍入的字段或表达式。
+
+**返回值：** 数值
+
+```javascript
+CEILING(2.3)
+```
+
+返回 3，即 2.3 向上舍入为最接近的整数。
+
+```javascript
+CEILING(-2.3)
+```
+
+会返回 -3，即 -2.3 舍入为 0 以下的最接近的正整数后加上负号前缀。
+
+#### EXP
+
+返回一个值，该值等于所指定数字的 e 幂。
+
+**使用：** EXP(数字)
+
+**参数：** `number` 一个数字字段或值（如 5）。
+
+**返回值：** 数值
+
+```javascript
+EXP(3)
+```
+
+此公式返回一个值，该值等于 e 的三次幂。
+
+```javascript
+Principal__c  EXP(Rate__c  Years__c)
+```
+
+此公式基于本金的自定义货币字段、利率的自定义百分比字段和年份的自定义数字字段计算复利。
+
+#### FLOOR
+
+返回向下舍入为最接近整数的数字；如果是负数，按整数部分舍入后加负号。
+
+**使用：** FLOOR(数字)
+
+**参数：** `number` 一个数字字段或值（如 5.245）。
+
+**返回值：** 数值
+
+```javascript
+FLOOR(2.5)
+```
+
+返回 2，即 2.5 向下舍入为最接近的整数。
+
+```javascript
+FLOOR(-2.5)
+```
+
+会返回 -2，即 -2.5 舍入为 0 以上的负数。
+
+#### LN
+
+返回一个指定数值的自然对数。自然对数以常数 e（值为 2.71828182845904）为底。
+
+**使用：** LN(数字)
+
+**参数：** `number` 您希望获得其自然对数的字段或表达式。注意：LN 函数是 EXP 函数的反函数。
+
+**返回值：** 数值
+
+```javascript
+LN(10)
+```
+
+返回 10 的自然对数，即 2.30。
+
+```javascript
+LN(Value__c)
+```
+
+返回名为 Value（值）的自定义数字字段的自然对数。
+
+#### LOG
+
+返回数字以 10 为底的对数。
+
+**使用：** LOG(数字)
+
+**参数：** `number` 您希望从中计算以 10 为底的对数的字段或表达式。
+
+**返回值：** 数值
+
+```javascript
+LOG(Salary__c)
+```
+
+计算某人的工资的对数。
+
+在本示例中，Salary（工资）是自定义金额字段。
+
+#### MAX
+
+返回一系列数字中的最大数字。
+
+**使用：** MAX(数字, 数字,...)
+
+**参数：**
+
+* *数字:* `number` 您希望从中检索最大数字的字段或表达式之一。
+* *数字:* `number` 您希望从中检索最大数字的字段或表达式之一。
+* ... 更多您希望从中检索最大数字的字段或表达式。
+
+**返回值：** 数值
+
+***示例：***
+
+***1.服务费***
+
+```javascript
+MAX(0.06 * Total_Cost__c , Min_Service_Charge__c)
+```
+
+***2.书籍版税***
+
+本示例中的公式字段计算服务费，取总成本的 6% 与最低服务费之间的较大者。请注意，最低服务费是默认值为 $15 的自定义货币字段。但是，如果最低服务费并不总是为同一金额，则可以使该字段为公式字段。
+
+```javascript
+MAX(0.10 * Pages__c, (Retail_Price__c * 0.07) * Total_Sold__c)
+```
+
+***3.佣金***
+
+此公式确定要支付的书籍版税。它显示两个金额中的较大的一项：每卖一本书 0.07 美元或每页 0.10 美元。它假设您有名为 Pages（页数）和 Total Sold（销售总额）的自定义数字字段，以及名为 Retail Price（零售价格）的自定义货币字段。
+
+```javascript
+MAX($user.Commission_Percent__c * Price, Price * Account_Discount__c, 100)
+```
+
+该示例确定要根据以下较大值为资产记录的佣金：用户的价格佣金百分比、价格乘以为金额存储的折扣百分比或 100 美元。本示例假设您有两个针对用户和资产的自定义百分比字段。
+
+#### MCEILING
+
+将数字向上四舍五入为最接近的整数；如果是负数，一样按值大小向上舍入为最接近的负整数。
+
+**使用：** MCEILING(number)
+
+**参数：** `number` 您希望计算的字段或表达式。
+
+**返回值：** 数值
+
+```javascript
+MCEILING(2.3)
+```
+
+返回 3，即 2.3 向上舍入为最接近的整数。
+
+```javascript
+MCEILING(-2.3)
+```
+
+返回 -3，即对于负数，-2.3 向下舍入为最接近的负整数。
+
+> MCEILING函数与CEILING在传入的参数是正数时用法一样，区别是参数为负数时后者是先按正数值向上舍入后再加上负号前缀。
+
+#### MFLOOR
+
+将数字向下四舍五入为最接近的整数；如果是负数，一样按值大小向下舍入为最接近的负整数。
+
+**使用：** MFLOOR(number)
+
+**参数：** `number` 您希望计算的字段或表达式。
+
+**返回值：** 数值
+
+```javascript
+MFLOOR(2.3)
+```
+
+返回 2，即 2.3 向下舍入为最接近的整数。
+
+```javascript
+MFLOOR(-2.3)
+```
+
+返回 -3，即对于负数，-2.3 向下舍入为最接近的负整数。
+
+> MFLOOR函数与FLOOR在传入的参数是正数时用法一样，区别是参数为负数时后者是先按正数值向下舍入后再加上负号前缀。
+
+#### MIN
+
+返回一系列数字中的最小数字。
+
+**使用：** MIN(数字, 数字,...)
+
+**参数：**
+
+* *数字:* `number` 您希望从中检索最小数字的字段或表达式之一。
+* *数字:* `number` 您希望从中检索最小数字的字段或表达式之一。
+* ... 更多您希望从中检索最小数字的字段或表达式。
+
+**返回值：** 数值
+
+```javascript
+MIN(250, Contribution__c /2)
+```
+
+本示例中的公式根据一半员工的捐献或 250 美元（较小者为准）的匹配计划来确定在员工 401K 匹配中提供多少金额。它假设您有一个名为 Contribution（贡献）的自定义货币字段。
+
+```javascript
+MIN(Gross__c * Bonus_Percent__c, ​  Performance__c / Number_of_Employees__c)
+```
+
+该示例确定了基于两个金额最小值的员工奖金金额：员工的总时间奖金百分比或在所有员工中平分公司的绩效奖金金额。它还假设您有一个名为 Number of Employees（职员数）的自定义数字字段，一个名为 Bonus Percent（奖金百分比）的自定义百分比字段，以及针对员工 Gross（毛利）和公司的 Performance（绩效）的自定义货币字段。
+
+#### MOD
+
+返回一个数字除以指定除数后的余数。
+
+**使用：** MOD(数字, 除数)
+
+**参数：**
+
+* *数字:* `number` 您希望被除的字段或表达式。
+* *除数:* `number` 要用作除数的数字。
+
+**返回值：** 数值
+
+```javascript
+MOD(3, 3)MOD(4, 3)MOD(123, 100)
+```
+
+返回 0； 返回 1； 返回 23。
+
+您可能希望禁止用户将会议安排在星期六或星期日。使用下面的示例可以对名为 My Date（我的日期）的自定义日期字段应用验证规则。
+
+```yaml
+CASE(MOD(My_Date__c - DATE(1900, 1, 7), 7),
+0, 0,
+6, 0,
+1) = 0
+```
+
+当 My Date（我的日期）的值不在星期一至星期五范围内时，本示例返回下面的错误消息：“My Date is not a weekday.”（我的日期不是工作日）。
+
+> 请不要使用0值作为除数传入。
+
+#### ROUND
+
+返回与所指定的数字最接近的一个数字，并通过指定的位数来约束新数字。
+
+**使用：** ROUND(数字, 数字位数)
+
+**参数：**
+
+* *数字:* `number` 您希望舍入的字段或表达式。
+* *数字位数:* `number` 您希望在舍入时考虑的小数位数。
+
+**返回值：** 数值
+
+```javascript
+ROUND (1.5, 0) = 2ROUND (1.2345, 0) = 1ROUND (-1.5, 0) = -2ROUND (225.49823, 2) = 225.50
+```
+
+```javascript
+ROUND( Amount-Amount* Discount_Percent__c,2)
+```
+
+使用此公式可以计算舍入到两位数的业务机会折扣金额。本示例是业务机会的数字公式字段，使用名为 Discount Percent（折扣百分比）的自定义百分比字段。
+
+> - 为数字位数输入零以将数值舍入为最接近的整数。  
+> - 该函数会根据您指定的小数位数自动舍入数字。例如，当您输入 1.49999 时，设置为两位小数的自定义数字字段存储为 1.50。  
+> - 该函数使用四舍五入算法。半数值始终要前一位加一。例如，1.45 四舍五入为 1.5。–1.45 四舍五入为 –1.5。  
+> - 界面上显示的数字取决于在字段在定义时您所选的小数位数。这里数字位数表示公式运算舍入时考虑的数字位数。  
+> - 第一个参数值为负数时，将按正数部分四舍五入后再加上负号前缀作为最终返回值，而不是像javascript编程语言Math.round函数一样按值进行四舍五入。  
+
+#### SQRT
+
+返回给定数字的正平方根。
+
+**使用：** SQRT(数字)
+
+**参数：** `number` 您希望计算其平方根的字段或表达式。
+
+**返回值：** 数值
+
+```javascript
+SQRT(25)
+```
+
+返回 25 的平方根（即 5）。
+
+```javascript
+SQRT(Amplitude__c)
+```
+
+返回代表地震振幅的自定义数字字段的平方根。
+
+> - 计算一个负数的平方根是不支持的，会返回错误信息。
+> - 可通过包含 IF 函数来避免出现零除数，例如：IF( Amplitude__c >= 0, SQRT( Amplitude__c ), null)。
+
 
 ### Text Functions
 

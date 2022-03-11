@@ -12,6 +12,77 @@ description: 标准对象定义低代码平台元数据的存储格式，包括�
 - 角色
 - ...
 
+### 公司 spaces
+公司又称工作区。用户被划分为不同的工作区（企业），每个工作区可以配置独立的组织机构和权限控制。业务人员录入的每一条业务数据都会自动加入 space 属性，用于标记所属的工作区。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name	| text | 名称 |
+| avatar | avatar | Logo |
+| owner | lookup | 所有者 |
+| admins | lookup | 管理员 |
+| qywx_corp_id | text | 企业ID(CorpId) |
+| qywx_agent_id | text | AgentID |
+| qywx_secret | text | Secret |
+| qywx_contact_secret | text | 通讯录同步Secret |
+| qywx_token | text | Token |
+| qywx_aes_key | text | AesKey |
+| dingtalk_corp_id | text | 企业ID(CorpId) |
+| dingtalk_agent_id  | text | AgentID |
+| dingtalk_key | text | AppKey |
+| dingtalk_secret | text | AppSecret |
+| dingtalk_aes_key | text | AesKey |
+| dingtalk_token | text | Token |
+| account_logo | avatar | Logo |
+| background | avatar | 登录页背景图 |
+| enable_register | boolean | 启用自助注册 |
+| default_profile | lookup | 默认简档 |
+| default_organization | lookup | 默认部门 |
+| api_key | text | API Key |
+
+<!--
+| avatar_square | avatar | 正方形Logo |
+| avatar_dark | avatar | 深色Logo |
+
+| balance | number | 账户余额 |
+| services | object | Services |
+| billing.remaining_months | number | 剩余月数 |
+| company_id |  | 分部 |
+| company_ids |  | 所属分部 |
+| features | [text] |  |
+-->
+
+### 部门 organizations
+部门又称组织机构。用于在工作区内，定义公司的组织机构。每个员工可以属于多个组织机构。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name	| text | 名称 |
+| fullname | text | 部门全称 |
+| parent | lookup | 上级部门 |
+| parents | lookup | 上级部门 |
+| children | lookup | 下级部门 |
+| sort_no | number | 排序号 |
+| users | lookup | 成员 |
+| company_id |  | 所属分部 |
+| company_ids |  | 所属分部 |
+| is_company | boolean | 分部级 |
+| hidden | boolean | 隐藏 |
+| qywx_id | text | 企业微信部门ID |
+| dingtalk_id | text | 钉钉部门ID |
+
+### 人员 space_users
+用于标记用户属于哪个工作区，以及在对应工作区的参数设置。每个用户可以属于多个工作区。
+
+<!--
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|  |  |  | 
+-->
+
+### 用户 users
+用于保存系统中的注册用户和用户的基本参数。
+
 ## 元数据相关
 
 - 对象

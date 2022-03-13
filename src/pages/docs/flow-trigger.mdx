@@ -63,7 +63,9 @@ module.exports = {
 - approveState: 审核状态[string],pending/approved/rejected
 - broker: 微服务实例
 
-## 流程微服务
+## BPM Service API
+
+BPM 微服务提供以下 API 供调用。
 
 - getFlow
 - getForm
@@ -92,7 +94,7 @@ afterSubmit: async function () {
         instanceId = this.instance._id;
     let deadLine = ...;
     let userIds = ...;
-    await this.broker.call(`flowManager.sendRemindSMS`, {
+    await this.broker.call(`BPMService.sendRemindSMS`, {
         instanceName, deadLine, userIds, spaceId, instanceId
     });
 },

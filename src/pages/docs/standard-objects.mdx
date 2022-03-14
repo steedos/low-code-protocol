@@ -47,8 +47,8 @@ description: 标准对象定义低代码平台元数据的存储格式，包括�
 | balance | number | 账户余额 |
 | services | object | Services |
 | billing.remaining_months | number | 剩余月数 |
-| company_id |  | 分部 |
-| company_ids |  | 所属分部 |
+| company_id | lookup | 分部 |
+| company_ids | lookup | 所属分部 |
 | features | [text] |  |
 -->
 
@@ -64,8 +64,8 @@ description: 标准对象定义低代码平台元数据的存储格式，包括�
 | children | lookup | 下级部门 |
 | sort_no | number | 排序号 |
 | users | lookup | 成员 |
-| company_id |  | 所属分部 |
-| company_ids |  | 所属分部 |
+| company_id | lookup | 所属分部 |
+| company_ids | lookup | 所属分部 |
 | is_company | boolean | 分部级 |
 | hidden | boolean | 隐藏 |
 | qywx_id | text | 企业微信部门ID |
@@ -74,14 +74,121 @@ description: 标准对象定义低代码平台元数据的存储格式，包括�
 ### 人员 space_users
 用于标记用户属于哪个工作区，以及在对应工作区的参数设置。每个用户可以属于多个工作区。
 
-<!--
 | 字段名 | 字段类型 | 字段含义 |
 |----|----|----|
-|  |  |  | 
+| company_id | lookup | 主分部 |
+| name | text | 姓名 |
+| job_number | text | 工号 |
+| company_ids | lookup | 分部(多选) |
+| username | text | 用户名 |
+| email | text | 邮件 |
+| email_verified | boolean | 邮件已验证 |
+| mobile | text | 手机 |
+| mobile_verified | boolean | 手机已验证 |
+| organizations | lookup | 部门(多选) |
+| organizations_parents | lookup | 部门(含上级) |
+| organization | lookup | 主部门 |
+| position | text | 职务 |
+| manager | lookup | 上级主管 |
+| profile | lookup | 简档 |
+| contact_id | lookup | 联系人 |
+| is_supplier | boolean | 是供应商 |
+| is_customer | boolean | 是客户 |
+| work_phone | text | 工作电话 |
+| locale | select | 语言 |
+| sort_no | number | 排序号 |
+| email_notification | boolean | 接收邮件通知 |
+| sms_notification | boolean | 接收短信提醒 |
+| user_accepted | boolean | 有效 |
+| password_expired | boolean | 密码已过期 |
+| avatar | avatar | 头像 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+| qywx_id | text | 企业微信账号 |
+| dingtalk_id | text | 钉钉账号 |
+| qywx_space | text | 企业微信工作区 |
+| dingtalk_space | text | 钉钉工作区 |
+| invite_state | text | 邀请状态 |
+| password | text | Password |
+| user | master_detail | 用户 |
+| owner | lookup | 所有者 |
+| space | text | 所属工作区 |
+
+<!--
+| hr | object | HR |
+| last_logon | date | 最近登陆 |
+
+| is_deleted | boolean | 已删除 |
+| deleted | datetime | 删除时间 |
+| deleted_by | lookup | 删除人 |
+| instances | grid | 申请单 |
+| instances.$._id | text | 申请单ID |
+| instances.$.state | text | 申请单状态 |
+| sharing | grid | 记录级权限 |
+| sharing.$ | ndefine | 授权条件 |
+| sharing.$.u | [text] | 授权用户 |
+| sharing.$.o | [text] | 授权组织 |
+| sharing.$.r | text | 来自规则 |
+| message_count | number | 留言数 |
+| locked | boolean | 已锁定 |
+| instance_state | select | 审批状态 |
+| _table | object | 记录对象流程映射功能中表单中表格行信息 |
+| _table._id | text | Object Workflow Related Form Table ItemID" |
+| _table._code | text | Object Workflow Related Form Table Code |
 -->
 
 ### 用户 users
 用于保存系统中的注册用户和用户的基本参数。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+avatar | avatar | 头像 |
+name | text | 姓名 |
+mobile | text | 手机 |
+email | text | 邮件 |
+username | text | 用户名 |
+steedos_id | text | Steedos ID |
+locale | select | 语言 |
+utcOffset | number | 时区 |
+email_notification | boolean | 接收邮件通知 |
+primary_email_verified | boolean | 主邮箱已验证 |
+last_logon | date | 最近登陆 |
+is_cloudadmin | boolean | 是云管理员 |
+is_deleted | boolean | 已删除 |
+password_expired | boolean | Password expired |
+company_id | lookup | 主分部 |
+company_ids | lookup | 所属分部 |
+owner | lookup | 所有者 |
+space | text | 所属工作区 |
+created | datetime | 创建时间 |
+created_by | lookup | 创建人 |
+modified | datetime | 修改时间 |
+modified_by | lookup | 修改人 |
+
+<!--
+login_failed_number | number |  |
+login_failed_lockout_time | datetime |  |
+lockout | boolean |  |
+
+deleted | datetime | 删除时间 |
+deleted_by | lookup | 删除人 |
+instances | grid | 申请单 |
+instances.$._id | text | 申请单ID |
+instances.$.state | text | 申请单状态 |
+sharing | grid | 记录级权限 |
+sharing.$ |  | 授权条件 |
+sharing.$.u | [text] | 授权用户 |
+sharing.$.o | [text] | 授权组织 |
+sharing.$.r | text | 来自规则 |
+message_count | number | 留言数 |
+locked | boolean | 已锁定 |
+instance_state | select | 审批状态 |
+_table | object | 记录对象流程映射功能中表单中表格行信息 |
+_table._id | text | Object Workflow Related Form Table Item ID |
+_table._code | text | Object Workflow Related Form Table Code |
+-->
 
 ## 元数据相关
 

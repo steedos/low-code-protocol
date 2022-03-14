@@ -144,28 +144,28 @@ description: 标准对象定义低代码平台元数据的存储格式，包括�
 
 | 字段名 | 字段类型 | 字段含义 |
 |----|----|----|
-avatar | avatar | 头像 |
-name | text | 姓名 |
-mobile | text | 手机 |
-email | text | 邮件 |
-username | text | 用户名 |
-steedos_id | text | Steedos ID |
-locale | select | 语言 |
-utcOffset | number | 时区 |
-email_notification | boolean | 接收邮件通知 |
-primary_email_verified | boolean | 主邮箱已验证 |
-last_logon | date | 最近登陆 |
-is_cloudadmin | boolean | 是云管理员 |
-is_deleted | boolean | 已删除 |
-password_expired | boolean | Password expired |
-company_id | lookup | 主分部 |
-company_ids | lookup | 所属分部 |
-owner | lookup | 所有者 |
-space | text | 所属工作区 |
-created | datetime | 创建时间 |
-created_by | lookup | 创建人 |
-modified | datetime | 修改时间 |
-modified_by | lookup | 修改人 |
+| avatar | avatar | 头像 |
+| name | text | 姓名 |
+| mobile | text | 手机 |
+| email | text | 邮件 |
+| username | text | 用户名 |
+| steedos_id | text | Steedos ID |
+| locale | select | 语言 |
+| utcOffset | number | 时区 |
+| email_notification | boolean | 接收邮件通知 |
+| primary_email_verified | boolean | 主邮箱已验证 |
+| last_logon | date | 最近登陆 |
+| is_cloudadmin | boolean | 是云管理员 |
+| is_deleted | boolean | 已删除 |
+| password_expired | boolean | Password expired |
+| company_id | lookup | 主分部 |
+| company_ids | lookup | 所属分部 |
+| owner | lookup | 所有者 |
+| space | text | 所属工作区 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
 
 <!--
 login_failed_number | number |  |
@@ -189,6 +189,17 @@ _table | object | 记录对象流程映射功能中表单中表格行信息 |
 _table._id | text | Object Workflow Related Form Table Item ID |
 _table._code | text | Object Workflow Related Form Table Code |
 -->
+
+### 角色 roles
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 角色名称 |
+| api_name | text | API Name |
+| parent | lookup | 上级角色 |
+| users | lookup | 成员 |
+| description | textarea | 描述 |
+
 
 ## 元数据相关
 

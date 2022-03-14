@@ -1,0 +1,20 @@
+---
+title: 函数
+description: 低代码平台允许在软件包中使用函数扩展业务逻辑以满足任何需求。
+---
+
+在低代码平台中函数是执行特定计算任务的代码，你可以有一个函数读取你的销售数据和计算销售税，或一个函数收集数据和生成一个格式化的PDF报告文件。
+
+本协议约定在低代码平台编写函数的规范，包括函数参数，返回值等规则；
+
+```js
+export default async function (event, context) {
+  console.info(
+    `Invoking myfunction with payload ${JSON.stringify(event.data || {})}`
+  );
+
+  const results = await context.org.data.query("SELECT Id, Name FROM Account");
+  console.info(JSON.stringify(results));
+  return results;
+}
+```

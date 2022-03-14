@@ -728,7 +728,7 @@ BLANKVALUE(Payment_Due_Date__c, StartDate + 5)
 > * 如果您对数值字段判断空值，比如`BLANKVALUE(Amount, 100)`，则字段没有值且配置将空白字段处理为空白时，该公式才返回第二个参数中的指定的置换表达式值，如果字段没有值且配置将空白字段处理为0时，则按0值返回而不是返回第二个参数中的指定表达式值。
 > * 因为我们的空白字段处理方式默认值是“将空白字段视为零”，所以低代码中要小心，不配置这个属性时，默认为按0值处理。零代码配置时问题不大，因为空白字段处理属性是必填的，不存在默认值问题。
 
-■ 该函数与[ISBLANK](/docs/admin/functions#isblank)很像，但是该函数会进一步返回字段值为空时的置换表达式对应的值，一般来说，如果您只是想判断字段值是否为空，应该使用后者而不是该函数。  
+■ 该函数与[ISBLANK](#ISBLANK)很像，但是该函数会进一步返回字段值为空时的置换表达式对应的值，一般来说，如果您只是想判断字段值是否为空，应该使用后者而不是该函数。  
 ■ 该函数不支持传入select字段类型参数，但是如果字段是单选的，可以先用TEXT函数选把select类型转换为text类型，比如`BLANKVALUE(TEXT(Leave__c), "error")`，多选的select字段类型无法使用BLANKVALUE函数。
 
 * 字段类型为 `text` 时：`BLANKVALUE(FieldName, "替换值")`
@@ -1251,56 +1251,597 @@ SQRT(Amplitude__c)
 > - 计算一个负数的平方根是不支持的，会返回错误信息。
 > - 可通过包含 IF 函数来避免出现零除数，例如：IF( Amplitude__c >= 0, SQRT( Amplitude__c ), null)。
 
+### 文本函数
 
-### Text Functions
+#### BEGINS
 
-- BEGINS	Determines if text begins with specific characters and returns TRUE if it does. Returns FALSE if it doesn't.
-- BR	Inserts a line break in a string of text.
-- CASESAFEID	Converts a 15-character ID to a case-insensitive 18-character ID.
-- CONTAINS	Compares two arguments of text and returns TRUE if the first argument contains the second argument. If not, returns FALSE.
-- FIND	Returns the position of a string within a string of text represented as a number.
-- GETSESSIONID	Returns the user’s session ID.
-- HTMLENCODE	Encodes text and merge field values for use in HTML by replacing characters that are reserved in HTML, such as the greater-than sign (>), with HTML entity equivalents, such as &gt;.
-- HYPERLINK	Creates a link to a URL specified that is linkable from the text specified.
-- IMAGE	Inserts an image with alternate text and height and width specifications.
-- INCLUDES	Determines if any value selected in a multi-select picklist field equals a text literal you specify.
-- ISPICKVAL	Determines if the value of a picklist field is equal to a text literal you specify.
-- JSENCODE	Encodes text and merge field values for use in JavaScript by inserting escape characters, such as a backslash (\), before unsafe JavaScript characters, such as the apostrophe (').
-- JSINHTMLENCODE	Encodes text and merge field values for use in JavaScript inside HTML tags by replacing characters that are reserved in HTML with HTML entity equivalents and inserting escape characters before unsafe JavaScript characters. JSINHTMLENCODE(someValue) is a convenience function that is equivalent to JSENCODE(HTMLENCODE((someValue)). That is, JSINHTMLENCODE first encodes someValue with HTMLENCODE, and then encodes the result with JSENCODE.
-- LEFT	Returns the specified number of characters from the beginning of a text string.
-- LEN	Returns the number of characters in a specified text string.
-- LOWER	Converts all letters in the specified text string to lowercase. Any characters that are not letters are unaffected by this function. Locale rules are applied if a locale is provided.
-- LPAD	Inserts characters you specify to the left-side of a text string.
-- MID	Returns the specified number of characters from the middle of a text string given the starting position.
-- RIGHT	Returns the specified number of characters from the end of a text string.
-- RPAD	Inserts characters that you specify to the right-side of a text string.
-- SUBSTITUTE	Substitutes new text for old text in a text string.
-- TEXT	Converts a percent, number, date, date/time, or currency type field into text anywhere formulas are used. Also, converts picklist values to text in approval rules, approval step rules, workflow rules, escalation rules, assignment rules, auto-response rules, validation rules, formula fields, field updates, and custom buttons and links.
-- TRIM	Removes the spaces and tabs from the beginning and end of a text string.
-- UPPER	Converts all letters in the specified text string to uppercase. Any characters that are not letters are unaffected by this function. Locale rules are applied if a locale is provided.
-- URLENCODE	Encodes text and merge field values for use in URLs by replacing characters that are illegal in URLs, such as blank spaces, with the code that represent those characters as defined in RFC 3986, Uniform Resource Identifier (URI): Generic Syntax. For example, blank spaces are replaced with %20, and exclamation points are replaced with %21.
-- VALUE	Converts a text string to a number.
+确定文本是否以特定字符开头，如果是则返回 TRUE（真）。如果不是，则返回 FALSE（假）。
 
+**使用：** BEGINS(文本, 比较文本)
+
+**参数：**
+
+* *文本:* `text` 您希望进行比较的字符全文或字段。
+* *比较文本:* `text` 用于比较的文本片断。
+
+**返回值：** 布尔
+
+```yaml
+IF(BEGINS (Product_type__c , “ICU”), “Medical”, “Technical”)
+```
+
+如果产品类型自定义文本字段中的文本以“ICU”开头，则此示例返回文本“Medical”（医疗）。对于所有其他产品显示“Technical”（技术）。
+
+> - 此函数区分大小写，因此，请确保比较文本值的大小写正确无误。
+> - 在验证规则或工作流规则中使用此函数时，留空的字段被视为有效。例如，如果您的验证规则要测试资产序列号是否以“3”开始，则序列号为空的所有资产都将视为有效。
+
+#### BR
+
+在文本字符串中插入一个换行符。
+
+**使用：** BR()
+
+**返回值：** 文本
+
+```yaml
+CASE(ShippingCountry,"USA",  ShippingStreet & BR() &  ShippingCity & ",  " & ShippingState & " " &  ShippingPostalCode & BR()  & ShippingCountry,"France",  ShippingStreet & BR() &  ShippingPostalCode & " " &  ShippingCity & BR() &  ShippingCountry, "etc")
+```
+
+此公式字段以标准格式显示联系人的带格式邮寄地址，根据所在的国家/地区，可能会在该地址的适当位置中包含空格和换行符。
+
+> - 请勿删除函数名称后面的括号。
+> - 保留括号为空。括号中不必包含值。
+> - 请勿忘记在 BR() 两侧加上串联运算符：&。
+
+#### CASESAFEID
+
+将 15 个字符的 ID 转换成区分大小写的 18 个字符 ID。
+
+**使用：** CASESAFEID(id)
+
+**参数：** `text` 对象 ID。
+
+**返回值：** 文本
+
+```javascript
+CASESAFEID (Id)
+```
+
+此公式将 15 个字符的 ID 替换为 18 个字符、区分大小写的 ID。 假设Id值为abcdefghijklmno，该公式将返回"abcdefghijklmnoAAA"。
+
+#### CONTAINS
+
+比较两个文本参数，如果第一个参数包含第二个参数，则返回 TRUE（真）。如果不包含，则返回 FALSE（假）。
+
+**使用：** CONTAINS(文本, 比较文本)
+
+**参数：**
+
+* *文本:* `text` 原始文本全文。
+* *比较文本:* `text` 用于比较的文本片断。
+
+**返回值：** 布尔
+
+```javascript
+IF(CONTAINS(Product_Type__c, "part"), "Parts", "Service")
+```
+
+此公式检查自定义文本字段 Product_Type（产品类型）的内容，并针对任何包含单词“part”的产品返回“Parts”。否则，将返回“Service”。请注意，如果 Product_Type（产品类型）字段包含“Part”或“PART”文本，此公式将返回“Services”。
+
+
+> - 此函数区分大小写，因此，请确保比较文本值的大小写正确无误。
+> - 在验证规则或工作流规则中使用此函数时，留空的字段被视为有效。例如，如果您的验证规则用来测试资产序列号是否包含“A”，那么，所有具有空序列号的资产将被视为有效。
+> - CONTAINS 函数不支持多选选项列表。
+
+
+#### FIND
+
+返回某个字符串在文本字符串内的位置（以数字形式表示）。
+
+**使用：** FIND(搜索文本, 文本\[, 起始字符数\])
+
+**参数：**
+
+* *搜索文本:* `text` 要查找的字符串。
+* *文本:* `text` 要搜索的字段或表达式。
+* *起始字符数:* `number` 要从左边算起的作为搜索起始位置的字符数。
+
+**返回值：** 数值
+
+```javascript
+FIND(" ", Street)
+```
+
+返回 Street 字段中的第一个空格所在的字符位置。可以使用此数字来确定街道地址的长度，以便将地址字段中的街道地址与街道名称分开。
+
+```javascript
+SUBSTITUTE(Email, LEFT(Email, FIND("@", Email)), "www.")
+```
+
+查找 @ 符号在个人电子邮件地址中的位置，以确定要用`“www.”`替换的文本长度，从而派生其网址。
+
+> - 请确保在验证公式之前去掉其中的中括号、\[ 和 \]。
+> - 如果文本参数中引用的字段为空，则该公式字段显示“0”。
+> - 您的 search_text 参数区分大小写，且不能包括任何通配符。
+> - 如果在执行搜索后未返回任何结果，则字段中将显示“0”。
+> - 起始字符数参数是可选的。如果未输入起始字符数 值，则该公式将使用值 1 或者字符串中的第一个字符。
+> - 如果起始字符数不大于零，则该字段中将显示“0”。
+> - 如果起始字符数大于文本的长度，则该字段中将显示“0”。
+> - 在输入起始字符数参数时，请记住，一些字段（如网址字段）是唯一的，因为系统会自动在您输入的文本开头附加“http://”。
+> - 请注意，字符串中的第一个字符指定为 1（而非 0）。
+
+#### HYPERLINK
+
+从指定文本创建一个到可链接的指定 URL 的链接。
+
+**使用：** HYPERLINK(url, friendly_name \[,target\])
+
+**参数：**
+
+**返回值：** 文本
+
+* *url:* `text` 网址。
+* *friendly_name:* `text` 链接文本。
+* *target:* `text` 要在其中显示内容的窗口或帧。
+
+```javascript
+HYPERLINK("/00U/e?retURL=%2F006x0000001T8Om&what_id="& Id,"Create Event")
+```
+
+添加一个名为“Create Event”（创建事件）的链接，当用户单击该链接时，系统会创建一个与当前的目标相关联的新事件。
+
+```javascript
+HYPERLINK("http://servername/call?id=" & Id & "&phone=" & Phone, Phone)
+```
+
+创建一个可链接的电话号码字段，当用户单击该字段时，系统会自动拨打其中的电话号码。在本示例中，用您的拨号工具名称及其用来拨号的命令替换“servername”（服务器名）和“call”（呼叫）。并在合并字段 Id 中插入联系人、业务机会或客户记录的标识符。第一个 Phone（电话）合并字段通知拨号工具要拨打的号码，最后一个 Phone（电话）合并字段使用 Phone（电话）字段的值作为用户单击时拨号的可链接文本。
+
+> - 超链接公式字段属于文本类型。
+> - 包含如 `HYPERLINK("http://www.cnet.com", "cnet")` 中引号内的协议和 URL。
+> - 避免在 HYPERLINK 函数结果中使用文本函数，如 LEN、LEFT 或 RIGHT。
+> - URL 不得包含 JavaScript。这会提高贵组织的安全性。
+> - 使用相对链接，以链接到站内页面。如果您的完整链接是 `https://yourInstance.steedos.com/a/b`，相对链接是“/a/b”。通过相对链接，超链接可在所有站内页面上正常工作。请确保使用斜杠“/”在相对 URL 前增加。
+> - 如果起始字符数不大于零，则该字段中将显示“0”。
+> - 如果起始字符数大于文本的长度，则该字段中将显示“0”。
+> - 在输入起始字符数参数时，请记住，一些字段（如网址字段）是唯一的，因为系统会自动在您输入的文本开头附加“http://”。
+> - 华炎魔方在界面上暂时不支持把该函数返回值显示为链接。
+
+#### INCLUDES
+
+决定多选选项列表字段中选择的任何值是否等于您所指定的文本文字。
+
+**使用：** INCLUDES(multiselect_picklist_field, text_literal)
+
+**参数：**
+
+* *multiselect_picklist_field:* `select` 选项列表字段名。
+* *text_literal:* `text` 要用作比较的文本。
+
+**返回值：** 布尔
+
+***示例：***
+
+```javascript
+INCLUDES(Hobbies__c, "Golf")
+```
+
+如果爱好自定义多选选项列表字段中选择的某个值是“高尔夫”，则 INCLUDES(Hobbies__c, "Golf") 将返回 TRUE（真）。
+
+> - 该函数只支持多选的选项列表字段，要使用单选选项列表字段请使用 [ISPICKVAL](#ISPICKVAL)。
+> - 可以使用 [ISBLANK](#ISBLANK) 决定选项列表字段是否为空。
+
+#### ISPICKVAL
+
+确定选项列表字段的值是否等于所指定的文本文字。
+
+**使用：** ISPICKVAL(picklist_field, text_literal)
+
+**参数：**
+
+* *picklist_field:* `select` 选项列表字段名。
+* *text_literal:* `text` 要用作比较的文本。
+
+**返回值：** 布尔
+
+***示例：***
+
+***1.合同启用***
+
+```javascript
+IF(ISPICKVAL( Status , "Activated"), NOW()-ActivatedDate, null)
+```
+
+计算自合同被启用以来的天数。如果合同状态不是“Activated”，则此字段为空。
+
+***2.佣金金额***
+
+```javascript
+IF(ISPICKVAL(StageName, "Closed Won"),   ROUND(Amount *0.02, 2), 0)
+```
+
+本示例计算处于“Closed Won”（已结束并赢得客户）阶段的任何业务机会的佣金金额。该字段的值将是任何已结束／赢得客户的业务机会的金额乘以 0.02。对于未处理或已丢失的业务机会，佣金值为零。
+
+> - 该函数只支持单选的选项列表字段，要使用多选选项列表字段请使用 [INCLUDES](#INCLUDES)。
+> - 可以使用 [ISBLANK](#ISBLANK) 决定选项列表字段是否为空。
+
+#### LEFT
+
+返回从文本字符串开头算起的指定数量的字符。
+
+**使用：** LEFT(文本, 字符数)
+
+**参数：**
+
+* *文本:* `text` 您希望返回的字段或表达式。
+* *字符数:* `number` 您希望返回的从左边算起的字符数。
+
+**返回值：** 文本
+
+```javascript
+TRIM(LEFT(LastName, 5)) & “-” & TRIM(RIGHT(SSN__c, 4))
+```
+
+此公式显示名称的前五个字符和社会保险编号的后四个字符（由连字符分隔）。请注意，本示例使用了名为 SSN 的自定义文本字段。
+
+> 如果字符数值小于零，公式会用零替换该值。
+
+#### LEN
+
+返回指定的文本字符串中所含的字符数。
+
+**使用：** LEN(文本)
+
+**参数：** `text` 您希望返回其长度的字段或表达式。
+
+**返回值：** 数值
+
+```javascript
+LEN(PartNumber__c)
+```
+
+此公式返回 Product Code（产品代码）字段中所含的字符数。
+
+#### LOWER
+
+将指定文本字符串中的所有字母转换为小写。不是字母的任何字符不受此函数的影响。如果提供区域则应用区域规则。
+
+**使用：** LOWER(text)
+
+**参数：** `text` 您要转换为小写的字段或文本。
+
+**返回值：** 文本
+
+```javascript
+LOWER("MYCOMPANY.COM")
+```
+
+返回“mycompany.com.”。
+
+```javascript
+LOWER( TickerSymbol )
+```
+
+以小写字符返回 Ticker Symbol 中的文本。
+
+#### LPAD
+
+将指定的字符插入文本字符串的左侧。
+
+**使用：** LPAD(文本, 填充长度, 填充字符串)
+
+**参数：**
+
+* *文本:* `text` 文本是要在其左侧插入字符的字段或表达式。
+* *填充长度:* `number` 填充长度是文本中将返回的总字符数。
+* *填充字符串:* `text` 填充字符串是应插入的字符。填充字符串是必须的，可以传入空字符串表示不填充。
+
+**返回值：** 文本
+
+***示例：***
+
+***1.字段名：截断***
+
+如果文本中值的长度超过了填充字符串，则将文本截断为填充长度的大小。
+
+```javascript
+LPAD(Name, 20, "")
+```
+
+在 20 个字符后截断名称字段。例如，如果初始值为"mycompany.com"，则返回值为"mycompany.com"，如果初始值为"mycompany_is_good_in_china.com"，则返回值为"mycompany_is_good_in"。
+
+***2.My_Company: 无更改***
+
+```javascript
+LPAD( 'my_company.com' , 14, 'z')
+```
+
+返回“my_company.com”而没有更改，因为它包含 14 个字符。
+
+***3.使用 Z 填充的字段名***
+
+```javascript
+LPAD("my_company.com", 15, "z")
+```
+
+返回名称"zmy_company.com"。
+
+> 不会忽略前置空格。
+
+#### MID
+
+从文本字符串中间返回从给定的起始位置算起的指定数量的字符。
+
+**使用：** MID(文本, 起始字符数, 字符数)
+
+**参数：**
+
+* *文本:* `text` 返回字符时要使用的字段或表达式。
+* *起始字符数:* `number` 从左边算起的作为起始位置的字符数（作为起始位置的字符数）。
+* *字符数:* `number` 要返回的总字符数。
+
+**返回值：** 文本
+
+```javascript
+MID( Division , 3, 4)
+```
+
+返回 Division（分部）名称中从左数第三个字符开始的四个字符。对于用户记录，这代表部门代码。
+
+```javascript
+MID("ABCDEFGH" , 3, 4)
+```
+
+返回"CDEF"。
+
+```javascript
+MID("ABCDEFGH", 0, 10)
+```
+
+返回"H"，即起始位置是从0开始而非1，传入0值作为起始位置时公式将不能按预期返回值。
+
+> 请注意，文本中的第一个字符指定为 1（而非 0）。
+
+#### RIGHT
+
+返回从文本字符串右边算起的指定数量的字符。
+
+**使用：** RIGHT(文本, 字符数)
+
+**参数：**
+
+* *文本:* `text` 您希望返回的字段或表达式。
+* *字符数:* `number` 您希望返回的从右边算起的字符数。
+
+**返回值：** 文本
+
+```javascript
+TRIM(LEFT(LastName, 5))&"-"&TRIM(RIGHT(SSN__c, 4))
+```
+
+显示名字的前五个字符和社会保险编号的后四个字符（由连字符分隔）。请注意，本示例假定您拥有名为 SSN 的文本自定义字段。
+
+> 如果字符数值小于零，则公式会用零替换该值。
+
+#### RPAD
+
+将指定的字符插入文本字符串的右侧。
+
+**使用：** RPAD(文本, 填充长度, 填充字符串)
+
+**参数：**
+
+* *文本:* `text` 文本是要在其后插入字符的字段或表达式。
+* *填充长度:* `number` 填充长度是文本中将返回的总字符数。
+* *填充字符串:* `number` 填充字符串是应插入的字符。填充字符串是必须的，可以传入空字符串表示不填充。 如果文本中值的长度超过了填充字符串，则将文本截断为填充长度的大小。
+
+**返回值：** 文本
+
+***示例：***
+
+***1.字段名：截断***
+
+```javascript
+RPAD(Name, 20, "")
+```
+
+在 20 个字符后截断名称字段。例如，如果初始值为"mycompany.com"，则返回值为"mycompany.com"，如果初始值为"mycompany_is_good_in_china.com"，则返回值为"mycompany_is_good_in"。
+
+***2.My_Company: 无更改***
+
+```javascript
+RPAD( 'my_company.com' , 14, 'z')
+```
+
+返回“my_company.com”而没有更改，因为它包含 14 个字符。
+
+***3.使用 Z 填充的字段名***
+
+```javascript
+RPAD("my_company.com", 15, "z")
+```
+
+返回名称"my_company.comz"。
+
+> - 不会忽略结尾空格。
+> - 在截断字符时与函数LPAD一样从右侧开始截断保留左侧部分，而不是相反。
+
+#### SUBSTITUTE
+
+用新文本替换文本字符串中的旧文本。
+
+**使用：** SUBSTITUTE(文本, 旧文本, 新文本)
+
+**参数：**
+
+* *文本:* `text` 要进行值替换的字段或值。
+* *旧文本:* `text` 要被替换的文本。
+* *新文本:* `text` 要用来替换旧文本的文本。
+
+**返回值：** 文本
+
+```javascript
+SUBSTITUTE(Name, "Coupon", "Discount")
+```
+
+返回包含术语“Coupon”（赠券）的业务机会的名称，返回名称时，将名称中的“Coupon”替换为“Discount”。
+
+```javascript
+SUBSTITUTE(Email, LEFT(Email, FIND("@", Email)), "www.")
+```
+
+查找 @ 符号在个人电子邮件地址中的位置，以确定要用 `“www.”` 替换的文本长度，从而派生其网址，比如Email值为"`abc@steedos.cn`"的话运行公式将返回"[www.steedos.cn"。](https://www.steedos.cn)
+
+> - 引号中的每个术语都区分大小写。
+> - 如果旧文本出现多次，则所出现的每个“旧文本”都将用所提供的新文本值替换，即使这会导致重复项也是如此。
+
+#### TEXT
+
+在使用公式的任何地方将百分比、数字、日期、日期时间或货币类型字段转换为文本。
+
+**使用：** TEXT(值)
+
+**参数：** `number/date/datetime/select` 您希望转换为文本格式的字段或表达式。
+
+**返回值：** 文本
+
+```javascript
+TEXT(ExpectedRevenue)
+```
+
+以文本格式返回业务机会的预期收入金额。例如，如果市场活动的 Expected Revenue（预期收入）是200000，此公式的字段中将显示“200000”。
+
+```javascript
+SerialNumber &"-"& TEXT(Quantity)
+```
+
+返回一个资产 ID 号，ID 号以序列号开头，以数量结尾，二者之间用连字符分隔。Serial Number（序列号）字段是文本字段，但 Quantity（数量）字段为数字字段，其前面需要使用 TEXT 函数。
+
+
+> - TEXT(null)返回值为 NULL而不是空字符串。  
+> - TEXT(FieldName) 参数为字段名的话，当字段值为空时，返回的是空字符串而不是"NULL"。
+> - 不支持传入文本类型值，否则将直接报错。
+> - 返回的文本未使用任何货币、百分比符号或逗号进行自动格式处理。
+> - 百分数以小数形式返回。
+> - 日期以 YYYY-MM-DD 格式（即四位数字年份、两位数字月份和两位数字日期）返回。
+> - 日期时间值以 YYYY-MM-DD HH:MM:SSZ 格式返回，其中 YYYY 是四位数字年份，MM 是两位数字月份，DD 是两位数字日期，HH 是两位数字小时，MM 是两位数字分钟，SS 是两位数字秒钟，Z 代表本初子午线，指示时间以 UTC 时区返回。
+> - 只支持传入单选的select字段，不支持多选。
+
+#### TRIM
+
+删除文本字符串开头和末尾处的空格和制表符。
+
+**使用：** TRIM(文本)
+
+**参数：** `text` 用您希望修整的字段或表达式替换文本。
+
+**返回值：** 文本
+
+```javascript
+TRIM(LEFT(LastName,5))& "-" & RIGHT(FirstName, 1)
+```
+
+为用户返回一个网络 ID，该 ID 用连字符分隔其姓氏的前五个字符和其名字的第一个字符。
+
+#### UPPER
+
+将指定文本字符串中的所有字母转换为大写。不是字母的任何字符不受此函数的影响。如果提供区域则应用区域规则。
+
+**使用：** UPPER(text)
+
+**参数：** `text` 将 text 用您要转换为大写的字段或表达式替换。
+
+**返回值：** 文本
+
+```javascript
+UPPER("mycompany.com")
+```
+
+返回“MYCOMPANY.COM.”。
+
+```javascript
+UPPER("Mycompany.com 123")
+```
+
+返回“MYCOMPANY.COM 123.”。
+
+#### VALUE
+
+将文本字符串转换为数字。
+
+**使用：** VALUE(文本)
+
+**参数：** `text` 您希望转换为数字的字段或表达式。
+
+**返回值：** 数值
+
+***示例：***
+
+***1.潜在客户编号***
+
+```javascript
+VALUE( Lead_Number__c )
+```
+
+返回自动编号字段 Lead Number（潜在客户编号）中的文本值所对应的数字。如果您希望在计算中使用 Lead Number（潜在客户编号）字段，则这可能非常有用。请注意，自动编号字段实际上是文本字段，必须转换为数字字段才能进行数值计算。
+
+***2.潜在客户循环分配***
+
+```javascript
+MOD(VALUE(Lead_Number__c), 3)
+```
+
+该公式适用于名称为 Round_Robin_ID 的自定义公式字段，它为每个潜在客户分配 0、1 或 2。该公式使用名称为 Lead Number 的自定义自动数字字段，它为每个潜在客户分配从 1 开始的唯一号码。MOD 函数使用潜在客户数量除以可用潜在客户队列的数量（在本示例中为 3），然后返回剩余值 0、1 或 2。在您的潜在客户分配规则中使用该公式字段的值向不同的队列分配潜在客户记录。例如：
+
+* Round_Robin_ID = 0 分配到队列 A
+* Round_Robin_ID = 1 分配到队列 B
+* Round_Robin_ID = 2 分配到队列 C
+
+
+请确保 VALUE 函数中的文本不包含除小数点（句点）或负号（连字符）以外的任何特殊字符。例如，公式 VALUE(Text_field__c) 产生以下结果：  
+■ 如果文本字段为123，则结果为 123。  
+■ 如果文本字段为0，则返回错误信息。  
+■ 如果文本字段为空白，则返回错误信  
+■ 如果文本字段为$123，则返回错误信  
+
+
+<!--
 ### Summary Functions
 The following functions are available with summary, matrix, and joined reports.
 
 - PARENTGROUPVAL	This function returns the value of a specified parent grouping. A “parent” grouping is any level above the one containing the formula. You can use this function only in custom summary formulas and at grouping levels for reports, but not at summary levels.
 - PREVGROUPVAL	This function returns the value of a specified previous grouping. A “previous” grouping is one that comes before the current grouping in the report. Choose the grouping level and increment. The increment is the number of columns or rows before the current summary. The default is 1; the maximum is 12. You can use this function only in custom summary formulas and at grouping levels for reports, but not at summary levels.
+-->
 
-### Advanced Functions
+### 高级函数
 
-- CURRENCYRATE	Returns the conversion rate to the corporate currency for the given currency ISO code. If the currency is invalid, returns 1.0.
-- GETRECORDIDS	Returns an array of strings in the form of record IDs for the selected records in a list, such as a list view or related list.
-- IMAGEPROXYURL	Securely retrieves external images and prevents unauthorized requests for user credentials.
-- INCLUDE	Returns content from an s-control snippet. Use this function to reuse common code in many s-controls.
-- ISCHANGED	Compares the value of a field to the previous value and returns TRUE if the values are different. If the values are the same, this function returns FALSE.
-- JUNCTIONIDLIST	Returns a JunctionIDList based on the provided IDs.
-- LINKTO	Returns a relative URL in the form of a link (href and anchor tags) for a custom s-control or Salesforce page.
-- PREDICT	Returns an Einstein Discovery prediction for a record based on the specified record ID or for a list of fields and their values.
-- REGEX	Compares a text field to a regular expression and returns TRUE if there is a match. Otherwise, it returns FALSE. A regular expression is a string used to describe a format of a string according to certain syntax rules.
-- REQUIRESCRIPT	Returns a script tag with source for a URL you specify. Use this function when referencing the Lightning Platform AJAX Toolkit or other JavaScript toolkits.
-- URLFOR	Returns a relative URL for an action, s-control, Visualforce page, or a file in a static resource archive in a Visualforce page.
-- VLOOKUP	Returns a value by looking up a related value on a custom object similar to the VLOOKUP() Excel function.
+#### REGEX
+
+将文本字段与正则表达式进行比较，如果匹配则返回 TRUE（真）。反之，返回 FALSE（假）。正则表达式是一个字符串，它根据一定语法规则描述字符串的格式。
+
+**使用：** REGEX(文本, regex_text)
+
+**参数：**
+
+* *文本:* `text` 您希望进行比较的字符全文或字段。
+* *比较文本:* `text` 您要匹配的正则表达式。
+
+**返回值：** 布尔
+
+***验证规则示例：***
+
+本示例确保名为 ID 的字段与表示***身份证号***的正则表达式匹配，即具备 310000YYYYMMDD0000 数字格式。
+
+```javascript
+NOT(REGEX(ID, "[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)"))
+```
+
+ - 正则表达式的语法基于Java Platform SE 6 语法。但是，转义字符 () 未被支持，更改为两个反斜杠 (\\)一样不支持，需要匹配特殊符号请用中括号包裹，比如要匹配符号点`.`可以写为`[.]`。
+ - 公式中正则表达式引擎匹配整个字符串，而不是在字符串内查找匹配。例如，如果您在搜索姓名 Marc Benioff，那么使用正则表达式.\*Marc Benioff.\*在如下字符串中找到匹配： `According to Marc Benioff, the social enterprise increases customer success.` 如果使用正则表达式 `Marc Benioff`，则它只会匹配到以下字符串： `Marc Benioff`
+ - 公式中正则表达式引擎匹配的是整个字符串，这表示正则表达起始^结尾$占位符默认是已经加在表达式的起止位置的，您不需要再加上这些占位符。
+ - 捕获分组和替换都将被忽略。
+ - 不支持\\w、\\d等表达试语法\[a-zA-Z0-9_\]、\[0-9\]代替。
+
+
 
 ## 参考
 

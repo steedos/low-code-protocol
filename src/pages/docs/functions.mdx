@@ -38,8 +38,8 @@ export default async function (event, context) {
 ### context
 
 - id: `string` 函数执行的唯一标识符。
-- space: `json` 调用函数时所属的工作区信息。
-  - broker: ?
+- org: `json` 调用函数时所属的工作区信息。
+  - broker: 微服务Broker，用于调用微服务函数。
   - apiVersion:  当前工作区所使用的api版本号。
   - baseUrl: 当前工作区的 base URL。
   - dataApi: 供客户端调用的数据请求接口。

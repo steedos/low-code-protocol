@@ -3,12 +3,14 @@ title: 微函数
 description: 在软件包中定义微函数扩展业务逻辑，微函数可以以微服务的形式调用，也可以发布为标准的API接口。
 ---
 
-在低代码平台中函数是执行特定计算任务的代码，你可以有一个函数读取你的销售数据和计算销售税，或一个函数收集数据和生成一个格式化的PDF报告文件。
+在低代码平台中微函数是执行特定计算任务的代码，你可以有一个函数读取你的销售数据和计算销售税，或一个函数收集数据和生成一个格式化的PDF报告文件。
 
-本协议约定在低代码平台编写函数的规范，包括函数参数，返回值等规则；
+本协议约定在低代码平台编写微函数的规范，包括函数参数，返回值等规则。
+
+## 示例
 
 ```js
-export default async function (event, context, logger) {
+export default async function (event, context) {
   console.info(
     `Invoking myfunction with payload ${JSON.stringify(event.data || {})}`
   );
@@ -18,3 +20,39 @@ export default async function (event, context, logger) {
   return results;
 }
 ```
+
+## 函数参数
+
+所有函数的参数规则统一，主要有event和context两个参数。
+
+### event
+
+- data: `json` 随函数传入的事件 `payload`。
+- dataContentType: `string` 事件 `payload` 的 `media type`。
+- dataSchema: `string` 事件 `payload` 遵循的 `schema`。
+- id: `string` 标识事件发生的唯一标识符。
+- source:  `string` 标识事件发生的上下文的URI。。
+- time: `string` 事件发生时的时间戳，默认为当前时间。
+- type: `string` 事件类型。
+
+### context
+
+- id: `string` 函数执行的唯一标识符。
+- space: `json` 调用函数时所属的工作区信息。
+  - apiVersion:  当前工作区所使用的api版本号。
+  - baseUrl: 当前工作区的 base URL。
+  - dataApi: 供客户端调用的数据请求接口。
+  - domainUrl: 当前工作区所属的域名地址。
+  - id: 当前工作区唯一标识符。
+  - user: 当前登录用户信息。
+
+## 函数返回值
+
+## 参考资料
+
+- [Saleforce Node.js Functions](https://developer.salesforce.com/docs/platform/functions/guide/NODE_README.html]
+- [Saleforce Invocationevent](https://developer.salesforce.com/docs/platform/functions/guide/invocationevent.html)
+- [Saleforce Context](https://developer.salesforce.com/docs/platform/functions/guide/context.html)
+- [Saleforce Dataapi](https://developer.salesforce.com/docs/platform/functions/guide/dataapi.html)
+- [Saleforce Org](https://developer.salesforce.com/docs/platform/functions/guide/org.html)
+

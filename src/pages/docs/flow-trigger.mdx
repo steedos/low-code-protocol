@@ -15,27 +15,36 @@ description: 在流程流转到特定节点时自动触发一段代码逻辑。
 ```js
 module.exports = {
     listenTo: '流程API名称',
-    beforeSubmit: [async] Function,
-    afterSubmit: [async] Function,
+    beforeDraftInsert: [async] Function,
+    afterDraftInsert: [async] Function,
+    beforeDraftSubmit: [async] Function,
+    afterDraftSubmit: [async] Function,
+    beforeStepSubmit: [async] Function,
+    afterStepSubmit: [async] Function,
     cacluateNextStepUsers: [async] Function,
     beforeCancel: [async] Function,
     afterCancel: [async] Function,
     beforeTerminate: [async] Function,
     afterTerminate: [async] Function,
+    afterEnd: [async] Function,
 }
 ```
 
 其中
 
 - listenTo: 流程API名称，选填。如果没有定义此属性，则取文件名中第一个 . 之前的文字作为listenTo的值
-- beforeSubmit: 审批表单提交前执行, 选填
-- afterSubmit : 审批表单提交后执行, 选填
+- beforeDraftInsert: 流程创建草稿前，初始化申请单，选填
+- afterDraftInsert: 流程创建草稿后，初始化申请单，选填
+- beforeDraftSubmit: 流程从草稿箱提交前执行，选填
+- afterDraftSubmit: 流程从草稿箱提交后执行，选填
+- beforeStepSubmit: 审批表单提交前执行, 选填
+- afterStepSubmit : 审批表单提交后执行, 选填
 - cacluateNextStepUsers: 计算审批表单下一步骤处理人后执行，用于重写下一步骤处理人选项清单, 选填
 - beforeCancel: 取消申请前执行，选填
 - afterCancel: 取消申请后执行，选填
-- beforeTerminat: 流程被中止前执行，选填
-- afterTerminat: 流程被中止后执行，选填
-- onEnd: 流程结束后执行，选填
+- beforeTerminate: 流程被中止前执行，选填
+- afterTerminate: 流程被中止后执行，选填
+- afterEnd: 流程结束后执行，选填
 
 
 ## 参数说明

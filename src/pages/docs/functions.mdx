@@ -23,7 +23,7 @@ export default async function (event, context) {
 
 ## 函数参数
 
-所有函数的参数规则统一，主要有event和context两个参数。
+所有函数的参数规则统一，主要有 `event` 和 `context` 两个参数。
 
 ### event
 
@@ -39,7 +39,7 @@ export default async function (event, context) {
 
 - id: `string` 函数执行的唯一标识符。
 - org: `json` 调用函数时所属的工作区信息。
-  - broker: 微服务Broker，用于调用微服务函数。
+  - broker: 微服务Broker，用于调用微服务 [Actions](/docs/services#%E5%87%BD%E6%95%B0%EF%BC%88Actions%EF%BC%89)。
   - apiVersion:  当前工作区所使用的api版本号。
   - baseUrl: 当前工作区的 base URL。
   - dataApi: 供客户端调用的数据请求接口。

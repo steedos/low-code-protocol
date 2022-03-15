@@ -17,7 +17,7 @@ module.exports = {
     listenTo: '流程API名称',
     beforeSubmit: [async] Function,
     afterSubmit: [async] Function,
-    cacluateNextUsers: [async] Function,
+    cacluateNextStepUsers: [async] Function,
     afterApproved: [async] Function,
     afterRejected: [async] Function,
     afterCanceled: [async] Function,
@@ -32,7 +32,7 @@ module.exports = {
 - listenTo: 流程API名称，选填。如果没有定义此属性，则取文件名中第一个 . 之前的文字作为listenTo的值
 - beforeSubmit: 审批表单提交前执行, 选填
 - afterSubmit : 审批表单提交后执行, 选填
-- cacluateNextUsers: 计算审批表单下一步骤处理人后执行，用于重写下一步骤处理人选项清单, 选填
+- cacluateNextStepUsers: 计算审批表单下一步骤处理人后执行，用于重写下一步骤处理人选项清单, 选填
 - afterApproved: 核准后执行，选填
 - afterRejected: 驳回后执行，选填
 - afterCanceled: 取消申请后执行，选填

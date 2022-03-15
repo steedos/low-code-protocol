@@ -49,13 +49,13 @@ export default async function (event, context, logger) {
 
 - id: `string` 函数执行的唯一标识符。
 - org: `json` 调用函数时所属的公司信息。
-  - broker: 微服务Broker，用于调用微服务 [Actions](/docs/services#%E5%87%BD%E6%95%B0%EF%BC%88Actions%EF%BC%89)。
   - apiVersion:  当前公司所使用的api版本号。
   - baseUrl: 当前公司的 base URL。
   - dataApi: 供客户端调用的数据请求接口。
   - domainUrl: 当前公司所属的域名地址。
   - id: 当前公司唯一标识符。
   - user: 当前登录用户信息。
+- broker: 微服务Broker，用于调用微服务 [Actions](/docs/services#%E5%87%BD%E6%95%B0%EF%BC%88Actions%EF%BC%89)。
 
 ## 函数返回值
 

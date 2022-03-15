@@ -10,15 +10,25 @@ description: 在软件包中定义微函数扩展业务逻辑，微函数可以�
 ## 示例
 
 ```js
-export default async function (event, context) {
-  console.info(
+export default async function (event, context, logger) {
+  logger.info(
     `Invoking myfunction with payload ${JSON.stringify(event.data || {})}`
   );
 
   const results = await context.org.data.query("SELECT Id, Name FROM Account");
-  console.info(JSON.stringify(results));
+  logger.info(JSON.stringify(results));
   return results;
 }
+```
+
+支持从第三方包 `import`，比如：
+```
+import { getCurrentData } from "yahoo-stock-prices";
+
+export default async function (event, context, logger) {
+  logger.info("I'm logging stuff!");
+  return getCurrentData("CRM");
+};
 ```
 
 ## 函数参数
@@ -38,13 +48,13 @@ export default async function (event, context) {
 ### context
 
 - id: `string` 函数执行的唯一标识符。
-- org: `json` 调用函数时所属的工作区信息。
+- org: `json` 调用函数时所属的公司信息。
   - broker: 微服务Broker，用于调用微服务 [Actions](/docs/services#%E5%87%BD%E6%95%B0%EF%BC%88Actions%EF%BC%89)。
-  - apiVersion:  当前工作区所使用的api版本号。
-  - baseUrl: 当前工作区的 base URL。
+  - apiVersion:  当前公司所使用的api版本号。
+  - baseUrl: 当前公司的 base URL。
   - dataApi: 供客户端调用的数据请求接口。
-  - domainUrl: 当前工作区所属的域名地址。
-  - id: 当前工作区唯一标识符。
+  - domainUrl: 当前公司所属的域名地址。
+  - id: 当前公司唯一标识符。
   - user: 当前登录用户信息。
 
 ## 函数返回值
@@ -54,6 +64,6 @@ export default async function (event, context) {
 - [Saleforce Node.js Functions](https://developer.salesforce.com/docs/platform/functions/guide/NODE_README.html)
 - [Saleforce Invocationevent](https://developer.salesforce.com/docs/platform/functions/guide/invocationevent.html)
 - [Saleforce Context](https://developer.salesforce.com/docs/platform/functions/guide/context.html)
-- [Saleforce Dataapi](https://developer.salesforce.com/docs/platform/functions/guide/dataapi.html)
+- [Saleforce DataApi](https://developer.salesforce.com/docs/platform/functions/guide/dataapi.html)
 - [Saleforce Org](https://developer.salesforce.com/docs/platform/functions/guide/org.html)
 

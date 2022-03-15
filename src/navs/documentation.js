@@ -8,6 +8,7 @@ const pages = createPageList(
 export const documentationNav = {
   '快速向导': [
     pages['overview'],
+    pages['plugin'],
     pages['datasource'],
     pages['metadata'],
     pages['designer'],

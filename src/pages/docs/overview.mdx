@@ -7,7 +7,7 @@ import SteedosPackages from './diagrams/Steedos Packages.drawio.svg'
 
 ## 协议内容
 
-本协议研究和制定低代码平台的底层技术规范，包括并不限于元数据规范、API规范、公式引擎规范、触发器规范、微服务规范、微前端规范、测试规范、软件包规范、DevOps流程规范。
+本协议研究和制定低代码平台的底层技术规范，包括并不限于元数据、微服务、微函数、微前端、微控件、标准对象、软件包、自动化工具、DevOps 规范。
 
 ## 设计原则
 
@@ -20,13 +20,12 @@ import SteedosPackages from './diagrams/Steedos Packages.drawio.svg'
   - [软件包服务](./service-package)
   - [Metadata 服务](./service-metadata)
   - [Records 服务](./service-records)
+
 ### 插件式扩展
 
-除核心微服务外，其他功能均以插件形式叠加。
+除核心微服务外，其他功能均以[插件](./plugin)形式叠加。
 
 插件本身也是一个软件包，插件应该是可插拔式的。启用插件可以扩展平台现有功能，停用插件不应该影响平台基座的运行能力。
-
-[了解更多](./plugin)
 
 ## DevOps流程
 

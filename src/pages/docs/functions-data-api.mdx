@@ -1,0 +1,127 @@
+---
+title: 微函数 DataApi
+description: 在软件包中定义的微函数里可以通过DataApi来实现数据交互。
+---
+
+本协议约定在低代码平台编写微函数时调用DataApi进行数据交互的相关规范，包括数据的增、删、改、查等相关函数规范。
+
+## 属性
+
+每个微函数中会把 `DataApi` 实例传入到 `context.org.dataApi` 参数中，每个实例都有以下属性：
+
+- accessToken: `string` 当前API实例需要使用的 `access token`，在初始化第三方API实例或发起一个自定义API请求时可能需要该属性值进行身份验证。
+
+## 方法
+
+每个 `DataApi` 实例都可以调用以下函数来实现数据交互。
+
+### commitUnitOfWork
+
+▸ commitUnitOfWork(unitOfWork: UnitOfWork): `Promise<Map<string, RecordModificationResult>>`
+
+Commits a UnitOfWork, executing all operations registered with it. If any of these operations fail, the whole unit is rolled back. To examine results for a single operation, inspect the returned map (which is keyed with ReferenceId returned from UnitOfWork.registerCreate and UnitOfWork.registerUpdate.
+
+Returns: Promise<Map<string, RecordModificationResult>>
+
+A map of RecordModificationResults, indexed by their ReferenceIds.
+
+### create
+
+▸ create(record: RecordForCreate): `Promise<RecordModificationResult>`
+
+Creates a new record described by the given RecordForCreate.
+
+Returns: `Promise<RecordModificationResult>`
+
+A RecordModificationResult that contains the created data wrapped in a Promise.
+
+### delete
+
+### newUnitOfWork
+
+▸ newUnitOfWork(): UnitOfWork
+
+Creates a new and empty UnitOfWork.
+
+Returns: UnitOfWork
+
+An empty UnitOfWork.
+
+### query
+
+▸ query(soql: string): `Promise<RecordQueryResult>`
+
+Queries for records with a given SOQL string.
+
+Returns: `Promise<RecordQueryResult>`
+
+A RecordQueryResult that contains the queried data wrapped in a Promise.
+
+### queryMore
+
+▸ queryMore(recordQueryResult: RecordQueryResult): `Promise<RecordQueryResult>`
+
+Queries for more records, based on the given RecordQueryResult.
+
+Returns: `Promise<RecordQueryResult>`
+
+A RecordQueryResult that contains the queried data wrapped in a Promise.
+
+### update
+
+▸ update(update: RecordForUpdate): `Promise<RecordModificationResult>`
+
+Updates an existing record described by the given RecordForUpdate.
+
+Returns: `Promise<RecordModificationResult>`
+
+A RecordModificationResult that contains the updated data wrapped in a Promise.
+
+## 示例
+
+```js
+"use strict";
+
+export default async function (event, context, logger) {
+  logger.info(
+    `Invoking salesforcesdkjs Function with payload ${JSON.stringify(
+      event.data || {}
+    )}`
+  );
+
+  // Extract Properties from Payload
+  const { name, accountNumber, industry, type, website } = event.data;
+
+  // Validate the payload params
+  if (!name) {
+    throw new Error(`Please provide account name`);
+  }
+
+  // Define a record using the RecordForCreate type and providing the Developer Name
+  const account = {
+    type: "Account",
+    fields: {
+      Name: `${name}-${Date.now()}`,
+      AccountNumber: accountNumber,
+      Industry: industry,
+      Type: type,
+      Website: website,
+    },
+  };
+
+  try {
+    // Insert the record using the SalesforceSDK DataApi and get the new Record Id from the result
+    const { id: recordId } = await context.org.dataApi.create(account);
+
+    // Query Accounts using the SalesforceSDK DataApi to verify that our new Account was created.
+    const soql = `SELECT Fields(STANDARD) FROM Account WHERE Id = '${recordId}'`;
+    const queryResults = await context.org.dataApi.query(soql);
+    return queryResults;
+  } catch (err) {
+    // Catch any DML errors and pass the throw an error with the message
+    const errorMessage = `Failed to insert record. Root Cause: ${err.message}`;
+    logger.error(errorMessage);
+    throw new Error(errorMessage);
+  }
+}
+```

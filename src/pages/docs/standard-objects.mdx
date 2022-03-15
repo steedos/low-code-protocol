@@ -191,6 +191,7 @@ _table._code | text | Object Workflow Related Form Table Code |
 -->
 
 ### 角色 roles
+用于保存管理员在设置应用中为审批王应用配置的角色配置
 
 | 字段名 | 字段类型 | 字段含义 |
 |----|----|----|
@@ -199,6 +200,138 @@ _table._code | text | Object Workflow Related Form Table Code |
 | parent | lookup | 上级角色 |
 | users | lookup | 成员 |
 | description | textarea | 描述 |
+
+## 功能相关
+
+- 报表 reports
+- 任务 tasks
+- 日程 events
+- 备忘 notes
+- 公告 announcements
+- 附件 cms_files
+
+### 报表 reports
+业务人员可以自定义报表来分析业务数据。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| report_type | select | 报表类型 |
+| data_source | select | 报表数据来源 |
+| object_name | lookup | 对象名 |
+| filter_scope | select | 过虑范围 |
+| filter_logic | text | 过滤逻辑 |
+| fields | lookup | 字段 |
+| rows | lookup | 行 |
+| columns | lookup | 列 |
+| values | lookup | 统计 |
+| filter_fields | grid | 过滤字段 |
+| filter_fields.$ | object | Filter Field |
+| filter_fields.$.field | lookup | 字段名称 |
+| filter_fields.$.required | boolean | 必填 |
+| description | textarea | 描述 |
+| charting | boolean | 显示图表 |
+| grouping | boolean | 显示小计 |
+| totaling | boolean | 显示总计 |
+| counting | boolean | 显示记录计数 |
+| graphql | textarea | Graphql |
+| html | textarea | Html |
+| helper | textarea | Helper |
+| script | textarea | Script |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+<!--
+| filters | Object | 过滤条件 |
+| filters.$ | | Filter |
+| filters.$.field | text | 字段名 |
+| filters.$.operation | select | 操作符 |
+| filters.$.value | | 字段值 |
+| options | | 操作 |
+| mrt | textarea | Mrt |
+| is_system | boolean | 系统 |
+-->
+
+
+### 任务 tasks
+用于日常任务管理，也可以用于管理对象的相关任务，当在对象上勾选了 ”允许添加任务“ 开关后，业务人员就可以在该对象记录详细界面看到该记录相关的任务子表。任务被创建后，其被分派人可以收到推送通知。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 主题 |
+| assignees | lookup | 分派给 |
+| due_date | date | 到期日期 |
+| state | select | 状态 |
+| priority | select | 优先级 |
+| related_to | lookup | 相关项 |
+| description | textarea | 描述 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+
+### 日程 events
+用于日常日程管理，也可以用于管理对象的相关日程，当在对象勾选了”允许添加事件“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的日程子表。日程被创建后，其被分派人可以收到推送通知。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 主题 |
+| start | datetime | 开始时间 |
+| end | datetime | 结束时间 |
+| assignees | lookup | 分派给 |
+| related_to | lookup | 相关项 |
+| is_all_day | boolean | 全天事件 |
+| location | text | 地址 |
+| description | textarea | 描述 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+
+### 备忘 notes
+用于日常备忘管理，也可以用于管理对象的相关备忘，当在对象勾选了”允许添加备注“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的备忘子表。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 标题 |
+| description | textarea | 内容 |
+| related_to | lookup | 相关项 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+
+### 公告 announcements
+用于发布公告，可以选择要发布到哪些人员，相关人员可以收到公告通知。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 标题 |
+| body | html | 正文 |
+| members | lookup | 发布对象 |
+| created | datetime | 发布时间 |
+| created_by | lookup | 发布人 |
+| modified_by | lookup | 修改人 |
+| modified | datetime | 修改时间 |
+
+
+### 附件 cms_files
+以用于管理对象的相关附件，当在对象勾选了”允许添加附件“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的附件子表。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| description | textarea | 描述 |
+| extention | text | 文件后缀 |
+| size | filesize | 文件大小 |
+| versions | file | 历史版本 |
+| parent | lookup | 所属记录 |
+
 
 
 ## 元数据相关

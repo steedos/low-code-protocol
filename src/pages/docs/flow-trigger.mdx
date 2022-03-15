@@ -26,6 +26,7 @@ module.exports = {
     afterCancel: [async] Function,
     beforeTerminate: [async] Function,
     afterTerminate: [async] Function,
+    beforeEnd: [async] Function,
     afterEnd: [async] Function,
 }
 ```
@@ -44,6 +45,7 @@ module.exports = {
 - afterCancel: 取消申请后执行，选填
 - beforeTerminate: 流程被中止前执行，选填
 - afterTerminate: 流程被中止后执行，选填
+- beforeEnd: 流程结束前执行，选填
 - afterEnd: 流程结束后执行，选填
 
 

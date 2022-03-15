@@ -18,12 +18,10 @@ module.exports = {
     beforeSubmit: [async] Function,
     afterSubmit: [async] Function,
     cacluateNextStepUsers: [async] Function,
-    afterApproved: [async] Function,
-    afterRejected: [async] Function,
-    afterCanceled: [async] Function,
-    afterTerminated: [async] Function,
-    afterFinalApproved: [async] Function,
-    afterFinalRejected: [async] Function
+    beforeCancel: [async] Function,
+    afterCancel: [async] Function,
+    beforeTerminate: [async] Function,
+    afterTerminate: [async] Function,
 }
 ```
 
@@ -33,12 +31,11 @@ module.exports = {
 - beforeSubmit: 审批表单提交前执行, 选填
 - afterSubmit : 审批表单提交后执行, 选填
 - cacluateNextStepUsers: 计算审批表单下一步骤处理人后执行，用于重写下一步骤处理人选项清单, 选填
-- afterApproved: 核准后执行，选填
-- afterRejected: 驳回后执行，选填
-- afterCanceled: 取消申请后执行，选填
-- afterTerminated: 流程被中止后执行，选填
-- afterFinalApproved: 最终核准后执行，选填
-- afterFinalRejected: 最后驳回后执行，选填
+- beforeCancel: 取消申请前执行，选填
+- afterCancel: 取消申请后执行，选填
+- beforeTerminat: 流程被中止前执行，选填
+- afterTerminat: 流程被中止后执行，选填
+- onEnd: 流程结束后执行，选填
 
 
 ## 参数说明

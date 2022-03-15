@@ -7,6 +7,7 @@ description: 标准对象定义低代码平台元数据的存储格式，包括�
 
 - 公司
 - 部门
+- 分部
 - 人员
 - 用户
 - 角色
@@ -70,6 +71,28 @@ description: 标准对象定义低代码平台元数据的存储格式，包括�
 | hidden | boolean | 隐藏 |
 | qywx_id | text | 企业微信部门ID |
 | dingtalk_id | text | 钉钉部门ID |
+
+### 分部 company
+分部，可以理解为集团分公司，每个员工可以属于多个分部，一般用于实现分部级权限。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 分部名称 |
+| code | text | 分部代码 |
+| parent | lookup | 上级分部 |
+| organization | lookup | 关联部门 |
+| currency_type | text | 本位币 |
+| admins | lookup | 管理员 |
+| description | textarea | 备注 |
+| sort_no | number | 排序号 |
+| company_id | lookup | 主分部 |
+| company_ids | lookup | 所属分部 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+
 
 ### 人员 space_users
 用于标记用户属于哪个工作区，以及在对应工作区的参数设置。每个用户可以属于多个工作区。
@@ -209,6 +232,7 @@ _table._code | text | Object Workflow Related Form Table Code |
 - 备忘 notes
 - 公告 announcements
 - 附件 cms_files
+- 附件版本 cfs_files_filerecord
 
 ### 报表 reports
 业务人员可以自定义报表来分析业务数据。
@@ -331,6 +355,29 @@ _table._code | text | Object Workflow Related Form Table Code |
 | size | filesize | 文件大小 |
 | versions | file | 历史版本 |
 | parent | lookup | 所属记录 |
+
+### 附件版本 cfs_files_filerecord
+用于存放附件的各个版本，可以在附件详情页查看附件各个版本。
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| original | object | 文件 |
+| original.name | text | 文件名 |
+| original.size | number | 文件大小 |
+| metadata | object | 属性 |
+| metadata.owner | lookup | 上传者 |
+| metadata.owner_name | text | 上传者 |
+| metadata.parent | master_detail | 所属文件 |
+| uploadedAt | datetime | 上传时间 |
+| created_by | lookup | 创建人 |
+| modified_by | lookup | 修改人 |
+| owner | lookup | 所有者 |
+| created | datetime | 创建时间 |
+| modified | datetime | 修改时间 |
+| locked | boolean | 已锁定 |
+| company_id | lookup | 主分部 |
+| company_ids | lookup | 所属分部 |
+| instance_state | select | 审批状态 |
 
 
 

@@ -114,7 +114,7 @@ summary_type: sum
 |----|----|----|
 | name | string | 字段名称 |
 | label | string | 字段显示名称 |
-| is_name | boolean | 将当前字段叫标记为name字段，用于选择数据时的显示名称 |
+| is_name | boolean | 名称字段 |
 | column_name | string | 数据库字段名 |
 | object | string | 字段所属对象 |
 | type | string | 字段类型 |
@@ -178,6 +178,7 @@ summary_type: sum
 | visible_on | string | 函数表达式，控制是否显示此字段 |
 
 补充说明：
-
+- **is_name**: 勾选该属性表示此字段会代替name字段作为“名称字段”。对象上默认以名为name的字段作为”名称字段”,点击“名称字段”会跳转到记录详细页面，支持配置为”名称字段“的字段类型有：文本、多行文本、自动编号、公式、日期、日期时间。
 - **formula_blank_value**: zeroes表示将空白字段视为零，blanks表示将空白字段视为空白，默认为zeroes 。
 - **write_requires_master_read**: 此字段仅适用于master_detail字段类型。true--允许具有'读取'访问权限的用户创建、编辑或删除子记录。false = 允许具有'读取/写入'访问权限的用户创建、编辑或删除子记录的权限。此设置比 true 更严格，并且是默认值。 
+- **primary**：作为主键字段来标识每条记录。每个对象都必须有一个主键字段来唯一标识其每条记录，默认数据源使用MongoDB作为数据库，所有对象的主键字段都是名为_id的字段，外部数据源可能使用关系型数据库，所以可以在对象设置中编辑字段属性，勾选其“外部数据源”栏的“主键”勾选框来把该字段设置为主键字段。

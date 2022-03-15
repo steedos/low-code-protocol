@@ -27,18 +27,37 @@ license: platform
 | name | string | API 名称 |
 | label | string | 显示名称 |
 | type | string | 类别 |
-| license | string | 许可证 |
 | assigned_apps | array | 授权应用 |
 | users | array | 成员 |
 | is_system | boolean | 系统 |
-| password_history | string | 强制密码历史。默认值3 |
-| max_login_attempts | string | 最大无效登录尝试次数。默认值10 |
-| lockout_interval | string | 锁定有效期间。默认值15 |
-| enable_MFA | boolean | 多重身份验证(需要开启短信服务) |
+| password_history | string | 强制密码历史 |
+| max_login_attempts | string | 最大无效登录尝试次数 |
+| lockout_interval | string | 锁定有效期间 |
+| login_expiration_in_days | number | 登录到期时间 |
+| phone_login_expiration_in_days | number | 手机App登录到期时间 |
 | logout_other_clients | boolean | 单例登录 |
-| login_expiration_in_days | number | 登录到期时间(天) |
 | phone_logout_other_clients | boolean | 手机App单例登录 |
-| phone_login_expiration_in_days | number | 手机App登录到期时间(天) |
+| enable_MFA | boolean | 多重身份验证 |
+
+<!--
+以下属性待定：
+| license | string | 许可证 |
+-->
+
+补充说明：
+
+- **type**: profile（简档）/permission_set（权限集），默认值为profile，简档是一种特殊的权限集。
+- **assigned_apps**:	授权对简档/权限集下的用户可以访问的应用，默认为空，表示授权全部应用
+- **users**: 分配哪些用户到权限集，如果是简档不需要指定该属性，因为用户属于哪个简档是在用户界面上配置的，一个用户可以属于多个权限集，但是只能属于一个简档。
+- **is_system**: 是否是系统简档，表示元数据是否只在代码文件中而没有保存到数据库中，可以点击名为“自定义”的操作按钮把该元数据保存到数据库中以在界面上修改相关属性。
+- **password_history**: 强制密码历史，这是一种密码策略。密码的重复使用是一个重要问题，在越长时间内重复使用帐户的相同密码，被攻击破解的可能性就越大。使用该密码策略，可以强制用户在更改密码时，不能使用之前使用过又被该密码策略记住的密码，系统默认会记住3个历史密码，同时提供记住1到24个密码的选项，管理员可以变更该选项来修改属于特定简档用户的密码策略。
+- **max_login_attempts**: 最大无效登录尝试次数，也是一种密码策略。设置将导致用户帐户被锁定的登录失败次数，默认最大尝试10次失败才会锁定账户，系统提供3次、5次、10次和无限制的选项，允许管理员变更该选项来修改属于特定简档下用户的密码策略，被锁定的账户将无法登录使用系统。
+- **lockout_interval**: 锁定有效期间，也是一种密码策略。设置账户被锁定后，自动解锁之前保持锁定状态的分钟数。默认15分钟后被锁定的账户就会自动解锁，系统提供15分钟、30分钟、60分钟和始终锁定的选项，允许管理员变更该选项来修改属于特定简档下用户的密码策略，另外用户也可以求助管理员手动为用户解除锁定。
+- **login_expiration_in_days**: 登录到期时间，这是一种登录策略，系统默认会在用户登录系统后90天自动清除其登录状态强制其重新登录以提升账户安全性，管理员可以在这里配置属于特定简档的账户多少天后会自动登出系统。
+- **phone_login_expiration_in_days**: 手机App登录到期时间，也是一种登录策略，与登录到期时间一样，不过这里只针对手机APP客户端上的账户。
+- **logout_other_clients**: 单例登录，也是一种登录策略，该策略强制一个账户只能在一处登录，每次登录某个客户端后，会自动注销以当前用户身份登录的其他客户端，默认不开启该策略，管理员可以为属于特定简档的用户开启该策略。
+- **phone_logout_other_clients**: 手机App单例登录，也是一种登录策略，与单例登录一样，不过这里只针对手机APP客户端上的账户。
+- **enable_MFA**: 多重身份验证，也是一种登录策略，使用该策略需要开启短信服务，默认不开启该策略，管理员可以开启短信服务后再为属于特定简档的用户开启该策略。
 
 ## 权限集 .permissionset.yml
 
@@ -59,15 +78,24 @@ type: permission_set
 * organization_admin： 分部管理员，用于为分部管理员额外增加权限。
 * workflow_admin： 流程管理员，用于为流程管理员额外增加权限。
 
-| 属性名 | 属性值类型 | 属性含义 |
-|----|----|----|
-| name | string | API 名称 |
-| label | string | 显示名称 |
-| type | string | 类别 |
-| license | string | 许可证 |
-| assigned_apps | array | 授权应用 |
-| users | array | 成员 |
-| is_system | boolean | 系统 |
+因为简档是一种特殊的权限集，所以它们拥有相同的元数据模型，并通过 `type` 属性来标识是属于简档还是普通的权限集，以下表格描述了哪些元数据属性分别属于哪种权限集，
+
+| 属性名 | 简档 | 权限集 | 属性含义 |
+|----|----|----|----|
+| name | Y | Y | API 名称 |
+| label | Y | Y | 显示名称 |
+| type | Y | Y | 类别 |
+| assigned_apps | Y | Y | 授权应用 |
+| users | Y | Y | 成员 |
+| is_system | Y | Y | 系统 |
+| password_history | Y | N | 强制密码历史 |
+| max_login_attempts | Y | N | 最大无效登录尝试次数 |
+| lockout_interval | Y | N | 锁定有效期间 |
+| login_expiration_in_days | Y | N | 登录到期时间 |
+| phone_login_expiration_in_days | Y | N | 手机App登录到期时间 |
+| logout_other_clients | Y | N | 单例登录 |
+| phone_logout_other_clients | Y | N | 手机App单例登录 |
+| enable_MFA | Y | N | 多重身份验证 |
 
 ## 对象权限 .permission.yml
 

@@ -1,0 +1,103 @@
+---
+title: 流程触发器
+description: 在流程流转到特定节点时自动触发一段代码逻辑。
+---
+
+流程触发器与 [触发器](/docs/trigger) 一样，也是一种特殊的微代码，主要用于编写流程流转过程中一些自定义业务逻辑，两者主要区别如下：
+
+- 监听的主体对象不同：对象上的触发器是绑定到特定对象上的，而流程触发器是绑定到特定流程上的。
+- 触发机制不同：对象上的触发器是在特定对象中的数据发生变化时触发，而流程触发器是在特定流程中的审批单流转状态发生变化时触发。
+
+## 流程触发器定义
+
+流程触发器文件名称以.workflowTrigger.js结尾，格式如下：
+
+```js
+module.exports = {
+    listenTo: '流程API名称',
+    beforeSubmit: [async] Function,
+    afterSubmit: [async] Function,
+    afterComputeNextUsers: [async] Function,
+    afterNextUsers: [async] Function,
+    afterApproved: [async] Function,
+    afterRejected: [async] Function,
+    afterCanceled: [async] Function,
+    afterTerminated: [async] Function,
+    afterFinalApproved: [async] Function,
+    afterFinalRejected: [async] Function
+}
+```
+
+其中
+
+- listenTo: 流程API名称，选填。如果没有定义此属性，则取文件名中第一个 . 之前的文字作为listenTo的值
+- beforeSubmit: 审批表单提交前执行, 选填
+- afterSubmit : 审批表单提交后执行, 选填
+- afterComputeNextUsers: 计算审批表单下一步骤处理人后执行，用于重写下一步骤处理人选项清单, 选填
+- afterNextUsers: 下一步骤处理人确定后执行，用于覆盖下一步骤处理人，选填
+- afterApproved: 核准后执行，选填
+- afterRejected: 驳回后执行，选填
+- afterCanceled: 取消申请后执行，选填
+- afterTerminated: 流程被中止后执行，选填
+- afterFinalApproved: 最终核准后执行，选填
+- afterFinalRejected: 最后驳回后执行，选填
+
+
+## 参数说明
+
+所有脚本函数均为无参函数，所属数据可从this中获取，this结构如下:
+
+- id: 审批单的唯一标识[string],
+- userId: 当前用户唯一标识[string],
+- spaceId: 当前工作区唯一标识[string],
+- flowName: 当前流程API名称[string]
+- instance: 当前审批单[json],
+- step: 当前步骤[json],
+- nextStep: 下一步骤[json],
+- traceId: [string],
+- values: 当前审批单表单值[json],
+- nextUserIds: 下一步骤处理人选项清单[[string]],
+- nextUserId: 当前步骤已选下一步骤处理人[string],
+- instanceState: 审批单状态[string],draft/pending/completed/approved/rejected/terminated
+- traceState: 审核状态[string],pending/approved/rejected
+- approveState: 审核状态[string],pending/approved/rejected
+- broker: 微服务实例
+
+## 流程微服务 API
+
+流程微服务提供以下 API 供调用。
+
+- getFlow
+- getForm
+- getFormVersion
+- getInstance
+- getTrace
+- getApprove
+- getStep
+- getUserRoles
+- getNextSteps
+- createInstance
+- submitInstance
+- sendRemindSMS
+- relocate
+
+## 触发器函数的返回值
+
+如果return的是false，则中断操作，如在beforeSubmit里return false,则不执行提交操作。
+
+## 流程触发器示例
+
+```js
+afterSubmit: async function () {
+    const instanceName = this.instance.name,
+        spaceId = this.spaceId,
+        instanceId = this.instance._id;
+    let deadLine = ...;
+    let userIds = ...;
+    await this.broker.call(`WorkflowService.sendRemindSMS`, {
+        instanceName, deadLine, userIds, spaceId, instanceId
+    });
+},
+```
+
+

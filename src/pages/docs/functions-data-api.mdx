@@ -17,25 +17,46 @@ description: 在软件包中定义的微函数里可以通过DataApi来实现数
 
 ### commitUnitOfWork
 
-▸ commitUnitOfWork(unitOfWork: UnitOfWork): `Promise<Map<string, RecordModificationResult>>`
+▸ commitUnitOfWork(unitOfWork: UnitOfWork): Promise<Map<string, [RecordModificationResult](#RecordModificationResult)>>
 
 Commits a UnitOfWork, executing all operations registered with it. If any of these operations fail, the whole unit is rolled back. To examine results for a single operation, inspect the returned map (which is keyed with ReferenceId returned from UnitOfWork.registerCreate and UnitOfWork.registerUpdate.
 
-Returns: Promise<Map<string, RecordModificationResult>>
+Returns: Promise<Map<string, [RecordModificationResult](#RecordModificationResult)>>
 
 A map of RecordModificationResults, indexed by their ReferenceIds.
 
 ### create
 
-▸ create(record: RecordForCreate): `Promise<RecordModificationResult>`
+▸ create(record: [RecordForCreate](#RecordForCreate)): Promise<[RecordModificationResult](#RecordModificationResult)>
 
-Creates a new record described by the given RecordForCreate.
+按传入的记录信息创建一条新记录。
 
-Returns: `Promise<RecordModificationResult>`
+参数列表：
 
-A RecordModificationResult that contains the created data wrapped in a Promise.
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| record	| [RecordForCreate](#RecordForCreate) |	要新建的记录信息 |
+
+返回值：Promise<[RecordModificationResult](#RecordModificationResult)>
+
+返回一个包括创建好的记录信息的 `Promise`。
 
 ### delete
+
+▸ delete(type: string, _id: string): Promise<[RecordModificationResult](#RecordModificationResult)>
+
+按传入的记录id值删除一条记录。
+
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| type	| string |	要删除的对象Api名称 |
+| _id	| string |	要删除的记录Id值 |
+
+返回值：Promise<[RecordModificationResult](#RecordModificationResult)>
+
+返回一个包括被删除记录信息的 `Promise`。
 
 ### newUnitOfWork
 
@@ -69,13 +90,77 @@ A RecordQueryResult that contains the queried data wrapped in a Promise.
 
 ### update
 
-▸ update(update: RecordForUpdate): `Promise<RecordModificationResult>`
+▸ update(update: [RecordForUpdate](#RecordForUpdate)): Promise<[RecordModificationResult](#RecordModificationResult)>
 
-Updates an existing record described by the given RecordForUpdate.
+按传入的记录信息修改一条存在的记录。
 
-Returns: `Promise<RecordModificationResult>`
+Returns: Promise<[RecordModificationResult](#RecordModificationResult)>
 
-A RecordModificationResult that contains the updated data wrapped in a Promise.
+返回一个包括修改后的记录信息的 `Promise`。
+
+## 结构类
+
+以下是上述微函数方法中需要用到的参数和返回值规范。
+
+### RecordForCreate
+
+Ƭ RecordForCreate: object
+
+调用 create 或 在 UnitOfWork 中注册一个创建新记录的操作时需要传入的记录信息。
+
+| 属性名称 | 类型 | 描述 |
+|----|----|----|
+| type	| string |	对象Api名称 |
+| fields	| object |	字段属性值 |
+
+比如：
+```
+{
+    type: "Account",
+    fields: {
+      Name: `${name}-${Date.now()}`,
+      AccountNumber: accountNumber,
+      Industry: industry,
+      Type: type,
+      Website: website,
+    },
+  };
+```
+
+### RecordForUpdate
+
+Ƭ RecordForUpdate: object
+
+调用 update 或 在 UnitOfWork 中注册一个修改记录的操作时需要传入的记录信息。
+
+| 属性名称 | 类型 | 描述 |
+|----|----|----|
+| type	| string |	对象Api名称 |
+| fields	| object |	字段属性值 |
+| fields._id	| string |	主键字段值 |
+
+比如：
+```
+{
+    type: "Account",
+    fields: {
+      _id: id,
+      Name: `${name}-${Date.now()}`,
+      AccountNumber: accountNumber,
+      Industry: industry,
+      Type: type,
+      Website: website,
+    },
+  };
+```
+
+### RecordModificationResult
+
+描述数据增、删、改相关操作的返回结果。
+
+| 属性名称 | 类型 | 描述 |
+|----|----|----|
+| _id	| string |	记录ID值 |
 
 ## 示例
 
@@ -111,7 +196,7 @@ export default async function (event, context, logger) {
 
   try {
     // Insert the record using the SalesforceSDK DataApi and get the new Record Id from the result
-    const { id: recordId } = await context.org.dataApi.create(account);
+    const { _id: recordId } = await context.org.dataApi.create(account);
 
     // Query Accounts using the SalesforceSDK DataApi to verify that our new Account was created.
     const soql = `SELECT Fields(STANDARD) FROM Account WHERE Id = '${recordId}'`;

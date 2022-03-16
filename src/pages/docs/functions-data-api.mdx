@@ -17,13 +17,19 @@ description: 在软件包中定义的微函数里可以通过DataApi来实现数
 
 ### commitUnitOfWork
 
-▸ commitUnitOfWork(unitOfWork: UnitOfWork): Promise<Map<string, [RecordModificationResult](#RecordModificationResult)>>
+▸ commitUnitOfWork(unitOfWork: [UnitOfWork](/docs/functions-unitofwork)): Promise<Map<string, [RecordModificationResult](#RecordModificationResult)>>
 
-Commits a UnitOfWork, executing all operations registered with it. If any of these operations fail, the whole unit is rolled back. To examine results for a single operation, inspect the returned map (which is keyed with ReferenceId returned from UnitOfWork.registerCreate and UnitOfWork.registerUpdate.
+提交一个 [UnitOfWork](/docs/functions-unitofwork) ，执行所有注册到它的操作。如果这些操作中的任何一个失败，整个单元就会回滚。要检查单个操作的结果，请检查返回的映射(使用从 UnitOfWork.registerCreate 和 UnitOfWork.registerUpdate 返回的 [ReferenceId](#ReferenceId) 作为键值)。
 
-Returns: Promise<Map<string, [RecordModificationResult](#RecordModificationResult)>>
+参数列表：
 
-A map of RecordModificationResults, indexed by their ReferenceIds.
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| unitOfWork	| [UnitOfWork](/docs/functions-unitofwork) |	要提交的 [UnitOfWork](/docs/functions-unitofwork) |
+
+返回值：Promise<Map<string, [RecordModificationResult](#RecordModificationResult)>>
+
+返回一个 [RecordModificationResult](#RecordModificationResult)>> 的集合，由它们的 [ReferenceIds](#ReferenceIds) 索引。
 
 ### create
 
@@ -60,13 +66,13 @@ A map of RecordModificationResults, indexed by their ReferenceIds.
 
 ### newUnitOfWork
 
-▸ newUnitOfWork(): UnitOfWork
+▸ newUnitOfWork(): [UnitOfWork](/docs/functions-unitofwork)
 
-Creates a new and empty UnitOfWork.
+创建一个新的空 [UnitOfWork](/docs/functions-unitofwork)。
 
-Returns: UnitOfWork
+返回值: [UnitOfWork](/docs/functions-unitofwork)
 
-An empty UnitOfWork.
+返回一个空的 [UnitOfWork](/docs/functions-unitofwork)。
 
 ### query
 
@@ -106,7 +112,7 @@ Returns: Promise<[RecordModificationResult](#RecordModificationResult)>
 
 Ƭ RecordForCreate: object
 
-调用 create 或 在 UnitOfWork 中注册一个创建新记录的操作时需要传入的记录信息。
+调用 [create](#create) 或 在 [UnitOfWork](/docs/functions-unitofwork) 中注册一个创建新记录的操作时需要传入的记录信息。
 
 | 属性名称 | 类型 | 描述 |
 |----|----|----|
@@ -131,7 +137,7 @@ Returns: Promise<[RecordModificationResult](#RecordModificationResult)>
 
 Ƭ RecordForUpdate: object
 
-调用 update 或 在 UnitOfWork 中注册一个修改记录的操作时需要传入的记录信息。
+调用 [update](#update) 或 在 [UnitOfWork](/docs/functions-unitofwork) 中注册一个修改记录的操作时需要传入的记录信息。
 
 | 属性名称 | 类型 | 描述 |
 |----|----|----|
@@ -194,6 +200,12 @@ Returns: Promise<[RecordModificationResult](#RecordModificationResult)>
 |----|----|----|
 | type	| string |	对象Api名称 |
 | fields	| object |	字段属性值 |
+
+### ReferenceId
+
+Ƭ ReferenceId: string
+
+引用将在将来创建、删除或修改的记录。
 
 ## 示例
 

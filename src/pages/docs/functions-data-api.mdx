@@ -70,23 +70,23 @@ An empty UnitOfWork.
 
 ### query
 
-▸ query(soql: string): `Promise<RecordQueryResult>`
+▸ query(soql: string): Promise<[RecordQueryResult](#RecordQueryResult)>
 
-Queries for records with a given SOQL string.
+根据传入的 SOQL 参数值，查询对象记录.
 
-Returns: `Promise<RecordQueryResult>`
+返回值: Promise<[RecordQueryResult](#RecordQueryResult)>
 
-A RecordQueryResult that contains the queried data wrapped in a Promise.
+返回一个包括请求到的对象记录集合的 `Promise`。
 
 ### queryMore
 
-▸ queryMore(recordQueryResult: RecordQueryResult): `Promise<RecordQueryResult>`
+▸ queryMore(recordQueryResult: [RecordQueryResult](#RecordQueryResult)): Promise<[RecordQueryResult](#RecordQueryResult)>
 
-Queries for more records, based on the given RecordQueryResult.
+在之前查询到的对象记录集合，即 [RecordQueryResult](#RecordQueryResult) 基础上进一步查询更多对象记录。
 
-Returns: `Promise<RecordQueryResult>`
+返回值: Promise<[RecordQueryResult](#RecordQueryResult)>
 
-A RecordQueryResult that contains the queried data wrapped in a Promise.
+返回一个包括请求到的对象记录集合的 `Promise`。
 
 ### update
 
@@ -156,11 +156,44 @@ Returns: Promise<[RecordModificationResult](#RecordModificationResult)>
 
 ### RecordModificationResult
 
-描述数据增、删、改相关操作的返回结果。
+描述对象记录增、删、改相关操作的返回结果。
 
 | 属性名称 | 类型 | 描述 |
 |----|----|----|
 | _id	| string |	记录ID值 |
+
+### RecordQueryResult
+
+描述对象记录查询返回结果，主要属性及其描述如下所示。
+
+#### done
+
+数据查询操作是否已经完结: boolean。
+
+如果为真，则不能再从查询结果中检索其他记录。如果为false，则仍然需要继续检索一个或多个记录。
+
+#### nextRecordsUrl
+
+下一组记录的URL(如果有的话): string。
+
+#### records
+
+查询结果中的记录： [Record](#Record)[]。
+
+#### totalSize
+
+查询返回的记录总数： number。
+
+### Record
+
+Ƭ Record: object
+
+从 [query](#query) or [queryMore](#queryMore) 请求中获取到的记录集合。
+
+| 属性名称 | 类型 | 描述 |
+|----|----|----|
+| type	| string |	对象Api名称 |
+| fields	| object |	字段属性值 |
 
 ## 示例
 

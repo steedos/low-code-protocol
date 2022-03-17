@@ -145,7 +145,7 @@ Builder.registerComponent(Heading, {
 ### 注册微页面引擎
 
 ```js
-import { Builder } from '@builder.io/react'
+import { Builder } from '@steedos-builder/sdk'
 
 // Register amis render 
 const AmisRender = props => {
@@ -165,8 +165,8 @@ const AmisRender = props => {
   )
 }
  
-Builder.registerComponent(AmisRender, {
-  name: 'AmisRender',
+Builder.registerPageRender(AmisRender, {
+  name: 'amis',
   inputs: [
     { name: 'schema', type: 'object' },
     { name: 'data', type: 'object' },

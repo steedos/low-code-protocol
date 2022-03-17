@@ -51,7 +51,7 @@ description: 在软件包中定义的微函数里可以通过DataApi来实现数
 
 ▸ delete(type: string, _id: string): Promise<[RecordModificationResult](#RecordModificationResult)>
 
-按传入的记录id值删除一条记录。
+按传入的对象Api名称及记录id值删除一条记录。
 
 参数列表：
 
@@ -80,6 +80,12 @@ description: 在软件包中定义的微函数里可以通过DataApi来实现数
 
 根据传入的 SOQL 参数值，查询对象记录.
 
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| soql	| string |	查询语句 |
+
 返回值: Promise<[RecordQueryResult](#RecordQueryResult)>
 
 返回一个包括请求到的对象记录集合的 `Promise`。
@@ -89,6 +95,12 @@ description: 在软件包中定义的微函数里可以通过DataApi来实现数
 ▸ queryMore(recordQueryResult: [RecordQueryResult](#RecordQueryResult)): Promise<[RecordQueryResult](#RecordQueryResult)>
 
 在之前查询到的对象记录集合，即 [RecordQueryResult](#RecordQueryResult) 基础上进一步查询更多对象记录。
+
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| recordQueryResult	| [RecordQueryResult](#RecordQueryResult) |	要补充到的查询结果集合 |
 
 返回值: Promise<[RecordQueryResult](#RecordQueryResult)>
 
@@ -100,7 +112,13 @@ description: 在软件包中定义的微函数里可以通过DataApi来实现数
 
 按传入的记录信息修改一条存在的记录。
 
-Returns: Promise<[RecordModificationResult](#RecordModificationResult)>
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| update	| [RecordForUpdate](#RecordForUpdate) |	要修改的记录信息 |
+
+返回值: Promise<[RecordModificationResult](#RecordModificationResult)>
 
 返回一个包括修改后的记录信息的 `Promise`。
 

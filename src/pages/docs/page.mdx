@@ -19,6 +19,7 @@ description: 支持使用代码形式编写自定义控件，并进一步开发�
 
 ```yml
 name: `pageApiName`
+is_active: true 
 object_name: contracts
 type: app/record/list/form
 render_engine: amis
@@ -30,10 +31,11 @@ render_engine: amis
 _id: xxx
 page: `page_id`
 version: 2
+is_active: true 
 schema: `amis json`
 ```
 
-### 页面分配 .pageAssignment.yml
+### 页面分配 page_assignments
 
 如果同一个用户授权了多个page时，使用最新的page授权
 
@@ -41,7 +43,7 @@ schema: `amis json`
 app: contract
 profile: user
 recordType: null
-page: contract-list
+page: `page_id`
 mobile: true
 ```
 
@@ -86,6 +88,7 @@ name: `pageApiName`
 object_name: contracts
 type: app/record/list/form
 render_engine: amis
+pageAssignments: []
 ```
 
 ### Amis Schema .page.amis.json

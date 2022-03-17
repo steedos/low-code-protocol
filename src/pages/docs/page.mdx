@@ -11,40 +11,24 @@ description: 支持使用代码形式编写自定义控件，并进一步开发�
 - 提供可视化工具
 - 需要支持自定义控件
 
-## 微页面元数据
+## 微页面表结构
 
-### 微页面 .page.yml
+### 微页面 pages
 
 ```yml
 name: `pageApiName`
-objectApiName: contracts
+object_name: contracts
 type: app/record/list/form
-renderEngine: amis
-schema: `pageApiName`.amis.json
-isDefault: true
+render_engine: amis
 ```
 
-### Amis Schema .amis.json
+### 微页面版本 page_versions
 
-.amis.json 独立保存，以便在 VS Code 中直接设计Schema。
-
-```json
-{
-  "type": "page",
-  "title": "标题",
-  "remark": {
-    "title": "标题",
-    "body": "这是一段描述问题，注意到了没，还可以设置标题。而且只有点击了才弹出来。",
-    "icon": "question-mark",
-    "placement": "right",
-    "trigger": "click",
-    "rootClose": true
-  },
-  "body": "内容部分. 可以使用 \\${var} 获取变量。如: `\\$date`: ${date}",
-  "aside": "边栏部分",
-  "toolbar": "工具栏",
-  "initApi": "/amis/api/mock2/page/initData"
-}
+```yml
+_id: xxx
+page: `page_id`
+version: 2
+schema: `amis json`
 ```
 
 ### 页面分配 .pageAssignment.yml
@@ -87,6 +71,42 @@ profile: user
 recordType: null
 desktop: contract-list-desktop
 mobile: contract-list
+```
+
+## 微页面元数据
+
+下载时只下载微页面最新版本。上传时只更新版本。
+
+### 微页面 .page.yml
+
+```yml
+name: `pageApiName`
+object_name: contracts
+type: app/record/list/form
+render_engine: amis
+```
+
+### Amis Schema .page.amis.json
+
+.page.amis.json 独立保存，以便在 VS Code 中直接设计Schema。
+
+```json
+{
+  "type": "page",
+  "title": "标题",
+  "remark": {
+    "title": "标题",
+    "body": "这是一段描述问题，注意到了没，还可以设置标题。而且只有点击了才弹出来。",
+    "icon": "question-mark",
+    "placement": "right",
+    "trigger": "click",
+    "rootClose": true
+  },
+  "body": "内容部分. 可以使用 \\${var} 获取变量。如: `\\$date`: ${date}",
+  "aside": "边栏部分",
+  "toolbar": "工具栏",
+  "initApi": "/amis/api/mock2/page/initData"
+}
 ```
 
 ## 微页面引擎

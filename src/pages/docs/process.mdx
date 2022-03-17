@@ -1,0 +1,53 @@
+---
+title: 微流程
+description: 支持接入不同的流程引擎，实现业务流程自定义。
+---
+
+## 核心需求
+
+- 插件式挂接不通流程引擎
+- 可视化设计业务流程
+- 业务对象与流程引擎相关联
+
+## 数据库设计
+
+### 流程 process
+
+```yml
+name: `processApiName`
+label: 显示名称
+object_name: contracts
+engine: activiti
+is_active: true 
+entry_criteria: //入口条件公式
+```
+
+### 流程版本 process_versions
+
+流程版本记录流程的修订历史，任务在运行时关联到此记录。发起流程时始终取流程最新版。
+
+```yml
+_id: xxx
+process: `process_id`
+version: 2
+schema: `process.activiti.json`
+```
+
+## 元数据
+
+元数据下载时只下载流程最新版本。上传时只更新版本。
+
+### 流程 .process.yml
+
+```yml
+name: `processApiName`
+label: 显示名称
+object_name: contracts
+engine: activiti
+is_active: true 
+entry_criteria: //入口条件公式
+```
+
+### 流程图 process.activiti.json
+
+基于 activiti 的流程图。在元数据中单独保存此文件，以便在 VS Code 中提供设计器插件。

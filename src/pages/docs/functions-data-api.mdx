@@ -1,0 +1,280 @@
+---
+title: 微函数 DataApi
+description: 在软件包中定义的微函数里可以通过DataApi来实现数据交互。
+---
+
+本协议约定在低代码平台编写微函数时调用DataApi进行数据交互的相关规范，包括数据的增、删、改、查等相关函数规范。
+
+## 属性
+
+每个微函数中会把 `DataApi` 实例传入到 `context.org.dataApi` 参数中，每个实例都有以下属性：
+
+- accessToken: `string` 当前API实例需要使用的 `access token`，在初始化第三方API实例或发起一个自定义API请求时可能需要该属性值进行身份验证。
+
+## 方法
+
+每个 `DataApi` 实例都可以调用以下函数来实现数据交互。
+
+### commitUnitOfWork
+
+▸ commitUnitOfWork(unitOfWork: [UnitOfWork](/docs/functions-unitofwork)): Promise<Map<string, [RecordModificationResult](#RecordModificationResult)>>
+
+提交一个 [UnitOfWork](/docs/functions-unitofwork) ，执行所有注册到它的操作。如果这些操作中的任何一个失败，整个单元就会回滚。要检查单个操作的结果，请检查返回的映射(使用从 UnitOfWork.registerCreate 和 UnitOfWork.registerUpdate 返回的 [ReferenceId](#ReferenceId) 作为键值)。
+
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| unitOfWork	| [UnitOfWork](/docs/functions-unitofwork) |	要提交的 [UnitOfWork](/docs/functions-unitofwork) |
+
+返回值：Promise<Map<string, [RecordModificationResult](#RecordModificationResult)>>
+
+返回一个 [RecordModificationResult](#RecordModificationResult)>> 的集合，由它们的 [ReferenceIds](#ReferenceIds) 索引。
+
+### create
+
+▸ create(record: [RecordForCreate](#RecordForCreate)): Promise<[RecordModificationResult](#RecordModificationResult)>
+
+按传入的记录信息创建一条新记录。
+
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| record	| [RecordForCreate](#RecordForCreate) |	要新建的记录信息 |
+
+返回值：Promise<[RecordModificationResult](#RecordModificationResult)>
+
+返回一个包括创建好的记录信息的 `Promise`。
+
+### delete
+
+▸ delete(type: string, _id: string): Promise<[RecordModificationResult](#RecordModificationResult)>
+
+按传入的对象Api名称及记录id值删除一条记录。
+
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| type	| string |	要删除的对象Api名称 |
+| _id	| string |	要删除的记录Id值 |
+
+返回值：Promise<[RecordModificationResult](#RecordModificationResult)>
+
+返回一个包括被删除记录信息的 `Promise`。
+
+### newUnitOfWork
+
+▸ newUnitOfWork(): [UnitOfWork](/docs/functions-unitofwork)
+
+创建一个新的空 [UnitOfWork](/docs/functions-unitofwork)。
+
+返回值: [UnitOfWork](/docs/functions-unitofwork)
+
+返回一个空的 [UnitOfWork](/docs/functions-unitofwork)。
+
+### query
+
+▸ query(soql: string): Promise<[RecordQueryResult](#RecordQueryResult)>
+
+根据传入的 SOQL 参数值，查询对象记录.
+
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| soql	| string |	查询语句 |
+
+返回值: Promise<[RecordQueryResult](#RecordQueryResult)>
+
+返回一个包括请求到的对象记录集合的 `Promise`。
+
+### queryMore
+
+▸ queryMore(recordQueryResult: [RecordQueryResult](#RecordQueryResult)): Promise<[RecordQueryResult](#RecordQueryResult)>
+
+在之前查询到的对象记录集合，即 [RecordQueryResult](#RecordQueryResult) 基础上进一步查询更多对象记录。
+
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| recordQueryResult	| [RecordQueryResult](#RecordQueryResult) |	要补充到的查询结果集合 |
+
+返回值: Promise<[RecordQueryResult](#RecordQueryResult)>
+
+返回一个包括请求到的对象记录集合的 `Promise`。
+
+### update
+
+▸ update(update: [RecordForUpdate](#RecordForUpdate)): Promise<[RecordModificationResult](#RecordModificationResult)>
+
+按传入的记录信息修改一条存在的记录。
+
+参数列表：
+
+| 名称 | 类型 | 描述 |
+|----|----|----|
+| update	| [RecordForUpdate](#RecordForUpdate) |	要修改的记录信息 |
+
+返回值: Promise<[RecordModificationResult](#RecordModificationResult)>
+
+返回一个包括修改后的记录信息的 `Promise`。
+
+## 结构类
+
+以下是上述微函数方法中需要用到的参数和返回值规范。
+
+### RecordForCreate
+
+Ƭ RecordForCreate: object
+
+调用 [create](#create) 或 在 [UnitOfWork](/docs/functions-unitofwork) 中注册一个创建新记录的操作时需要传入的记录信息。
+
+| 属性名称 | 类型 | 描述 |
+|----|----|----|
+| type	| string |	对象Api名称 |
+| fields	| object |	字段属性值 |
+
+比如：
+```
+{
+    type: "Account",
+    fields: {
+      Name: `${name}-${Date.now()}`,
+      AccountNumber: accountNumber,
+      Industry: industry,
+      Type: type,
+      Website: website,
+    },
+  };
+```
+
+### RecordForUpdate
+
+Ƭ RecordForUpdate: object
+
+调用 [update](#update) 或 在 [UnitOfWork](/docs/functions-unitofwork) 中注册一个修改记录的操作时需要传入的记录信息。
+
+| 属性名称 | 类型 | 描述 |
+|----|----|----|
+| type	| string |	对象Api名称 |
+| fields	| object |	字段属性值 |
+| fields._id	| string |	主键字段值 |
+
+比如：
+```
+{
+    type: "Account",
+    fields: {
+      _id: id,
+      Name: `${name}-${Date.now()}`,
+      AccountNumber: accountNumber,
+      Industry: industry,
+      Type: type,
+      Website: website,
+    },
+  };
+```
+
+### RecordModificationResult
+
+描述对象记录增、删、改相关操作的返回结果。
+
+| 属性名称 | 类型 | 描述 |
+|----|----|----|
+| _id	| string |	记录ID值 |
+
+### RecordQueryResult
+
+描述对象记录查询返回结果，主要属性及其描述如下所示。
+
+#### done
+
+数据查询操作是否已经完结: boolean。
+
+如果为真，则不能再从查询结果中检索其他记录。如果为false，则仍然需要继续检索一个或多个记录。
+
+#### nextRecordsUrl
+
+下一组记录的URL(如果有的话): string。
+
+#### records
+
+查询结果中的记录： [Record](#Record)[]。
+
+#### totalSize
+
+查询返回的记录总数： number。
+
+### Record
+
+Ƭ Record: object
+
+从 [query](#query) or [queryMore](#queryMore) 请求中获取到的记录集合。
+
+| 属性名称 | 类型 | 描述 |
+|----|----|----|
+| type	| string |	对象Api名称 |
+| fields	| object |	字段属性值 |
+
+### ReferenceId
+
+Ƭ ReferenceId: string
+
+引用将在将来创建、删除或修改的记录。
+
+## 示例
+
+```js
+"use strict";
+
+export default async function (event, context, logger) {
+  logger.info(
+    `Invoking salesforcesdkjs Function with payload ${JSON.stringify(
+      event.data || {}
+    )}`
+  );
+
+  // Extract Properties from Payload
+  const { name, accountNumber, industry, type, website } = event.data;
+
+  // Validate the payload params
+  if (!name) {
+    throw new Error(`Please provide account name`);
+  }
+
+  // Define a record using the RecordForCreate type and providing the Developer Name
+  const account = {
+    type: "Account",
+    fields: {
+      Name: `${name}-${Date.now()}`,
+      AccountNumber: accountNumber,
+      Industry: industry,
+      Type: type,
+      Website: website,
+    },
+  };
+
+  try {
+    // Insert the record using the SalesforceSDK DataApi and get the new Record Id from the result
+    const { _id: recordId } = await context.org.dataApi.create(account);
+
+    // Query Accounts using the SalesforceSDK DataApi to verify that our new Account was created.
+    const soql = `SELECT Fields(STANDARD) FROM Account WHERE Id = '${recordId}'`;
+    const queryResults = await context.org.dataApi.query(soql);
+    return queryResults;
+  } catch (err) {
+    // Catch any DML errors and pass the throw an error with the message
+    const errorMessage = `Failed to insert record. Root Cause: ${err.message}`;
+    logger.error(errorMessage);
+    throw new Error(errorMessage);
+  }
+}
+```
+
+## 参考资料
+
+- [Saleforce DataApi](https://developer.salesforce.com/docs/platform/functions/guide/dataapi.html)
+

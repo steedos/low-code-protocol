@@ -143,7 +143,7 @@ Builder.registerComponent(Heading, {
 import { Builder } from '@builder.io/react'
 
 // Register amis render 
-const Amis = props => {
+const AmisRender = props => {
   const {schema, data} = props;
 
   return (
@@ -160,8 +160,8 @@ const Amis = props => {
   )
 }
  
-Builder.registerComponent(Amis, {
-  name: 'Amis',
+Builder.registerComponent(AmisRender, {
+  name: 'AmisRender',
   inputs: [
     { name: 'schema', type: 'object' },
     { name: 'data', type: 'object' },

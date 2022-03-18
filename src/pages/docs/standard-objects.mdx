@@ -1259,6 +1259,60 @@ label: 软件包版本
 | version | text | 版本号 |
 
 
+## chatter相关
+- 消息 chat_messages
+- 房间 chat_rooms
+- 订阅 chat_subscriptions
+
+### 消息 chat_messages
+基础模块：通知消息。
+
+```yaml
+name: chat_messages
+label: Chat Message
+icon: rtc_presence
+hidden: false
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| related_to | lookup | 相关 |
+| name | textarea | 内容 |
+| type | select | 消息类型 |
+
+### 房间 chat_rooms
+基础模块：会议房间。
+
+```yaml
+name: chat_rooms
+label: Chat Room
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 内容 |
+| members | lookup | 成员 |
+| owner | lookup | 房主 |
+| type | select | 类型 |
+
+### 订阅 chat_subscriptions
+基础模块：订阅内容。
+
+```yaml
+name: chat_subscriptions
+label: Chat Subscription
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| related_to | lookup | 相关 |
+| last_message_text | text | 最新消息预览(文本) |
+| last_message_date | datetime | 最新消息发送时间 |
+| unread | number | 未读数 |
+
 ## 主数据相关
 
 - 节假日

@@ -18,7 +18,7 @@ description: 支持接入不同的流程引擎，实现业务流程自定义。
 name: `processApiName`
 label: 显示名称
 object_name: contracts
-engine: activiti
+engine: activiti/camunda
 is_active: true 
 entry_criteria: //入口条件公式
 ```
@@ -32,7 +32,7 @@ _id: xxx
 process: `process_id`
 version: 2
 is_active: true 
-schema: `process.activiti.json`
+schema: `process.activiti.bpmn`
 ```
 
 ## 元数据
@@ -53,3 +53,42 @@ entry_criteria: //入口条件公式
 ### 流程图 process.activiti.json
 
 基于 activiti 的流程图。在元数据中单独保存此文件，以便在 VS Code 中提供设计器插件。
+
+## 接入 BPM 引擎
+
+使用插件方式接入 BPM 服务。
+
+### 定义 BPM 服务
+
+定义 [Moleculer](https://moleculer.services/docs/0.14/services.html) 微服务
+
+```js
+{
+    module.exports = {
+        name: "ActivitiEngine",
+        settings: {
+            serviceEndpoint: "https://activi.services"
+        },
+        actions: {
+            // deploy process
+            deploy(ctx) {
+                // call activiti api
+            },
+
+            // start process
+            start(ctx) {
+                // call activiti api
+            }
+        }
+    }
+}
+```
+
+### 注册 BPM 服务
+
+```js
+   Builder.register('bpm-engine', {
+       name: 'acitivi',
+       service: 'ActivitiEngine',
+   })
+```

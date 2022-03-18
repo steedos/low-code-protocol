@@ -41,6 +41,7 @@ export const documentationNav = {
   'API': [
     pages['api-metadata'],
     pages['api-records'],
+    pages['api-process'],
   ],
   // '可视化工具': [
   //   pages['designer-object'],

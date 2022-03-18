@@ -20,6 +20,48 @@ description: 根据流程的元数据定义，自动生成审批相关API。
 
 ### 发起审批
 
+新建一个草稿状态的审批单。
+
+#### URI
+
+```text
+/api/workflow/open/drafts
+```
+
+#### 请求参数
+
+请求发起审批接口时需要传入以下参数。
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| flow | string | 流程_id |
+| applicant | string | 申请人_id |
+| applicant_username | string | 申请人用户名 |
+| values | object | 审批单字段值 |
+
+applicant 与 applicant_username 两个参数两选一即可。
+
+#### 返回值
+
+该API接口请求成功时返回值格式如下：
+
+其中data返回的是创建成功的审批单记录信息。
+
+```json
+{
+    "status": "success",
+    "data": {...}
+}
+```
+
+该API接口请求失败时返回值格式如下：
+
+```json
+{
+    "status": "success",
+    "data": { errors: [{ errorMessage: "" }] }
+}
+```
 
 ### 暂存审批单
 

@@ -1,5 +1,5 @@
 ---
-title: 微流程
+title: 开放流程
 description: 支持接入不同的流程引擎，实现业务流程自定义。
 ---
 
@@ -87,8 +87,10 @@ entry_criteria: //入口条件公式
 ### 注册 BPM 服务
 
 ```js
-   Builder.register('bpm-engine', {
-       name: 'acitivi',
-       service: 'ActivitiEngine',
-   })
+import {Builder} from '@steedos-builder/sdk';
+
+Builder.register('bpm-engine', {
+    name: 'acitivi',
+    service: 'ActivitiEngine',
+})
 ```

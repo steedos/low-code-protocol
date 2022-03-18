@@ -52,6 +52,8 @@ hidden: true
 - 人员
 - 用户
 - 角色
+- 业务伙伴
+- 联系人
 
 ### 公司 spaces
 公司又称工作区。用户被划分为不同的工作区（企业），每个工作区可以配置独立的组织机构和权限控制。业务人员录入的每一条业务数据都会自动加入 space 属性，用于标记所属的工作区。
@@ -216,24 +218,6 @@ enable_enhanced_lookup: true
 <!--
 | hr | object | HR |
 | last_logon | date | 最近登陆 |
-
-| is_deleted | boolean | 已删除 |
-| deleted | datetime | 删除时间 |
-| deleted_by | lookup | 删除人 |
-| instances | grid | 申请单 |
-| instances.$._id | text | 申请单ID |
-| instances.$.state | text | 申请单状态 |
-| sharing | grid | 记录级权限 |
-| sharing.$ | ndefine | 授权条件 |
-| sharing.$.u | [text] | 授权用户 |
-| sharing.$.o | [text] | 授权组织 |
-| sharing.$.r | text | 来自规则 |
-| message_count | number | 留言数 |
-| locked | boolean | 已锁定 |
-| instance_state | select | 审批状态 |
-| _table | object | 记录对象流程映射功能中表单中表格行信息 |
-| _table._id | text | Object Workflow Related Form Table ItemID" |
-| _table._code | text | Object Workflow Related Form Table Code |
 -->
 
 ### 用户 users
@@ -276,23 +260,6 @@ hidden: false
 login_failed_number | number |  |
 login_failed_lockout_time | datetime |  |
 lockout | boolean |  |
-
-deleted | datetime | 删除时间 |
-deleted_by | lookup | 删除人 |
-instances | grid | 申请单 |
-instances.$._id | text | 申请单ID |
-instances.$.state | text | 申请单状态 |
-sharing | grid | 记录级权限 |
-sharing.$ |  | 授权条件 |
-sharing.$.u | [text] | 授权用户 |
-sharing.$.o | [text] | 授权组织 |
-sharing.$.r | text | 来自规则 |
-message_count | number | 留言数 |
-locked | boolean | 已锁定 |
-instance_state | select | 审批状态 |
-_table | object | 记录对象流程映射功能中表单中表格行信息 |
-_table._id | text | Object Workflow Related Form Table Item ID |
-_table._code | text | Object Workflow Related Form Table Code |
 -->
 
 ### 角色 roles
@@ -312,6 +279,122 @@ hidden: true
 | parent | lookup | 上级角色 |
 | users | lookup | 成员 |
 | description | textarea | 描述 |
+
+### 业务伙伴 accounts
+用于保存业务伙伴相关信息。
+
+```yaml
+name: accounts
+label: 业务伙伴
+icon: account
+enable_files: true
+enable_search: true
+enable_events: true
+enable_tasks: true
+enable_api: true
+enable_share: true
+enable_audit: true
+enable_enhanced_lookup: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 业务伙伴名称 |
+| owner | lookup | 所有者 |
+| is_supplier | boolean | 供应商 |
+| is_customer | boolean | 客户 |
+| type | select | 类型 |
+| parent_id | lookup | 母公司 |
+| credit_code | text | 纳税人识别号（身份证/其他） |
+| website | url | 网站 |
+| phone | text | 电话 |
+| fax | text | 传真 |
+| description | textarea | 描述 |
+| industry | select | 行业 |
+| number_of_employees | number | 员工人数 |
+| state | select | 区域 |
+| billing_address | textarea | 开单地址 |
+| shipping_address | textarea | 发货地址 |
+| account_number | text | 业务伙伴编号 |
+| rating | select | 分级 |
+| invoice_address | text | 开票地址 |
+| invoice_phone | text | 开票电话 |
+| invoice_bank | text | 开户行 |
+| invoice_combinenum | text | 账号 |
+| account_source | text | 业务伙伴来源 |
+| site | text | 业务伙伴地点 |
+| annual_revenue | currency | 年收入 |
+| ownership | select | 所有权 |
+| account_division | text | 业务伙伴分部 |
+| partner_account | boolean | 合作伙伴 |
+| assistant | text | 助理 |
+| asst_phone | text | 助理电话 |
+| birthdate | date | 生日 |
+| department | text | 部门 |
+| email | email | 电子邮件 |
+| do_not_call | boolean | 请勿致电 |
+| has_opted_out_of_email | boolean | 退出邮件列表 |
+| fax_opt_out | boolean | 退出传真列表 |
+| home_phone | text | 家庭电话 |
+| lead_source | select | 潜在业务伙伴来源 |
+| mailing_city | text | 邮寄地址-城市 |
+| mailing_street | text | 邮寄地址-街道 |
+| mailing_zip | text | 邮寄地址-邮政编码 |
+| other_city | text | 其他地址-城市 |
+| other_street | text | 其他地址-街道 |
+| other_zip | text | 其他地址-邮政编码 |
+| mobile | text | 手机 |
+| salutation | select | 性别 |
+| other_phone | text | 其他电话 |
+
+### 联系人 contacts
+用于保存联系人相关信息。
+
+```yaml
+name: contacts
+label: 联系人
+icon: contact
+enable_files: true
+enable_search: true
+enable_events: true
+enable_tasks: true
+enable_api: true
+enable_audit: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 姓名 |
+| owner | lookup | 所有者 |
+| account | master_detail | 所属客户 |
+| reports_to_id | lookup | 直属上司 |
+| salutation | select | 性别 |
+| title | text | 职务 |
+| department | text | 部门 |
+| email | email | 邮件 |
+| fax | text | 传真 |
+| phone | text | 工作电话 |
+| mobile | text | 手机 |
+| home_phone | text | 家庭电话 |
+| birthdate | date | 生日 |
+| mailing_address | textarea | 邮寄地址 |
+| user | lookup | 外部用户 |
+| hoddy | text | 爱好 |
+| description | textarea | 备注 |
+| last_save_date | date | 上次保持联系保存日期 |
+| last_request_date | date | 上次保持联系请求日期 |
+| individual | text | 个人 |
+| other_city | text | 其他地址-城市 |
+| other_street | text | 其他地址-街道 |
+| other_zip | text | 其他地址-邮政编码 |
+| other_phone | text | 其他电话 |
+| assistant | text | 助理 |
+| asst_phone | text | 助理电话 |
+| do_not_call | boolean | 请勿致电 |
+| has_opted_out_of_email | boolean | 退出邮件列表 |
+| fax_opt_out | boolean | 退出传真列表 |
+| lead_source | select | 潜在客户来源 |
+
 
 ## 功能相关
 

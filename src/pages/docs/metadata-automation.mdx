@@ -12,3 +12,54 @@ description: 定义流程自动化相关元数据
 - 批准过程
 - Process
 - Flow
+
+### 工作流规则 workflow_rule
+用于保存管理员在流程自动化配置中配置的工作流规则
+
+```yaml
+name: workflow_rule
+label: Workflow Rule
+icon: maintenance_work_rule
+hidden: true
+enable_enhanced_lookup: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| object_name | lookup | 对象 |
+| name | text | API 名称 |
+| label | text | 显示名称 |
+| active | boolean | 启用 |
+| trigger_type | select | 评估条件 |
+| formula | textarea | 公式 |
+| updates_field_actions | lookup | 字段更新 |
+| workflow_notifications_actions | lookup | 工作流通知 |
+| description | textarea | 描述 |
+
+
+### 字段更新 action_field_updates
+用于保存管理员在流程自动化配置中配置的字段更新信息。
+
+```yaml
+name: action_field_updates
+label: Field Updates
+icon: record
+hidden: true
+enable_inline_edit: false
+enable_enhanced_lookup: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name |  text | API 名称 |
+| label |  text | 显示名称 |
+| object_name |  lookup | 对象 |
+| target_object |  lookup | 要更新的对象 |
+| field_name |  lookup | 要更新的字段 |
+| operation |  lookup | 新字段值类型 |
+| formula |  textarea | 公式 |
+| literal_value |  text | 指定新字段值 |
+| notify_assignee |  boolean | 通知被分配人(仅修改拥有者时由此选项) |
+| description |  textarea | 描述 |
+| reevaluate_on_change |  boolean | 字段更改后重新评估工作流规则 |
+| undirect |  boolean | 触发对象触发器、工作流规则、字段验证规则 |

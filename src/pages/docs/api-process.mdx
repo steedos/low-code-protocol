@@ -220,6 +220,34 @@ orgField 参数是一个json对象，以下表格描述了该参数的属性清�
 |----|----|----|
 | Instances | object[] | 申请单内容 |
 
+以下表格描述了Instances中的对象键值信息：
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| _id | string | 审批单_id |
+| flow | string | 当前流程_id |
+| name | string | 审批单名称 |
+| applicant | string | 申请人_id |
+| submitter | string | 提交人_id |
+| inbox_users | string[] | 待审核人_id集合 |
+| traces | object[] | 签核历程 |
+
+以下表格描述了 traces 中的对象键值信息：
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| approves | object[] | 审批历程 |
+
+以下表格描述了 approves 中的对象键值信息：
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| next_steps | string[] | 下一步骤_id集合 |
+| attachments | string[] | 附件 |
+| description | string[] | 审批意见 |
+
+> traces 是每个步骤的签核历程，approves 则是每个签核历程中的审批历程，里面记录了详细的审批表单信息。
+
 #### 返回值
 
 - 该API接口请求成功时返回值格式如下：

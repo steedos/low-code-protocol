@@ -30,7 +30,7 @@ hidden: true
 | instances.$._id | text | 申请单ID |
 | instances.$.state | text | 申请单状态 |
 | sharing | grid | 记录级权限 |
-| sharing.$ |  | 授权条件 |
+| sharing.$ | object | 授权条件 |
 | sharing.$.u | [text] | 授权用户 |
 | sharing.$.o | [text] | 授权组织 |
 | sharing.$.r | text | 来自规则 |
@@ -44,14 +44,13 @@ hidden: true
 | _table._code | text | Object Workflow Related Form Table Code |
 
 
-## 人员相关
+## 组织人员
 
 - 公司
 - 部门
 - 分部
 - 人员
 - 用户
-- 角色
 - 业务伙伴
 - 联系人
 
@@ -262,23 +261,6 @@ login_failed_lockout_time | datetime |  |
 lockout | boolean |  |
 -->
 
-### 角色 roles
-用于保存管理员在设置应用中为审批王应用配置的角色配置
-
-```yaml
-name: roles
-label: Role
-icon: groups
-hidden: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 角色名称 |
-| api_name | text | API Name |
-| parent | lookup | 上级角色 |
-| users | lookup | 成员 |
-| description | textarea | 描述 |
 
 ### 业务伙伴 accounts
 用于保存业务伙伴相关信息。
@@ -396,219 +378,9 @@ enable_audit: true
 | lead_source | select | 潜在客户来源 |
 
 
-## 功能相关
-
-- 报表 reports
-- 任务 tasks
-- 日程 events
-- 备忘 notes
-- 公告 announcements
-- 附件 cms_files
-- 附件版本 cfs_files_filerecord
-
-### 报表 reports
-业务人员可以自定义报表来分析业务数据。
-
-```yaml
-name: reports
-label: Report
-icon: report
-enable_space_global: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 名称 |
-| report_type | select | 报表类型 |
-| data_source | select | 报表数据来源 |
-| object_name | lookup | 对象名 |
-| filter_scope | select | 过虑范围 |
-| filter_logic | text | 过滤逻辑 |
-| fields | lookup | 字段 |
-| rows | lookup | 行 |
-| columns | lookup | 列 |
-| values | lookup | 统计 |
-| filter_fields | grid | 过滤字段 |
-| filter_fields.$ | object | Filter Field |
-| filter_fields.$.field | lookup | 字段名称 |
-| filter_fields.$.required | boolean | 必填 |
-| description | textarea | 描述 |
-| charting | boolean | 显示图表 |
-| grouping | boolean | 显示小计 |
-| totaling | boolean | 显示总计 |
-| counting | boolean | 显示记录计数 |
-| graphql | textarea | Graphql |
-| html | textarea | Html |
-| helper | textarea | Helper |
-| script | textarea | Script |
-| created | datetime | 创建时间 |
-| created_by | lookup | 创建人 |
-| modified | datetime | 修改时间 |
-| modified_by | lookup | 修改人 |
-
-<!--
-| filters | Object | 过滤条件 |
-| filters.$ | | Filter |
-| filters.$.field | text | 字段名 |
-| filters.$.operation | select | 操作符 |
-| filters.$.value | | 字段值 |
-| options | | 操作 |
-| mrt | textarea | Mrt |
-| is_system | boolean | 系统 |
--->
 
 
-### 任务 tasks
-用于日常任务管理，也可以用于管理对象的相关任务，当在对象上勾选了 ”允许添加任务“ 开关后，业务人员就可以在该对象记录详细界面看到该记录相关的任务子表。任务被创建后，其被分派人可以收到推送通知。
-
-```yaml
-name: tasks
-label: Task
-icon: timesheet_entry
-enable_search: true
-enable_files: true
-enable_chatter: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 主题 |
-| assignees | lookup | 分派给 |
-| due_date | date | 到期日期 |
-| state | select | 状态 |
-| priority | select | 优先级 |
-| related_to | lookup | 相关项 |
-| description | textarea | 描述 |
-| created | datetime | 创建时间 |
-| created_by | lookup | 创建人 |
-| modified | datetime | 修改时间 |
-| modified_by | lookup | 修改人 |
-
-
-### 日程 events
-用于日常日程管理，也可以用于管理对象的相关日程，当在对象勾选了”允许添加事件“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的日程子表。日程被创建后，其被分派人可以收到推送通知。
-
-```yaml
-name: events
-label: Event
-icon: event
-enable_search: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 主题 |
-| start | datetime | 开始时间 |
-| end | datetime | 结束时间 |
-| assignees | lookup | 分派给 |
-| related_to | lookup | 相关项 |
-| is_all_day | boolean | 全天事件 |
-| location | text | 地址 |
-| description | textarea | 描述 |
-| created | datetime | 创建时间 |
-| created_by | lookup | 创建人 |
-| modified | datetime | 修改时间 |
-| modified_by | lookup | 修改人 |
-
-
-### 备忘 notes
-用于日常备忘管理，也可以用于管理对象的相关备忘，当在对象勾选了”允许添加备注“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的备忘子表。
-
-```yaml
-name: notes
-label: Notes
-icon: note
-enable_search: true
-```
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 标题 |
-| description | textarea | 内容 |
-| related_to | lookup | 相关项 |
-| created | datetime | 创建时间 |
-| created_by | lookup | 创建人 |
-| modified | datetime | 修改时间 |
-| modified_by | lookup | 修改人 |
-
-
-### 公告 announcements
-用于发布公告，可以选择要发布到哪些人员，相关人员可以收到公告通知。
-
-```yaml
-name: announcements
-icon: announcement
-label: Announcement
-hidden: false
-enable_files: true
-enable_chatter: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 标题 |
-| body | html | 正文 |
-| members | lookup | 发布对象 |
-| created | datetime | 发布时间 |
-| created_by | lookup | 发布人 |
-| modified_by | lookup | 修改人 |
-| modified | datetime | 修改时间 |
-
-
-### 附件 cms_files
-以用于管理对象的相关附件，当在对象勾选了”允许添加附件“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的附件子表。
-
-```yaml
-name: cms_files
-label: Attachments
-icon: drafts
-enable_search: true
-enable_api: true
-hidden: false
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 名称 |
-| description | textarea | 描述 |
-| extention | text | 文件后缀 |
-| size | filesize | 文件大小 |
-| versions | file | 历史版本 |
-| parent | lookup | 所属记录 |
-
-### 附件版本 cfs_files_filerecord
-用于存放附件的各个版本，可以在附件详情页查看附件各个版本。
-
-```yaml
-name: cfs_files_filerecord
-label: Attachment Version
-table_name: 'cfs.files.filerecord'
-icon: drafts
-enable_search: true
-enable_api: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| original | object | 文件 |
-| original.name | text | 文件名 |
-| original.size | number | 文件大小 |
-| metadata | object | 属性 |
-| metadata.owner | lookup | 上传者 |
-| metadata.owner_name | text | 上传者 |
-| metadata.parent | master_detail | 所属文件 |
-| uploadedAt | datetime | 上传时间 |
-| created_by | lookup | 创建人 |
-| modified_by | lookup | 修改人 |
-| owner | lookup | 所有者 |
-| created | datetime | 创建时间 |
-| modified | datetime | 修改时间 |
-| locked | boolean | 已锁定 |
-| company_id | lookup | 主分部 |
-| company_ids | lookup | 所属分部 |
-| instance_state | select | 审批状态 |
-
-
-## 审批相关
+## 审批
 
 - 角色 roles
 - 表单 forms
@@ -1030,7 +802,7 @@ hidden: true
 | active | boolean | 激活 |
 | description | text | 描述 |
 
-## 数据导入相关
+## 数据导入
 
 - 数据导入 queue_import
 - 数据导入历史 queue_import_history
@@ -1089,7 +861,7 @@ hidden: true
 | file | file | Excel文件 |
 
 
-## 知识相关
+## 知识
 
 - 栏目 cms_categories
 - 知识 cms_posts
@@ -1165,7 +937,7 @@ hidden: true
 | avatar | avatar | Logo图片 |
 | layout | textarea | 网站模版 |
 
-## 软件包相关
+## 软件包
 
 - 软件包 package
 - 已安装的软件包 imported_package
@@ -1344,7 +1116,7 @@ label: 软件包版本
 | version | text | 版本号 |
 
 
-## chatter相关
+## 留言
 - 消息 chat_messages
 - 房间 chat_rooms
 - 订阅 chat_subscriptions
@@ -1398,7 +1170,7 @@ hidden: true
 | last_message_date | datetime | 最新消息发送时间 |
 | unread | number | 未读数 |
 
-## 批准过程相关
+## 批准过程
 
 - 批准过程 process_definition
 - 批准步骤 process_node
@@ -1907,9 +1679,218 @@ enable_api: true
 
 ## 平台基础对象
 
+- 报表 reports
+- 任务 tasks
+- 日程 events
+- 备忘 notes
+- 公告 announcements
+- 附件 cms_files
+- 附件版本 cfs_files_filerecord
 - 在线表单
 - 节假日
 - 工作时间
+
+### 报表 reports
+业务人员可以自定义报表来分析业务数据。
+
+```yaml
+name: reports
+label: Report
+icon: report
+enable_space_global: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| report_type | select | 报表类型 |
+| data_source | select | 报表数据来源 |
+| object_name | lookup | 对象名 |
+| filter_scope | select | 过虑范围 |
+| filter_logic | text | 过滤逻辑 |
+| fields | lookup | 字段 |
+| rows | lookup | 行 |
+| columns | lookup | 列 |
+| values | lookup | 统计 |
+| filter_fields | grid | 过滤字段 |
+| filter_fields.$ | object | Filter Field |
+| filter_fields.$.field | lookup | 字段名称 |
+| filter_fields.$.required | boolean | 必填 |
+| description | textarea | 描述 |
+| charting | boolean | 显示图表 |
+| grouping | boolean | 显示小计 |
+| totaling | boolean | 显示总计 |
+| counting | boolean | 显示记录计数 |
+| graphql | textarea | Graphql |
+| html | textarea | Html |
+| helper | textarea | Helper |
+| script | textarea | Script |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+<!--
+| filters | Object | 过滤条件 |
+| filters.$ | | Filter |
+| filters.$.field | text | 字段名 |
+| filters.$.operation | select | 操作符 |
+| filters.$.value | | 字段值 |
+| options | | 操作 |
+| mrt | textarea | Mrt |
+| is_system | boolean | 系统 |
+-->
+
+
+### 任务 tasks
+用于日常任务管理，也可以用于管理对象的相关任务，当在对象上勾选了 ”允许添加任务“ 开关后，业务人员就可以在该对象记录详细界面看到该记录相关的任务子表。任务被创建后，其被分派人可以收到推送通知。
+
+```yaml
+name: tasks
+label: Task
+icon: timesheet_entry
+enable_search: true
+enable_files: true
+enable_chatter: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 主题 |
+| assignees | lookup | 分派给 |
+| due_date | date | 到期日期 |
+| state | select | 状态 |
+| priority | select | 优先级 |
+| related_to | lookup | 相关项 |
+| description | textarea | 描述 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+
+### 日程 events
+用于日常日程管理，也可以用于管理对象的相关日程，当在对象勾选了”允许添加事件“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的日程子表。日程被创建后，其被分派人可以收到推送通知。
+
+```yaml
+name: events
+label: Event
+icon: event
+enable_search: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 主题 |
+| start | datetime | 开始时间 |
+| end | datetime | 结束时间 |
+| assignees | lookup | 分派给 |
+| related_to | lookup | 相关项 |
+| is_all_day | boolean | 全天事件 |
+| location | text | 地址 |
+| description | textarea | 描述 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+
+### 备忘 notes
+用于日常备忘管理，也可以用于管理对象的相关备忘，当在对象勾选了”允许添加备注“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的备忘子表。
+
+```yaml
+name: notes
+label: Notes
+icon: note
+enable_search: true
+```
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 标题 |
+| description | textarea | 内容 |
+| related_to | lookup | 相关项 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+
+### 公告 announcements
+用于发布公告，可以选择要发布到哪些人员，相关人员可以收到公告通知。
+
+```yaml
+name: announcements
+icon: announcement
+label: Announcement
+hidden: false
+enable_files: true
+enable_chatter: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 标题 |
+| body | html | 正文 |
+| members | lookup | 发布对象 |
+| created | datetime | 发布时间 |
+| created_by | lookup | 发布人 |
+| modified_by | lookup | 修改人 |
+| modified | datetime | 修改时间 |
+
+
+### 附件 cms_files
+以用于管理对象的相关附件，当在对象勾选了”允许添加附件“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的附件子表。
+
+```yaml
+name: cms_files
+label: Attachments
+icon: drafts
+enable_search: true
+enable_api: true
+hidden: false
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| description | textarea | 描述 |
+| extention | text | 文件后缀 |
+| size | filesize | 文件大小 |
+| versions | file | 历史版本 |
+| parent | lookup | 所属记录 |
+
+### 附件版本 cfs_files_filerecord
+用于存放附件的各个版本，可以在附件详情页查看附件各个版本。
+
+```yaml
+name: cfs_files_filerecord
+label: Attachment Version
+table_name: 'cfs.files.filerecord'
+icon: drafts
+enable_search: true
+enable_api: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| original | object | 文件 |
+| original.name | text | 文件名 |
+| original.size | number | 文件大小 |
+| metadata | object | 属性 |
+| metadata.owner | lookup | 上传者 |
+| metadata.owner_name | text | 上传者 |
+| metadata.parent | master_detail | 所属文件 |
+| uploadedAt | datetime | 上传时间 |
+| created_by | lookup | 创建人 |
+| modified_by | lookup | 修改人 |
+| owner | lookup | 所有者 |
+| created | datetime | 创建时间 |
+| modified | datetime | 修改时间 |
+| locked | boolean | 已锁定 |
+| company_id | lookup | 主分部 |
+| company_ids | lookup | 所属分部 |
+| instance_state | select | 审批状态 |
+
 
 ### 在线表单 web_forms
 在线表单（匿名提交数据），用于潜在客户注册、合作伙伴申请表、在线故障申报之类的需求。

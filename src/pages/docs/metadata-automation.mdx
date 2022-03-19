@@ -15,13 +15,16 @@ description: 定义流程自动化相关元数据
 - Flow
 
 ### 对象验证规则 object_validation_rules
+
+对象验证规则.validationRule.yml  
 用于保存在对象上配置的验证规则，验证规则主要用于验证该对象的数据是否符合特定的规则。当用户对于对象的某个字段的更改不符合用户创建的验证规则时，用户输入的信息无法提交保存。
 
 ```yaml
-name: object_validation_rules
-icon: textbox
-hidden: true
-label: Object Validation Rules
+name: test
+active: true
+description: 对象验证规则说明
+error_condition_formula: 1==1
+error_message: 错误消息提示
 ```
 
 | 字段名 | 字段类型 | 字段含义 |
@@ -34,14 +37,23 @@ label: Object Validation Rules
 | error_message | textarea | 错误消息 |
 
 ### 工作流规则 workflow_rule
+
+object_name.workflow.yml  
 用于保存管理员在流程自动化配置中配置的工作流规则
 
 ```yaml
-name: workflow_rule
-label: Workflow Rule
-icon: maintenance_work_rule
-hidden: true
-enable_enhanced_lookup: true
+rules:
+  - name: test
+    active: true
+    description: 描述信息
+    formula: 1=1
+    label: 测试工作流规则
+    object_name: testobject__c
+    trigger_type: onCreateOrTriggeringUpdate
+    updates_field_actions: []
+    workflow_notifications_actions: []
+fieldUpdates: []
+notifications: []
 ```
 
 | 字段名 | 字段类型 | 字段含义 |
@@ -58,15 +70,22 @@ enable_enhanced_lookup: true
 
 
 ### 字段更新 action_field_updates
+
+object_name.workflow.yml   
 用于保存管理员在流程自动化配置中配置的字段更新信息。
 
 ```yaml
-name: action_field_updates
-label: Field Updates
-icon: record
-hidden: true
-enable_inline_edit: false
-enable_enhanced_lookup: true
+fieldUpdates:
+  - name: fieldupdate
+    description: 描述
+    field_name: name
+    formula: '{ ''名称全称'' }'
+    label: 字段更新测试
+    object_name: testobject__c
+    operation: formula
+    reevaluate_on_change: true
+    target_object: testobject__c
+    undirect: true
 ```
 
 | 字段名 | 字段类型 | 字段含义 |
@@ -85,14 +104,18 @@ enable_enhanced_lookup: true
 | undirect |  boolean | 触发对象触发器、工作流规则、字段验证规则 |
 
 ### 工作流通知 workflow_notifications
+
+object_name.workflow.yml   
 用于保存管理员在流程自动化配置中配置的工作流通知信息
 
 ```yaml
-name: workflow_notifications
-label: Workflow Notification
-icon: quick_text
-hidden: true
-enable_inline_edit: false
+notifications:
+  - name: worktalk
+    assigned_user_field: []
+    body: '{ ''哈哈哈哈'' }'
+    label: 工作流通知测试
+    object_name: testobject__c
+    title: '{ ''标题公式'' }'
 ```
 
 | 字段名 | 字段类型 | 字段含义 |
@@ -104,3 +127,5 @@ enable_inline_edit: false
 | body | textarea | 正文公式 |
 | assigned_users | lookup | 指定具体人员 |
 | assigned_user_field | lookup | 指定对象上的用户字段 |
+
+**注意：** 工作流规则、字段更新、工作流通知这三个元数据在同一个文件下！

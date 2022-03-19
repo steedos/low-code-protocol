@@ -44,29 +44,46 @@ tabs:
 visible: true
 ```
 
-| 属性名 | 属性值类型 | 属性含义 |
+| 属性名 | 属性类型 | 属性含义 |
 |----|----|----|
-| _id | string | 应用的唯一标识。 |
-| url | string | 应用地址 |
-| name | string | 应用显示名称。 |
-| code | string | 应用的唯一标识。 |
-| description | string | 应用描述。 |
-| icon | string | 应用图标。 |
-| icon_slds | string | 应用图标。 |
-| sort | number | 排序 |
-| tabs | array | 用于指定此应用下的选项卡 |
-| objects | array | 用于指定此应用下有多少对象。 |
-| mobile_objects | array | 用于指定此应用在手机上显示的对象。 |
-| admin_menus | array | 管理员菜单 |
+| name | text | 名称 |
+| code | text | API 名称 |
+| icon_slds | lookup | 图标 |
 | visible | boolean | 启用 |
-| is_new_window | boolean | 新窗口打开 |
-| mobile | boolean | 在手机端显示 |
-| oauth2_enabled | boolean | 启用OAuth2认证 |
-| oauth2_logout_enabled | boolean | 启用OAuth2单点注销 |
-| saml_enabled | boolean | 启用SAML |
-| saml_logout_enabled | boolean | 启用SAML单点注销 |
-| is_use_iframe | boolean | 使用iframe打开 |
+| description | textarea | 描述 |
+| tabs | lookup | 选项卡 |
+| objects | lookup | 桌面主菜单 |
+| mobile_objects | lookup | 手机主菜单 |
+| is_creator | boolean | 显示在桌面菜单中 |
+| mobile | boolean | 显示在手机菜单中 |
+| icon | text | 旧版图标 |
+| sort | number | 排序 |
+| url | url | 外部链接 |
 | is_use_ie | boolean | 使用IE打开(需使用Steedos桌面客户端) |
+| is_use_iframe | boolean | 使用iframe打开 |
+| is_new_window | boolean | 在新窗口打开 |
+| on_click | textarea | 链接脚本 |
+| auth_name | text | 验证域名 |
+| secret | text | API 密钥 |
+| oauth2_enabled | boolean | 启用 OAuth2 |
+| oauth2_callback_url | text | 回调 URL |
+| oauth2_scopes | select | 范围 |
+| oauth2_logout_enabled | boolean | 启用单点注销 |
+| oauth2_logout_url | url | 单点注销 URL |
+| oauth2_home_url | url | 应用首页 |
+| oauth2_logo | image | 应用 Logo |
+| oauth2_client_secret | text | 应用密钥 |
+| saml_enabled | boolean | 启用 SAML |
+| saml_entity_id | text | Entity Id |
+| saml_issuer | text | Issuer |
+| saml_idp_cert | text | IDP Cert |
+| saml_acs_url | url | ACS Url |
+| saml_name_id_format | text | 名称 |
+| saml_logout_enabled | boolean | 启用单点注销 |
+| saml_logout_url | url | 单点注销 URL |
+| saml_logout_block | select | 单点注销绑定 |
+| is_system | boolean | 系统 |
+| from_code_id | text | from_code_id |
 
 
 ## 选项卡
@@ -82,23 +99,23 @@ page: contract_analysis
 type: page
 ```
 
-| 属性名 | 属性值类型 | 属性含义 |
+| 属性名 | 属性类型 | 属性含义 |
 |----|----|----|
-| label | string | 显示名称 |
-| name | string | API 名称 |
-| icon | string | 图标 |
-| parent | string | 上级选项卡 |
-| type | string | 类型 |
+| label | text | 显示名称 |
+| name | text | API 名称 |
+| icon | lookup | 图标 |
+| parent | lookup | 上级选项卡 |
+| type | select | 类型 |
 | mobile | boolean | 显示在手机菜单中 |
 | desktop | boolean | 显示在桌面菜单中 |
 | frame_height | number | 选项卡框架的高度 |
 | has_sidebar | boolean | 显示侧边栏面板 |
-| object | string | 对象 |
-| url | string | 外部链接 |
+| object | lookup | 对象 |
+| url | url | 外部链接 |
 | is_new_window | boolean | 在新窗口打开 |
-| page | string | 页面 |
-| action_overrides | string | 分配给选项卡的操作替代列表 |
-| description | string | 描述 |
+| page | lookup | 页面 |
+| action_overrides | text | 分配给选项卡的操作替代列表 |
+| description | textarea | 描述 |
 | is_system | boolean | 系统 |
 
 ## 列表视图
@@ -150,23 +167,36 @@ sort:
     order: desc
 ```
 
-| 属性名 | 属性值类型 | 属性含义 |
+| 属性名 | 属性类型 | 属性含义 |
 |----|----|----|
-| name | string | API 名称 |
-| label | string | 视图显示名称 |
-| type | string | 列表显示类型，默认为grid |
-| filter_scope | string | 范围 |
-| columns | array | 列表显示的字段 |
-| mobile_columns | array | 手机模式下列表显示的字段 |
-| extra_columns | array | 额外在列表显示的字段 |
-| sort | array | 排序 |
-| filters | array, string | 过滤条件 |
-| filter_fields | array | 过滤的字段 |
-| sort_no | number | 显示顺序，从小到大 |
-| options | object | 额外选项 |
+| label | text | 显示名称 |
+| name | text | API 名称 |
+| object_name | master_detail | 对象 |
+| filter_scope | lookup | 过滤范围 |
+| shared | boolean | 共享视图到工作区 |
 | show_count | boolean | 显示条目数 |
-| shared | boolean | 是否共享 |
-| scrolling_mode | string | 滚动条样式 |
+| type | select | 视图类型 |
+| scrolling_mode | select | 滚动条样式 |
+| columns | grid | 显示的列 |
+| columns.$ | object | 显示的列 |
+| columns.$.field | lookup | 字段 |
+| columns.$.width | text | 宽度 |
+| filter_fields | lookup | 默认过滤字段 |
+| sort | grid | 默认排序规则 |
+| sort.$ | object | Order |
+| sort.$.field_name | lookup | 排序字段 |
+| sort.$.order | select | 排序方式 |
+| filters | grid | 过滤器 |
+| filters.$ | object | Filter |
+| filters.$.field | lookup | 字段 |
+| filters.$.operation | lookup | 运算符 |
+| filters.$.value |  | 值 |
+| filter_logic | text | 过滤逻辑 |
+| mobile_columns | grid | 手机端显示的列 |
+| mobile_columns.$ | object | 手机端显示的列 |
+| mobile_columns.$.field | lookup | 字段 |
+| sort_no | number | 排序号 |
+
 
 ## 页面布局
 对象名.页面布局.layout.yml  
@@ -200,15 +230,32 @@ related_lists:
 type: record
 ```
 
-| 属性名 | 属性值类型 | 属性含义 |
+| 属性名 | 属性类型 | 属性含义 |
 |----|----|----|
-| name | string | API 名称 |
-| label | string | 页面布局名 |
-| object_name | string | 对象 |
-| profiles | array | 简档 |
-| buttons | grid | 操作按钮 |
+| name | text | Api Name |
+| label | text | 页面布局名 |
+| object_name | master_detail | 对象 |
+| type | select |  类型  |
+| profiles | lookup | 简档 |
+| buttons | grid | 操作 |
+| buttons.$.button_name | lookup | 名称 |
+| buttons.$.visible_on | textarea | 显示条件 |
 | fields | grid | 字段 |
+| fields.$ | object | Field |
+| fields.$.field_name | lookup | 字段 |
+| fields.$.is_readonly | boolean | 只读 |
+| fields.$.is_required | boolean | 必填 |
+| fields.$.group | text | 分组 |
+| fields.$.visible_on | textarea | 显示条件 |
 | related_lists | grid | 相关子表 |
+| related_lists.$.related_field_fullname | lookup | 子表名称 |
+| related_lists.$.label | text | 显示标题 |
+| related_lists.$.field_names | lookup | 显示的字段 |
+| related_lists.$.sort_field_name | lookup | 排序字段 |
+| related_lists.$.sort_order | select | 排序方式 |
+| related_lists.$.filters | textarea | 过滤规则 |
+| related_lists.$.visible_on | textarea | 显示条件 |
+| related_lists.$.page_size | number | 每页显示数量 |
 
 ## 自定义按钮
 自定义按钮分为 按钮.button.js 和 按钮.button.yml 两个文件。
@@ -255,13 +302,13 @@ type: script
 visible: true
 ```
 
-| 属性名 | 属性值类型 | 属性含义 |
+| 属性名 | 属性类型 | 属性含义 |
 |----|----|----|
-| name | string | API 名称 |
-| label | string | 显示名称 |
-| object | string | 所属对象 |
+| name | text | API 名称 |
+| label | text | 显示名称 |
+| object | master_detail | 所属对象 |
 | is_enable | boolean | 启用 |
 | visible | boolean | 可见 |
-| 'on' | string | 显示位置 |
-| type | string | 类型 |
+| 'on' | lookup | 显示位置 |
+| type | select | 类型 |
 | todo | code | 执行的脚本 |

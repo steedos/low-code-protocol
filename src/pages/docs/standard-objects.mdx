@@ -1563,11 +1563,125 @@ icon: approval
 | modified | datetime | 修改时间 | 
 | modified_by | lookup | 修改人| 
 
-## 主数据相关
 
+## 高级设置相关
+
+- 登录会话
+- 自定义主页
+- 审计日志
+- 自动编号
+- 在线表单
 - 节假日
-- 货币
-- ...
+- 工作时间
+- WebHooks
+- API Key
+
+
+### 登录会话 sessions
+用于保存登录的用户、ip地址、登录时间等信息。
+
+```yaml
+name: sessions
+label: Session
+icon: queue
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| userId | lookup | 用户 |
+| token | text | Token |
+| userAgent | text | 用户代理 |
+| ip | text | IP地址 |
+| valid | boolean | 有效 |
+| is_phone | boolean | 手机 |
+| is_tablet | boolean | 平板电脑 |
+| client_id | text | Client ID |
+| connected_app_id | lookup | 连接的应用程序 |
+| modified | datetime | 最近登录时间 |
+| created | datetime | 首次登录时间 |
+
+### 自定义主页 dashboard
+用于定义应用的主页。
+
+```yaml
+name: dashboard
+label: Dashboard
+icon: dashboard_ea
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| apps | lookup | 关联应用 |
+| widgets | grid | 组件 |
+| widgets.$.label | text | 标题 |
+| widgets.$.type | lookup | 类型 |
+| widgets.$.position | lookup | 位置 |
+| widgets.$.html | textarea | HTML |
+| description | textarea | 描述 |
+
+### 审计日志 audit_records
+跟踪字段的修改历史，此功能会消耗更多服务器资源，只有必要的对象才应该配置此属性。
+
+```yaml
+name: audit_records
+label: Audit Record
+icon: record
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| related_to | lookup | 相关项 |
+| created | datetime | 时间 |
+| field_name | text | 字段 |
+| created_by | lookup | 用户 |
+| previous_value | text | 原始值 |
+| new_value | text | 新值 |
+
+### 自动编号 autonumber
+用于查看含有自动编号字段的对象和修改自动编号字段的当前编号值。
+
+```yaml
+name: autonumber
+label: Auto Number
+icon: formula
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| object_name | text | 对象名 |
+| field_name | text | 自动编号字段 |
+| current_no | number | 当前编号值 |
+| date_from | datetime | 日期范围开始日期 |
+| date_to | datetime | 日期范围截止日期 |
+
+
+### 在线表单 web_forms
+在线表单（匿名提交数据），用于潜在客户注册、合作伙伴申请表、在线故障申报之类的需求。
+
+```yaml
+name: web_forms
+label: Web Forms
+icon: display_text
+enable_api: true
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| object_name | lookup | 关联对象 |
+| fields | lookup | 显示字段 |
+| return_url | text | 返回地址 |
+| record_owner | lookup | 记录所有人 |
+| notification_users | lookup | 通知用户 |
+| generated_html | code | 表单HTML |
+
 
 ### 节假日 holidays
 用于自定义节假日。
@@ -1589,6 +1703,87 @@ hidden: true
 | created_by | lookup | 创建人 |
 | modified | datetime | 修改时间 |
 | modified_by | lookup | 修改人 |
+
+### 工作时间 business_hours
+用于自定义工作时间。
+
+```yaml
+name: business_hours
+label: Business Hours
+icon: date_time
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| is_default | boolean | 默认工作时间 |
+| start | text | 开始时间 |
+| end | text | 结束时间 |
+| lunch_start | text | 午休开始时间 |
+| lunch_end | text | 午休结束时间 |
+| working_days | select | 工作日 |
+| utc_offset | number | GMT时差 |
+
+
+### WebHooks： object_webhooks
+用于保存待执行的Webhooks队列。
+
+```yaml
+name: object_webhooks
+label: Object Webhook
+icon: output
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| object_name | lookup | 对象 |
+| events | select | 事件 |
+| fields | lookup | 推送字段 |
+| payload_url | text | URL |
+| content_type | text | 请求数据格式 |
+| active | boolean | 激活 |
+| space | text | 所属工作区 |
+
+
+### API Key ： api_keys
+用于保存用户创建的API Key记录，启用状态的API Key通常被用于各种接口中身份验证。在激活华炎魔方私有部署项目时也是使用API Key来作身份验证的。
+
+```yaml
+name: api_keys
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: false
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+icon: omni_supervisor
+is_enable: true
+label: API Key
+
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| active | boolean | 启用 |
+| api_key | text | API Key |
+| last_use_time | datetime | 最后使用时间 |
+| name | text | 名称 |
+| owner | lookup | 所有者 |
+
+## 主数据相关
+
+- 货币
+- ...
 
 ### 货币 currency
 

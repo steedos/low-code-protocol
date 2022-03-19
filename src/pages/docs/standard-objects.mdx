@@ -1566,18 +1566,22 @@ icon: approval
 | modified_by | lookup | 修改人| 
 
 
-## 高级设置相关
+## 平台内核对象
 
 - 登录会话
 - 自定义主页
 - 审计日志
 - 自动编号
-- 在线表单
-- 节假日
-- 工作时间
 - WebHooks
+- webhooks队列
 - API Key
-
+- 货币
+- 设置
+- 对象触发器
+- _object_reload_logs
+- 外部数据源
+- 邀请用户
+- 外部应用
 
 ### 登录会话 sessions
 用于保存登录的用户、ip地址、登录时间等信息。
@@ -1663,69 +1667,6 @@ hidden: true
 | date_to | datetime | 日期范围截止日期 |
 
 
-### 在线表单 web_forms
-在线表单（匿名提交数据），用于潜在客户注册、合作伙伴申请表、在线故障申报之类的需求。
-
-```yaml
-name: web_forms
-label: Web Forms
-icon: display_text
-enable_api: true
-hidden: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 名称 |
-| object_name | lookup | 关联对象 |
-| fields | lookup | 显示字段 |
-| return_url | text | 返回地址 |
-| record_owner | lookup | 记录所有人 |
-| notification_users | lookup | 通知用户 |
-| generated_html | code | 表单HTML |
-
-
-### 节假日 holidays
-用于自定义节假日。
-
-```yaml
-name: holidays
-label: Holidays
-icon: event
-hidden: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 名称 |
-| type | select | 类型 |
-| date | date | 日期 |
-| adjusted_to | select | 对应工作日 |
-| created | datetime | 创建时间 |
-| created_by | lookup | 创建人 |
-| modified | datetime | 修改时间 |
-| modified_by | lookup | 修改人 |
-
-### 工作时间 business_hours
-用于自定义工作时间。
-
-```yaml
-name: business_hours
-label: Business Hours
-icon: date_time
-hidden: true
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| name | text | 名称 |
-| is_default | boolean | 默认工作时间 |
-| start | text | 开始时间 |
-| end | text | 结束时间 |
-| lunch_start | text | 午休开始时间 |
-| lunch_end | text | 午休结束时间 |
-| working_days | select | 工作日 |
-| utc_offset | number | GMT时差 |
 
 
 ### WebHooks： object_webhooks
@@ -1748,6 +1689,33 @@ hidden: true
 | content_type | text | 请求数据格式 |
 | active | boolean | 激活 |
 | space | text | 所属工作区 |
+
+
+### webhooks队列 object_webhooks_queue
+用于保存待执行的Webhooks队列。
+
+```yaml
+name: object_webhooks_queue
+label: Object Webhooks Queue
+icon: sms
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| webhook | object |  webhook  |
+| webhook.data | object |  data  |
+| webhook.payload_url | text |  payload_url  |
+| webhook.content_type | text |  content_type  |
+| webhook.action | text |  action  |
+| webhook.actionUserInfo | object |  actionUserInfo  |
+| webhook.objectName | text | Object Name|
+| webhook.objectDisplayName | text | Object Display Name|
+| webhook.nameFieldKey | text | Name Field Key|
+| webhook.redirectUrl | text | Redirect Url|
+| sent | boolean | 是否发送|
+| sending | number |  发送数量  |
+| createdAt | datetime | 发送时间|
+| createdBy | lookup |  创建人  |
 
 
 ### API Key ： api_keys
@@ -1781,17 +1749,6 @@ label: API Key
 | last_use_time | datetime | 最后使用时间 |
 | name | text | 名称 |
 | owner | lookup | 所有者 |
-
-## 主数据相关
-
-- 货币
-- 设置
-- 对象触发器
-- _object_reload_logs
-- 外部数据源
-- 邀请用户
-- 外部应用
-- webhooks队列
 
 
 ### 货币 currency
@@ -1946,31 +1903,78 @@ enable_api: true
 | saml_logout_url | url | 单点注销 URL |
 | saml_logout_block | select | 单点注销绑定 |
 
-### webhooks队列 object_webhooks_queue
-用于保存待执行的Webhooks队列。
+
+
+## 平台基础对象
+
+- 在线表单
+- 节假日
+- 工作时间
+
+### 在线表单 web_forms
+在线表单（匿名提交数据），用于潜在客户注册、合作伙伴申请表、在线故障申报之类的需求。
 
 ```yaml
-name: object_webhooks_queue
-label: Object Webhooks Queue
-icon: sms
+name: web_forms
+label: Web Forms
+icon: display_text
+enable_api: true
+hidden: true
 ```
 
 | 字段名 | 字段类型 | 字段含义 |
 |----|----|----|
-| webhook | object |  webhook  |
-| webhook.data | object |  data  |
-| webhook.payload_url | text |  payload_url  |
-| webhook.content_type | text |  content_type  |
-| webhook.action | text |  action  |
-| webhook.actionUserInfo | object |  actionUserInfo  |
-| webhook.objectName | text | Object Name|
-| webhook.objectDisplayName | text | Object Display Name|
-| webhook.nameFieldKey | text | Name Field Key|
-| webhook.redirectUrl | text | Redirect Url|
-| sent | boolean | 是否发送|
-| sending | number |  发送数量  |
-| createdAt | datetime | 发送时间|
-| createdBy | lookup |  创建人  |
+| name | text | 名称 |
+| object_name | lookup | 关联对象 |
+| fields | lookup | 显示字段 |
+| return_url | text | 返回地址 |
+| record_owner | lookup | 记录所有人 |
+| notification_users | lookup | 通知用户 |
+| generated_html | code | 表单HTML |
+
+
+### 节假日 holidays
+用于自定义节假日。
+
+```yaml
+name: holidays
+label: Holidays
+icon: event
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| type | select | 类型 |
+| date | date | 日期 |
+| adjusted_to | select | 对应工作日 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+### 工作时间 business_hours
+用于自定义工作时间。
+
+```yaml
+name: business_hours
+label: Business Hours
+icon: date_time
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| is_default | boolean | 默认工作时间 |
+| start | text | 开始时间 |
+| end | text | 结束时间 |
+| lunch_start | text | 午休开始时间 |
+| lunch_end | text | 午休结束时间 |
+| working_days | select | 工作日 |
+| utc_offset | number | GMT时差 |
+
 
 ## 参考
 

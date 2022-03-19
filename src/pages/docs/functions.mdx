@@ -31,39 +31,134 @@ export default async function (event, context, logger) {
 };
 ```
 
-## 函数参数
+## 函数定义
 
-所有函数的参数规则统一，主要有 `event` 和 `context` 两个参数。
+Ƭ Function<A, B>: (event: [InvocationEvent`<A>`](#InvocationEvent), context: [Context](#Context), logger: [Logger](#Logger)) => Promise`<B>` | B
 
-### event
+微函数定义及其参数规范。
 
-- data: `json` 随函数传入的事件 `payload`。
-- dataContentType: `string` 事件 `payload` 的 `media type`。
-- dataSchema: `string` 事件 `payload` 遵循的 `schema`。
-- id: `string` 标识事件发生的唯一标识符。
-- source:  `string` 标识事件发生的上下文的URI。。
-- time: `string` 事件发生时的时间戳，默认为当前时间。
-- type: `string` 事件类型。
+### 类型参数
 
-### context
+| 名称 |
+|----|
+| A |
+| B |
 
-- id: `string` 函数执行的唯一标识符。
-- org: `json` 调用函数时所属的公司信息。
-  - broker: 微服务Broker，用于调用微服务 [Actions](/docs/services#%E5%87%BD%E6%95%B0%EF%BC%88Actions%EF%BC%89)。
-  - apiVersion:  当前公司所使用的api版本号。
-  - baseUrl: 当前公司的 base URL。
-  - [dataApi](/docs/functions-data-api): 供客户端调用的数据请求接口。
-  - domainUrl: 当前公司所属的域名地址。
-  - id: 当前公司唯一标识符。
-  - user: 当前登录用户信息。
+### 函数参数
 
-## 函数返回值
+所有函数的参数规则统一，以下是参数清单。
+
+| 名称 | 类型 |
+|----|----|
+| event	| [InvocationEvent`<A>`](#InvocationEvent) |
+| context	| [Context](#Context) |
+| logger	| [Logger](#Logger) |
+
+## 参数类型
+
+以下是微函数中传入的各种参数类型规范。
+
+### InvocationEvent
+
+代表与事件发生相关的数据，并支持关于事件发生源的元数据，有以下属性规范。
+
+#### data: object
+
+随函数传入的事件 `payload`。
+
+#### dataContentType: string
+
+事件 `payload` 的 `media type`。
+
+#### dataSchema: string
+
+事件 `payload` 遵循的 `schema`。
+
+#### id: string
+
+标识事件发生的唯一标识符。
+
+#### source: string
+
+标识事件发生的上下文的URI。
+
+#### time: string
+
+事件发生时的时间戳，默认为当前时间。
+
+#### type: string
+
+事件类型。
+
+### Context
+
+表示微函数执行环境中的上下文参数，有以下属性规范。
+
+#### id: string
+
+函数执行的唯一标识符。
+
+#### org: Org
+
+调用函数时所属的公司信息，其规范见 [Org](#Org)。
+
+### Org
+
+调用微函数时的组织和用户的信息，有以下属性规范。
+
+#### broker
+
+微服务Broker，用于调用微服务 [Actions](/docs/services#%E5%87%BD%E6%95%B0%EF%BC%88Actions%EF%BC%89)。
+
+#### apiVersion: string
+
+当前公司所使用的api版本号。
+
+#### baseUrl: string
+
+当前公司的 base URL。
+
+#### dataApi: DataApi
+
+供客户端调用的数据请求接口，其规范见 [DataApi](/docs/functions-data-api)。
+
+#### domainUrl: string
+
+当前公司所属的域名地址。
+
+#### id: string
+
+当前公司唯一标识符。
+
+#### user: User
+
+当前登录用户信息，其规范见 [User](#User)。
+
+### User
+
+调用微函数时的组织和用户的信息，有以下属性规范。
+
+#### id: string
+
+用户的ID。
+
+#### onBehalfOfUserId: string
+
+用户所代表的用户id。
+
+#### username: string
+
+用户的用户名。
+
+### Logger
 
 ## 参考资料
 
+- [SalesforceFunction](https://developer.salesforce.com/docs/platform/functions/guide/modules.html#salesforcefunction)
 - [Saleforce Node.js Functions](https://developer.salesforce.com/docs/platform/functions/guide/NODE_README.html)
 - [Saleforce Invocationevent](https://developer.salesforce.com/docs/platform/functions/guide/invocationevent.html)
 - [Saleforce Context](https://developer.salesforce.com/docs/platform/functions/guide/context.html)
+- [Saleforce Logger](https://developer.salesforce.com/docs/platform/functions/guide/logger.html)
 - [Saleforce DataApi](https://developer.salesforce.com/docs/platform/functions/guide/dataapi.html)
 - [Saleforce Org](https://developer.salesforce.com/docs/platform/functions/guide/org.html)
 

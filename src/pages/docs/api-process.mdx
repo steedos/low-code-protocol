@@ -12,7 +12,8 @@ description: 根据流程的元数据定义，自动生成审批相关API。
 | 发起审批 | POST |
 | 暂存审批单 | POST |
 | 计算下一步处理人 | POST |
-| 提交审批 | POST |
+| 提交草稿中申请单 | POST |
+| 提交审批中申请单 | POST |
 
 ## API 规范
 
@@ -30,7 +31,7 @@ description: 根据流程的元数据定义，自动生成审批相关API。
 
 #### 请求参数
 
-请求发起审批接口时需要传入以下参数。
+请求该接口时需要传入以下参数。
 
 | 名称 | 类型| 描述 |
 |----|----|----|
@@ -43,9 +44,7 @@ applicant 与 applicant_username 两个参数两选一即可。
 
 #### 返回值
 
-该API接口请求成功时返回值格式如下：
-
-其中data返回的是创建成功的审批单记录信息。
+- 该API接口请求成功时返回值格式如下：
 
 ```json
 {
@@ -54,17 +53,20 @@ applicant 与 applicant_username 两个参数两选一即可。
 }
 ```
 
-该API接口请求失败时返回值格式如下：
+data返回的是创建成功的审批单记录信息。
+
+- 该API接口请求失败时返回值格式如下：
 
 ```json
 {
-    "status": "success",
-    "data": { errors: [{ errorMessage: "" }] }
+    "status": "error",
+    "data": { errors: [{ errorMessage: "..." }] }
 }
 ```
 
 ### 暂存审批单
 
+敬请期待...
 
 ### 计算下一步处理人
 
@@ -85,7 +87,7 @@ applicant 与 applicant_username 两个参数两选一即可。
 
 #### 请求参数
 
-请求计算下一步处理人接口时需要根据URI中传入的不同处理人类型传入不同的参数。
+请求该接口时需要根据URI中传入的不同处理人类型传入不同的参数。
 
 - 处理人类型为指定人员 specifyUser 时需要传入的参数：
 
@@ -200,4 +202,106 @@ orgField 参数是一个json对象，以下表格描述了该参数的属性清�
 
 当该API接口执行过程中出现错误时，会以字符串形式返回到 error 键值中。
 
-### 提交审批
+### 提交草稿中申请单
+
+把草稿状态的申请单提交到下一步骤。
+
+#### URI
+
+```text
+/api/workflow/submit
+```
+
+#### 请求参数
+
+请求该接口时需要传入以下参数。
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| Instances | object[] | 申请单内容 |
+
+#### 返回值
+
+- 该API接口请求成功时返回值格式如下：
+
+```json
+{
+    "result": [...]
+}
+```
+
+result中返回的是一个对象数组，该数组中包含的键值信息如下所示：
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| alerts | string | 提示信息 |
+
+alerts中主要是提示流程版本是否已升级。
+
+- 该API接口请求失败时返回值格式如下：
+
+```json
+{
+    errors: [{ errorMessage: "..." }]
+}
+```
+
+### 提交审批中申请单
+
+把审批中的申请单提交到下一步骤。
+
+#### URI
+
+```text
+/api/workflow/engine
+```
+
+#### 请求参数
+
+请求该接口时需要传入以下参数。
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| Approvals | object[] | 审批内容 |
+
+以下表格描述了Approvals中的对象键值信息：
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| instance | string | 当前审批单_id |
+| trace | string | 当前签核历程_id |
+| _id | string | 当前审批历程_id |
+| values | object | 审批表单值 |
+| next_steps | object[] | 下一步骤 |
+| judge | string | 审批状态 |
+| description | string | 审批意见 |
+| geolocation | string | 审批地点 |
+
+以下表格描述了next_steps中的对象键值信息：
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| step | string | 下一步骤_id |
+| users | string[] | 下一步骤处理人_id |
+
+以下表格描述了judge数据字典：
+
+| 名称 | 类型| 描述 |
+|----|----|----|
+| approved | string | 核准 |
+| rejected | string | 驳回 |
+| terminated | string | 被取回 |
+| reassigned | string | 转签核 |
+| relocated | string | 重定位 |
+
+#### 返回值
+
+- 该API接口请求成功时返回空对象。
+
+- 该API接口请求失败时返回值格式如下：
+
+```json
+{
+    errors: [{ errorMessage: "..." }]
+}
+```

@@ -663,7 +663,6 @@ hidden: true
 | category | lookup | 表单分类 |
 | is_valid | boolean | 是否有效 |
 | instance_style | select | 样式 |
-| historys |  | 历史版本 |
 | approve_on_create | boolean | 是否同意审批 |
 | approve_on_modify | boolean | 是否修改审批 |
 | approve_on_delete | boolean | 是否删除审批 |
@@ -682,6 +681,9 @@ hidden: true
 | current.fields.$.is_searchable | boolean | Searchable |
 | current.fields.$.is_multiselect | boolean | Multiselect |
 
+<!--
+| historys |  | 历史版本 |
+-->
 
 ### 流程 flows
 用于保存管理员用审批王应用的流程设计器设计的流程。
@@ -935,7 +937,7 @@ hidden: true
 | instances.$._id | text | 申请单ID |
 | instances.$.state | text | 申请单状态 |
 | sharing | grid | 记录级权限 |
-| sharing.$ |   | 授权条件 |
+| sharing.$ | object | 授权条件 |
 | sharing.$.u | [text] | 授权用户 |
 | sharing.$.o | [text] | 授权组织 |
 | sharing.$.r | text | 来自规则 |

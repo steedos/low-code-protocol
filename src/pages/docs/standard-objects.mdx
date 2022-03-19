@@ -1785,7 +1785,14 @@ label: API Key
 ## 主数据相关
 
 - 货币
-- ...
+- 设置
+- 对象触发器
+- _object_reload_logs
+- 外部数据源
+- 邀请用户
+- 外部应用
+- webhooks队列
+
 
 ### 货币 currency
 
@@ -1809,6 +1816,161 @@ version: 2
 | created_by | lookup | 创建人 |
 | modified | datetime | 修改时间 |
 | modified_by | lookup | 修改人 |
+
+### 设置 settings
+
+```yaml
+name: settings
+label: Setting
+icon: custom
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|type|text|类型|
+|object_name|text|对象名|
+|record_id|text|记录ID|
+|settings|object|设置|
+
+### 对象触发器 object_triggers
+
+```yaml
+name: object_triggers
+icon: apex
+label: Object Triggers
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| object | master_detail | 所属对象 |
+| when | lookup | 运行时 |
+| is_enable | boolean | 已启用 |
+| todo | textarea | 执行的脚本 |
+
+
+### _object_reload_logs
+
+```yaml
+name: _object_reload_logs
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|object_name|text|object_name|
+|change_date|object|change_date|
+|change_time|datetime|change_time|
+
+
+### 外部数据源 datasources
+
+```yaml
+name: datasources
+label: DataSource
+icon: entity
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| driver | select | 数据库类型 |
+| label | text | 显示名称 |
+| name | text | API 名称 |
+| url | text | 连接数据库的URL |
+| host | text | 服务器地址 |
+| port | number | 端口 |
+| database | text | 数据库 |
+| username | text | 用户名 |
+| password | password | 密码 |
+| mssql_options | textarea | 连接选项 |
+| connectString | textarea | connectString |
+| timezone | text | 时区 |
+| options | object | Options |
+| enable_space | boolean | 启用工作区 |
+| locale | text | 语言 |
+| logging | boolean | Debug |
+| is_enable | boolean | 启用 |
+
+
+### 邀请用户 space_users_invite
+记录邀请信息
+
+```yaml
+name: space_users_invite
+icon: link
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|valid|boolean|valid|
+|invited_users|lookup|Invited users|
+
+### 外部应用 connected_apps
+
+```yaml
+name: connected_apps
+label: External Application
+icon: entity
+hidden: true
+enable_api: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| code | text | API 名称 |
+| active | boolean | 激活 |
+| app_logo | avatar | 图标 |
+| description | textarea | 描述 |
+| app_website | url | 应用官网 |
+| start_url | text | 开始 URL |
+| mobile_start_url | text | 移动开始 URL |
+| client_id | text | Client ID |
+| client_secret | text | Client Secret |
+| oauth2_enabled | boolean | 启用 OAuth2 |
+| oauth2_callback_url | text | 回调 URL |
+| oauth2_scopes | select | 范围 |
+| oauth2_logout_enabled | boolean | 启用单点注销 |
+| oauth2_logout_url | url | 单点注销 URL |
+| saml_enabled | boolean | 启用 SAML |
+| saml_entity_id | text | Entity ID |
+| saml_issuer | text | Issuer |
+| saml_idp_cert | text | IDP Cert |
+| saml_acs_url | url | ACS URL |
+| saml_name_id_format | text | Name |
+| saml_logout_enabled | boolean | 启用单点注销 |
+| saml_logout_url | url | 单点注销 URL |
+| saml_logout_block | select | 单点注销绑定 |
+
+### webhooks队列 object_webhooks_queue
+用于保存待执行的Webhooks队列。
+
+```yaml
+name: object_webhooks_queue
+label: Object Webhooks Queue
+icon: sms
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| webhook | object |  webhook  |
+| webhook.data | object |  data  |
+| webhook.payload_url | text |  payload_url  |
+| webhook.content_type | text |  content_type  |
+| webhook.action | text |  action  |
+| webhook.actionUserInfo | object |  actionUserInfo  |
+| webhook.objectName | text | Object Name|
+| webhook.objectDisplayName | text | Object Display Name|
+| webhook.nameFieldKey | text | Name Field Key|
+| webhook.redirectUrl | text | Redirect Url|
+| sent | boolean | 是否发送|
+| sending | number |  发送数量  |
+| createdAt | datetime | 发送时间|
+| createdBy | lookup |  创建人  |
 
 ## 参考
 

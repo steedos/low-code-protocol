@@ -8,6 +8,7 @@ description: 定义流程自动化相关元数据
 - 对象验证规则
 - 工作流规则
 - 字段更新
+- 工作流通知
 - 记录修改（创建、更新、删除）
 - 批准过程
 - Process
@@ -82,3 +83,24 @@ enable_enhanced_lookup: true
 | description |  textarea | 描述 |
 | reevaluate_on_change |  boolean | 字段更改后重新评估工作流规则 |
 | undirect |  boolean | 触发对象触发器、工作流规则、字段验证规则 |
+
+### 工作流通知 workflow_notifications
+用于保存管理员在流程自动化配置中配置的工作流通知信息
+
+```yaml
+name: workflow_notifications
+label: Workflow Notification
+icon: quick_text
+hidden: true
+enable_inline_edit: false
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | API 名称 |
+| label | text | 显示名称 |
+| object_name | lookup | 对象 |
+| title | textarea | 标题公式 |
+| body | textarea | 正文公式 |
+| assigned_users | lookup | 指定具体人员 |
+| assigned_user_field | lookup | 指定对象上的用户字段 |

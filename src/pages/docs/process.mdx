@@ -65,7 +65,7 @@ entry_criteria: //入口条件公式
 ```js
 {
     module.exports = {
-        name: "ActivitiEngine",
+        name: "activiti-engine",
         settings: {
             serviceEndpoint: "https://activi.services"
         },
@@ -84,13 +84,3 @@ entry_criteria: //入口条件公式
 }
 ```
 
-### 注册 BPM 服务
-
-```js
-import {Builder} from '@steedos-builder/sdk';
-
-Builder.register('bpm-engine', {
-    name: 'acitivi',
-    service: 'ActivitiEngine',
-})
-```

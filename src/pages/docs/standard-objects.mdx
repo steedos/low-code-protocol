@@ -1677,6 +1677,16 @@ enable_api: true
 - 在线表单
 - 节假日
 - 工作时间
+- 计量单位
+- 物料类型
+- 物料分组
+- 物料
+- 仓库
+- 库位
+- 银行类别
+- 银行
+- 发票类型
+- 税率
 - 货币
 
 
@@ -1945,6 +1955,313 @@ hidden: true
 | lunch_end | text | 午休结束时间 |
 | working_days | select | 工作日 |
 | utc_offset | number | GMT时差 |
+
+### 计量单位 measurement_unit
+
+```yaml
+name: measurement_unit
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_enhanced_lookup: true
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: true
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+icon: account
+is_enable: true
+label: 计量单位
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|code | text | 编码 |
+|name | text | 计量单位名称 |
+|owner | lookup | 所有者 |
+|remark | textarea | 描述 |
+
+### 物料类型 asset_type
+
+```yaml
+name: asset_type
+enable_api: true
+enable_share: true
+enable_enhanced_lookup: true
+icon: entity
+label: 物料类型
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|code | text | 编码 |
+|name | text | 名称 |
+|separate_accounting | boolean | 单独核算 |
+
+### 物料分组 material_group
+
+```yaml
+name: material_group
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_enhanced_lookup: true
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: true
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+enable_tree: true
+parent_field: material_group
+icon: account
+is_enable: true
+label: 物料分组
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| asset_type | lookup | 所属物料类型 |
+| children | lookup | 子分组 |
+| group_code | text | 分组编码 |
+| inventory | boolean | 盘点 |
+| material_group | lookup | 上级物料分组 |
+| name | text | 物料分组名称 |
+| owner | lookup | 所有者 |
+| remark | textarea | 描述 |
+| separate_accounting |  formula | 单独核算 | 
+
+
+### 物料 product
+
+```yaml
+name: product
+custom: true
+enable_audit: true
+enable_enhanced_lookup: true
+enable_files: true
+enable_search: true
+icon: product
+label: 物料
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| amount | currency | 价格 |
+| asset_type | lookup | 物料类型 |
+| attributes | select | 属性 |
+| company_id | lookup | 主分部 |
+| depreciation_range | number | 折旧年限 |
+| description | textarea | 备注 |
+| display_url | url | 显示URL |
+| external_data_source | lookup | 外部数据源 |
+| external_id | text | 外部ID |
+| family | select | 物料系列 |
+| gross_weight | number | 毛重 |
+| height | number | 高 |
+| image | image | 图片 |
+| inventory | boolean | 盘点 |
+| is_active | toggle | 已启用 |
+| is_asset | boolean | 资产 |
+| length | number | 长 |
+| manufacturer | text | 制造厂商 |
+| material_group | lookup | 物料分组 |
+| name | text | 物料名称 |
+| net_weight | number | 净重 |
+| number_of_quantity_installments | number | 数量分期付款期数 |
+| number_of_revenue_installments | number | 收入分期付款期数 |
+| owner | lookup | 所有者 |
+| product_code | text | 物料编码 |
+| product_currency | lookup | 币种 |
+| purpose | select | 使用用途 |
+| quantity_installment_period | text | 数量分期付款周期 |
+| quantity_schedule_type | text | 数量计划类型 |
+| quantity_scheduling_enabled | boolean | 已启用数量计划 |
+| quantity_unit_of_measure | text | 数量计量单位 |
+| replace | text | 替代 |
+| revenue_installment_period | text | 收入分期付款周期 |
+| revenue_schedule_type | text | 收入计划类型 |
+| revenue_scheduling_enabled | boolean | 已启用收入计划 |
+| salvage | percent | 残值率 |
+| separate_accounting | boolean | 单独核算 |
+| specification | text | 规格型号 |
+| stock_keeping_unit | text | 最小存货单位 |
+| supplier | text | 供应商 |
+| unit | lookup | 计量单位 |
+| version | text | 版本 |
+| width | number | 宽 |
+
+### 仓库 warehouse
+
+```yaml
+name: warehouse
+enable_audit: true
+enable_files: true
+enable_search: true
+enable_enhanced_lookup: true
+icon: household
+label: 仓库
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| address | textarea | 仓库地址 |
+| code | text | 仓库号 |
+| dept | lookup | 相关部门 |
+| name | text | 仓库名称 |
+| remarks | textarea | 备注 |
+| warehouse_keeper | lookup | 仓库管理员 |
+| warehouse_status | select | 仓库状态 |
+
+### 库位 stock_location__c
+
+```yaml
+name: stock_location__c
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_enhanced_lookup: true
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_tree: true
+enable_workflow: false
+icon: carousel
+is_enable: true
+label: 库位
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|children | lookup | 子库位 |
+|name | text | 库位名称 |
+|parent | lookup | 上级库位 |
+|warehouse_id__c | lookup | 所属仓库 |
+
+
+### 银行类别 bank_type
+
+```yaml
+name: bank_type
+enable_api: true
+enable_share: true
+enable_enhanced_lookup: true
+icon: account
+label: 银行类别
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|code | text | 类别代码 |
+|description | textarea | 备注 |
+|name | text | 类别名称 |
+
+
+### 银行 bank
+
+```yaml
+name: bank
+custom: true
+enable_api: true
+enable_share: true
+enable_enhanced_lookup: true
+icon: account
+label: 银行
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|code | text | 银行代码 |
+|combinenum | text | 联行号 |
+|description | textarea | 备注 |
+|enablestate | select | 启用状态 |
+|name | text | 银行名称 |
+|pk_banktype | master_detail | 银行类别 |
+
+
+### 发票类型 invoice_type
+
+```yaml
+name: invoice_type
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+enable_enhanced_lookup: true
+icon: account
+is_enable: true
+label: 发票类型
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|label | text | 显示名称 |
+|name | text | 代码 |
+|owner | lookup | 所有者 |
+
+
+### 税率 tax_rates
+
+```yaml
+name: tax_rates
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: true
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+enable_enhanced_lookup: true
+icon: account
+is_enable: true
+label: 税率
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|name | text | 名称 |
+|owner | lookup | 所有者 |
+|tax_rate | percent | 税率 |
 
 ### 货币 currency
 

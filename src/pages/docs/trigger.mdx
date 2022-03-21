@@ -197,6 +197,8 @@ module.exports = {
 
 需要新增或修改的记录内容，仅beforeInsert, beforeUpdate触发器中存在此属性。
 
+在 before 前缀的事件前触发器函数中可以变更 doc 参数值，变更后的值最终会保存到数据库中并传入到 after后缀的事件后触发器函数中。
+
 ### AfterTriggerEvent
 
 事件后触发器函数被触发时的相关事件数据，在 [TriggerEvent](#TriggerEvent) 的基础上扩展了以下属性规范。
@@ -205,9 +207,13 @@ module.exports = {
 
 需要新增或修改的记录内容，仅afterInsert, afterUpdate触发器中存在此属性。
 
+在after后缀的事件后触发器函数中变更 doc 参数值后并不会再回写到数据库中。
+
 #### previousDoc: object
 
 修改或删除前的记录内容，仅afterUpdate, afterDelete触发器中存在此属性。
+
+通常在after后缀的事件后触发器函数中通过 `event.previousDoc` 与`event.doc` 值进行比较来判断哪些字段值发生了变化。
 
 ### QueryTriggerEvent
 
@@ -215,7 +221,15 @@ module.exports = {
 
 #### query: QueryOptions
 
-查询数据相关参数。
+触发器中查询数据相关参数。
+
+- fields: string[] 字段名数组，选填。 例如：['字段名1', '字段名2']
+- filters: [QueryFilters](/docs/api-records-filters) 查询条件数组， 选填。
+- sort: string 排序规则， 格式为：`字段名 desc/asc`，选填。例如： "name desc" 表示按名称字段倒序排序。
+- top: number 返回记录数， 选填。
+- skip: number 跳过记录数，通常用于分页显示， 选填。
+
+以上 `event.query` 中的所有查询参数都可以在触发器中被改写，比如可以修改 `fields` 属性以放开或收缩字段查询权限，修改 `filters` 属性变更查询过滤条件。
 
 ### Context
 

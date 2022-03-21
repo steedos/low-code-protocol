@@ -27,17 +27,209 @@ module.exports = {
 }
 ```
 
-其中
+### listenTo
 
-- listenTo: 对象名称，选填。如果没有定义此属性，则取文件名中第一个 . 之前的文字作为listenTo的值，支持通过通配符指向多个对象
-- beforeInsert: 数据新增前执行, 选填
-- beforeUpdate: 数据修改前执行, 选填
-- beforeDelete: 数据删除前执行, 选填
-- beforeFind : 查询数据之前执行, 选填
-- afterInsert: 数据新增后执行, 选填
-- afterUpdate: 数据修改后执行, 选填
-- afterDelete: 数据删除后执行, 选填
+对象名称，选填。如果没有定义此属性，则取文件名中第一个 . 之前的文字作为listenTo的值，支持通过通配符指向多个对象。
 
+### 事件前触发
+
+事件前触发的触发器，可以用于校验用户录入的数据是否正确，如果有问题，可以抛错，错误信息会反馈到前端操作页面；还可以结合权限控制当前操作等。
+
+事件前触发的触发器函数都是以before前缀命名。
+
+### 事件后触发
+
+事件后触发的触发器，可以用于执行关联的事件，比如任务创建完成后发送通知给指定人员。
+
+事件前触发的触发器函数都是以after前缀命名。
+
+## 触发器函数
+
+以下是相关触发器函数的详细规范，包括函数参数及返回值规则。
+
+### beforeInsert
+
+▸ beforeInsert(event: [BeforeTriggerEvent`<A>`](#BeforeTriggerEvent), context: [Context](#Context), logger: [Logger](#Logger)) : void | boolean
+
+数据新增前执行, 选填。
+
+参数列表：
+
+| 名称 | 类型 |
+|----|----|
+| event	| [BeforeTriggerEvent`<A>`](#BeforeTriggerEvent) |
+| context	| [Context](#Context) |
+| logger	| [Logger](#Logger) |
+
+返回值：void | boolean
+
+如果返回的是false，则中断操作，不执行数据插入。
+
+### beforeUpdate
+
+▸ beforeUpdate(event: [BeforeTriggerEvent`<A>`](#BeforeTriggerEvent), context: [Context](#Context), logger: [Logger](#Logger)) : void | boolean
+
+数据修改前执行, 选填。
+
+参数列表：
+
+| 名称 | 类型 |
+|----|----|
+| event	| [BeforeTriggerEvent`<A>`](#BeforeTriggerEvent) |
+| context	| [Context](#Context) |
+| logger	| [Logger](#Logger) |
+
+返回值：void | boolean
+
+如果返回的是false，则中断操作，不执行数据更新。
+
+### beforeDelete
+
+▸ beforeDelete(event: [BeforeTriggerEvent`<A>`](#BeforeTriggerEvent), context: [Context](#Context), logger: [Logger](#Logger)) : void | boolean
+
+数据删除前执行, 选填。
+
+参数列表：
+
+| 名称 | 类型 |
+|----|----|
+| event	| [BeforeTriggerEvent`<A>`](#BeforeTriggerEvent) |
+| context	| [Context](#Context) |
+| logger	| [Logger](#Logger) |
+
+返回值：void | boolean
+
+如果返回的是false，则中断操作，不执行数据删除。
+
+### beforeFind
+
+▸ beforeFind(event: [QueryTriggerEvent`<A>`](#QueryTriggerEvent), context: [Context](#Context), logger: [Logger](#Logger)) : void | boolean
+
+查询数据之前执行, 选填。
+
+参数列表：
+
+| 名称 | 类型 |
+|----|----|
+| event	| [QueryTriggerEvent`<A>`](#QueryTriggerEvent) |
+| context	| [Context](#Context) |
+| logger	| [Logger](#Logger) |
+
+返回值：void | boolean
+
+如果返回的是false，则中断操作，不执行数据查询。
+
+### afterInsert
+
+▸ afterInsert(event: [AfterTriggerEvent`<A>`](#AfterTriggerEvent), context: [Context](#Context), logger: [Logger](#Logger)) : void | boolean
+
+数据新增后执行, 选填。
+
+参数列表：
+
+| 名称 | 类型 |
+|----|----|
+| event	| [AfterTriggerEvent`<A>`](#AfterTriggerEvent) |
+| context	| [Context](#Context) |
+| logger	| [Logger](#Logger) |
+
+返回值：void
+
+### afterUpdate
+
+▸ afterUpdate(event: [AfterTriggerEvent`<A>`](#AfterTriggerEvent), context: [Context](#Context), logger: [Logger](#Logger)) : void | boolean
+
+数据修改后执行, 选填。
+
+参数列表：
+
+| 名称 | 类型 |
+|----|----|
+| event	| [AfterTriggerEvent`<A>`](#AfterTriggerEvent) |
+| context	| [Context](#Context) |
+| logger	| [Logger](#Logger) |
+
+返回值：void
+
+### afterDelete
+
+▸ afterDelete(event: [AfterTriggerEvent`<A>`](#AfterTriggerEvent), context: [Context](#Context), logger: [Logger](#Logger)) : void | boolean
+
+数据删除后执行, 选填。
+
+参数列表：
+
+| 名称 | 类型 |
+|----|----|
+| event	| [AfterTriggerEvent`<A>`](#AfterTriggerEvent) |
+| context	| [Context](#Context) |
+| logger	| [Logger](#Logger) |
+
+返回值：void
+
+## 参数类型
+
+以下是微函数中传入的各种参数类型规范。
+
+### TriggerEvent
+
+触发器函数被触发时的相关事件数据，有以下属性规范。
+
+下面并没有列出当前用户所属公司 id 和当前用户 id 属性，因为它们在另一个参数 [Context](#Context) 中。
+
+#### id: string
+
+触发触发器事件的对象记录的唯一标识。
+
+#### object_name: string
+
+触发触发器事件的对象Api名称。
+
+#### datasource_name: string
+
+触发触发器事件的对象所属数据源Api名称。
+
+### BeforeTriggerEvent
+
+事件前触发器函数被触发时的相关事件数据，在 [TriggerEvent](#TriggerEvent) 的基础上扩展了以下属性规范。
+
+#### doc: object
+
+需要新增或修改的记录内容，仅beforeInsert, beforeUpdate触发器中存在此属性。
+
+### AfterTriggerEvent
+
+事件后触发器函数被触发时的相关事件数据，在 [TriggerEvent](#TriggerEvent) 的基础上扩展了以下属性规范。
+
+#### doc: object
+
+需要新增或修改的记录内容，仅afterInsert, afterUpdate触发器中存在此属性。
+
+#### previousDoc: object
+
+修改或删除前的记录内容，仅afterUpdate, afterDelete触发器中存在此属性。
+
+### QueryTriggerEvent
+
+查询触发器函数被触发时的相关事件数据，在 [TriggerEvent](#TriggerEvent) 的基础上扩展了以下属性规范。
+
+#### query: QueryOptions
+
+
+
+### Context
+
+表示触发器函数在执行环境中的上下文参数，与微函数中的 [Context](/docs/functions#Context) 参数规范一致。
+
+其中 `context.org.id` 和 `context.org.user.id` 分别标识了触发器执行时当前用户所属公司 id 和当前用户 id。
+
+要在触发器中进行数据交互，可以调用参数 `context.org.dataApi` 中的相关函数，其规范见 [DataApi](/docs/functions-data-api)。
+
+另外还可以通过参数 `context.org.broker` 来调用微服务 [Actions](/docs/services#函数（Actions）)。
+
+### Logger
+
+输出不同级别的日志消息功能，与微函数中的 [Logger](/docs/functions#Logger) 参数规范一致。
 
 ## 参数说明
 
@@ -57,7 +249,7 @@ module.exports = {
 
 如果return的是false，则中断操作，如在before.insert里return false,则不执行insert操作。
 
-## 触发器示例
+## 示例
 
 ```js
 beforeInsert: async function () {

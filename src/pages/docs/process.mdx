@@ -78,13 +78,12 @@ entry_criteria: //入口条件公式
             // start process
             start(ctx) {
                 // call activiti api
-            }
-        },
-        events: {
-          "activiti.afterStep": {
+            },
             
-          }
-        }
+            beforeCancel(ctx) {
+              // 调用流程触发器脚本。
+            },
+        },
     }
 }
 ```

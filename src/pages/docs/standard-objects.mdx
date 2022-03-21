@@ -3,6 +3,17 @@ title: 标准对象
 description: 标准对象定义低代码平台元数据的存储格式，包括对象、字段、权限、报表、流程等；以及企业软件必须的基础数据：组织、人员、角色等。
 ---
 
+- [base对象](#base对象)
+- [组织人员](#组织人员)
+- [审批](#审批)
+- [数据导入](#数据导入)
+- [知识](#知识)
+- [软件包](#软件包)
+- [留言](#留言)
+- [批准过程](#批准过程)
+- [平台内核对象](#平台内核对象)
+- [平台基础对象](#平台基础对象)
+
 ## base对象
 base对象是所有对象的基础对象，这意味着华炎魔方中所有的对象都是继承自该对象。
 
@@ -1347,7 +1358,6 @@ icon: approval
 - WebHooks
 - webhooks队列
 - API Key
-- 货币
 - 设置
 - 对象触发器
 - _object_reload_logs
@@ -1523,28 +1533,6 @@ label: API Key
 | owner | lookup | 所有者 |
 
 
-### 货币 currency
-
-```yaml
-name: currency
-enable_audit: true
-enable_files: true
-enable_search: true
-enable_enhanced_lookup: true
-icon: currency
-label: 货币
-version: 2
-```
-
-| 字段名 | 字段类型 | 字段含义 |
-|----|----|----|
-| exchange_rate | number | 汇率（人民币） |
-| name | text | 货币名称 |
-| shorthand | text | 简称 |
-| created | datetime | 创建时间 |
-| created_by | lookup | 创建人 |
-| modified | datetime | 修改时间 |
-| modified_by | lookup | 修改人 |
 
 ### 设置 settings
 
@@ -1689,6 +1677,8 @@ enable_api: true
 - 在线表单
 - 节假日
 - 工作时间
+- 货币
+
 
 ### 报表 reports
 业务人员可以自定义报表来分析业务数据。
@@ -1955,6 +1945,29 @@ hidden: true
 | lunch_end | text | 午休结束时间 |
 | working_days | select | 工作日 |
 | utc_offset | number | GMT时差 |
+
+### 货币 currency
+
+```yaml
+name: currency
+enable_audit: true
+enable_files: true
+enable_search: true
+enable_enhanced_lookup: true
+icon: currency
+label: 货币
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| exchange_rate | number | 汇率（人民币） |
+| name | text | 货币名称 |
+| shorthand | text | 简称 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
 
 
 ## 参考

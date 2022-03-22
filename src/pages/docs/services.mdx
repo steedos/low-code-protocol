@@ -1,0 +1,400 @@
+---
+title: 微服务
+description: 可以通过在微服务中定义动作和订阅事件来实现各种业务逻辑。 
+---
+
+## 微服务协议
+
+支持在软件包中自定义微服务。微服务可以用任何语言编写，运行在任何环境中，但需要统一注册到微服务中心。
+
+### 自定义微服务
+
+每个软件包根目录下有一个名为 `package.service.js` 的默认微服务文件，这里可以编写软件包级别的微服务逻辑。
+
+在软件包的元数据文件夹 `main/default` 下有一个自定义微服务文件夹 `services`，可以在该文件夹中创建 [微服务Schema文件](#Schema) 来自定义微服务。
+
+每个 [微服务Schema文件](#Schema) 都必须以 `.service.js`后缀，`services` 文件夹下的所有 [微服务Schema文件](#Schema) 都会自动被注册到微服务中心。
+
+比如我们可以在目录 `main/default/services/posts.service.js` 文件中编写 [微服务Schema](#Schema) 来为 posts 对象实现一些自定义微服务逻辑。
+
+自定义微服务与软件包默认微服务主要有以下区别：
+
+- 文件名可以自定义，但是必须以 `service.js`后缀命名。
+- 服务名称不会自动加前缀。
+
+### Schema
+
+Schema中有一些主要属性: name, version, settings, actions, methods, events。
+
+```js
+// math.service.js
+module.exports = {
+    name: "math",
+    actions: {
+        add(ctx) {
+            return Number(ctx.params.a) + Number(ctx.params.b);
+        },
+
+        sub(ctx) {
+            return Number(ctx.params.a) - Number(ctx.params.b);
+        }
+    }
+}
+```
+
+以上Schema定义了有2个动作的简单服务。
+
+### 基本属性
+
+微服务Schema 中有一些基础属性。
+
+```js
+// posts.v1.service.js
+module.exports = {
+    name: "posts",
+    version: 1
+}
+```
+
+`name` 是一个必须定义的属性。 当你调用它时，它是动作名称的第一部分。
+
+> 要禁用服务名称前缀, 请在服务设置中修改 `$noServiceNamePrefix: true` 。
+
+`version` 是一个可选的属性。 使用它来运行来自同一服务的多个版本。 它也是动作名称中的前缀。 它可以是 Number 或 String。
+
+```js
+// posts.v2.service.js
+module.exports = {
+    name: "posts",
+    version: 2,
+    actions: {
+        find() {...}
+    }
+}
+```
+
+在版本 2 上调用此服务的动作 find:
+
+```
+broker.call("v2.posts.find");
+```
+
+> REST call
+
+> 通过 API Gateway, 发出请求 `GET /v2/posts/find`.
+
+> 要禁用服务名称前缀, 请在服务设置中修改 `$noVersionPrefix: true` 。
+
+### 设置
+
+`settings` 属性是一个静态存储属性，您可以在那里存储每个设置/选项到您的服务。 您可以通过服务内的 `this.settings` 操作它。
+
+```
+// mailer.service.js
+module.exports = {
+    name: "mailer",
+    settings: {
+        transport: "mailgun"
+    },
+
+    action: {
+        send(ctx) {
+            if (this.settings.transport == "mailgun") {
+                ...
+            }
+        }
+    }
+}
+```
+
+> `settings` 也可以在远程节点上获得。 它在发现服务期间转移。
+
+#### 内部设置
+
+核心模块使用了一些内部设置。 这些设置名称具有 `$ (dollar sign)` 前缀。
+
+| Name | Type | Default | 说明 |
+|----|----|----|----|
+| $noVersionPrefix | Boolean | false | 在动作名称中禁用版本前缀。|
+| $noServiceNamePrefix | Boolean | false | 在动作名称中禁用名字前缀。|
+| $dependencyTimeout | Number | 0 | 等待此服务的依赖服务超时时间。|
+| $shutdownTimeout | Number | 0 | 超时关闭此等待的活动请求。|
+| $secureSettings | Array | [] | 安全设置列表。|
+
+#### 服务安全设置项
+
+为了保护您的令牌 & API 密钥，在服务设置中定义 ·`$secureSettings: []` 属性并设置受保护的属性键。 受保护的设置不会被发布到其他节点，它不会出现在服务注册表中。 这些设置仅在服务函数内的 `this.settings` 下可用。
+
+```
+// mail.service.js
+module.exports = {
+    name: "mailer",
+    settings: {
+        $secureSettings: ["transport.auth.user", "transport.auth.pass"],
+
+        from: "sender@moleculer.services",
+        transport: {
+            service: 'gmail',
+            auth: {
+                user: 'gmail.user@gmail.com',
+                pass: 'yourpass'
+            }
+        }
+    }        
+    // ...
+};
+```
+
+### 混入
+
+Mixins 是分配 Moleculer 服务的可重复使用功能的一种灵活的方式。 服务构造器将这些混入功能与当前服务方案合并。 当一个服务使用混入时，mixins 中存在的所有属性都将被“混入”到当前的服务中。
+
+以下示例扩展 `moleculer-web` 服务
+
+```
+// api.service.js
+const ApiGwService = require("moleculer-web");
+
+module.exports = {
+    name: "api",
+    mixins: [ApiGwService]
+    settings: {
+        // Change port setting
+        port: 8080
+    },
+    actions: {
+        myAction() {
+            // Add a new action to apiGwService service
+        }
+    }
+}
+```
+
+上面的示例创建一个 `api` 服务，继承来自 `ApiGwService` 的所有属性，但覆盖端口设置并通过新的 `myAction` 动作扩展。
+
+#### 合并算法
+
+合并算法取决于属性类型。
+
+| 属性 | 算法 |
+|----|----|
+| name, version | 合并 & 覆盖。|
+| settings | 在 [defaultsDeep](https://lodash.com/docs/4.17.15#defaultsDeep) 的情况下深度扩展。|
+| metadata | 在 [defaultsDeep](https://lodash.com/docs/4.17.15#defaultsDeep) 的情况下深度扩展。|
+| actions | 在 [defaultsDeep](https://lodash.com/docs/4.17.15#defaultsDeep) 的情况下深度扩展。| 如果您在服务中设置为 fals 您可以禁用混入行为。|
+| hooks | 在 [defaultsDeep](https://lodash.com/docs/4.17.15#defaultsDeep) 的情况下深度扩展。|
+| methods | 合并 & 覆盖。|
+| events | 连接侦听器。|
+| created, started, stopped | 连接侦听器。|
+| mixins | 合并 & 覆盖。|
+| dependencies | 合并 & 覆盖。|
+| any custom | 合并 & 覆盖。|
+
+示例：
+
+- 合并 & 覆盖： 如果 serviceA 有 a: 5, b: 8 且 serviceB 有c: 10 b: 15, 混合服务将有 a: 5, b: 15 and c: 10。
+- 连接： 如果 serviceA & serviceB 订阅 users.created 事件，当 users.created 事件发出时，两个事件处理程序都会被调用。
+
+### Actions
+
+服务公开的可调用的方法称为活动或动作或行为 (`actions`, 以后不加区分)。 他们可以使用 `broker.call` 或 `ctx.call` 来调用。 该动作可以是 `Function` (简写为 `handler`) 或一个对象具有 `handler` 属性及更多属性。 该动作应该放置在 Schema 中的 `actions` 下。
+
+```js
+// math.service.js
+module.exports = {
+    name: "math",
+    actions: {
+        // Shorthand definition, only a handler function
+        add(ctx) {
+            return Number(ctx.params.a) + Number(ctx.params.b);
+        },
+
+        // Normal definition with other properties. In this case
+        // the `handler` function is required!
+        mult: {
+            cache: false,
+            params: {
+                a: "number",
+                b: "number"
+            },
+            handler(ctx) {
+                // The action properties are accessible as `ctx.action.*`
+                if (!ctx.action.cache)
+                    return Number(ctx.params.a) * Number(ctx.params.b);
+            }
+        }
+    }
+};
+```
+
+您可以这样调用上述动作
+
+```
+const res = await broker.call("math.add", { a: 5, b: 7 });
+const res = await broker.call("math.mult", { a: 10, b: 31 });
+```
+
+在动作中，您可以使用 `ctx.call` 方法在其他服务中调用其他嵌套动作。 它是 `broker.call`的一个别名，但它将自己设置为父 `context` (由于正确的追踪链)。
+
+```js
+// posts.service.js
+module.exports = {
+    name: "posts",
+    actions: {
+        async get(ctx) {
+            // Find a post by ID
+            let post = posts[ctx.params.id];
+
+            // Populate the post.author field through "users" service
+            // Call the "users.get" action with author ID
+            const user = await ctx.call("users.get", { id: post.author });
+            if (user) {
+                // Replace the author ID with the received user object
+                post.author = user;
+            }
+
+            return post;
+        }
+    }
+};
+```
+
+> 动作处理器的 `this` 总是指向 `Service` 实例。
+
+### Events
+
+您可以在 `events` 中订阅事件。
+
+```js
+// report.service.js
+module.exports = {
+    name: "report",
+
+    events: {
+        // Subscribe to "user.created" event
+        "user.created"(ctx) {
+            this.logger.info("User created:", ctx.params);
+            // Do something
+        },
+
+        // Subscribe to all "user.*" events
+        "user.*"(ctx) {
+            console.log("Payload:", ctx.params);
+            console.log("Sender:", ctx.nodeID);
+            console.log("Metadata:", ctx.meta);
+            console.log("The called event name:", ctx.eventName);
+        }
+
+        // Subscribe to a local event
+        "$node.connected"(ctx) {
+            this.logger.info(`Node '${ctx.params.id}' is connected!`);
+        }
+    }
+};
+```
+
+> 动作处理器的 `this` 总是指向 `Service` 实例。
+
+#### Grouping
+
+服务管理器按群组名称将事件监听器分组。 默认情况下，群组名称是服务名称。 但你可以在事件定义中覆盖它。
+
+```js
+// payment.service.js
+module.exports = {
+    name: "payment",
+    events: {
+        "order.created": {
+            // Register handler to the "other" group instead of "payment" group.
+            group: "other",
+            handler(payload) {
+                // ...
+            }
+        }
+    }
+}
+```
+
+### Methods
+
+若要在服务中创建私有方法，请将您的函数放在 `methods` 中。 这些函数是私有的，无法与 `broker.call` 一起调用。 但你可以在服务中调用它(来自操作处理器、事件处理器和生命周期事件处理器)。
+
+```js
+// mailer.service.js
+module.exports = {
+    name: "mailer",
+    actions: {
+        send(ctx) {
+            // Call the `sendMail` method
+            return this.sendMail(ctx.params.recipients, ctx.params.subject, ctx.params.body);
+        }
+    },
+
+    methods: {
+        // Send an email to recipients
+        sendMail(recipients, subject, body) {
+            return new Promise((resolve, reject) => {
+                ...
+            });
+        }
+    }
+};
+```
+
+If you want to wrap a method with a middleware use the following notation:
+
+```js
+// posts.service.js
+module.exports = {
+    name: "posts",
+
+    methods: {
+        list: {
+            async handler(count) {
+                // Do something
+                return posts;
+            }
+        }
+    }
+};
+```
+
+> 方法名称不能是 `name, version, settings, metadata, schema, broker, actions, logger`, 因为在 Schema 中这些名字是保留的。
+
+> 方法中的 `this` 总是指向 `Service` 实例。
+
+### 生命周期事件
+
+有一些生命周期服务事件，将由服务管理器触发。
+
+```js
+// www.service.js
+module.exports = {
+    name: "www",
+    actions: {...},
+    events: {...},
+    methods: {...},
+
+    created() {
+        // Fired when the service instance created (with `broker.loadService` or `broker.createService`)
+    },
+
+    merged() {
+        // Fired after the service schemas merged and before the service instance created
+    },
+
+    async started() {
+        // Fired when broker starts this service (in `broker.start()`)
+    }
+
+    async stopped() {
+        // Fired when broker stops this service (in `broker.stop()`)
+    }
+};
+```
+
+## 参考
+
+- [Salesforce Functions](https://developer.salesforce.com/docs/platform/functions/overview)
+- [Moleculer Service](https://moleculer.services/zh/docs/0.14/services.html)
+- [Moleculer Sidecar](https://github.com/moleculerjs/sidecar)

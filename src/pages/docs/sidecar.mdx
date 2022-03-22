@@ -1,15 +1,29 @@
 ---
-title: 微服务
-description: 
+title: Sidecar
+description: 允许在微服务项目中使用外部服务，这些外部服务可以用任何语言编写，不限于低代码平台本身的编程语言，能运行在任何环境中，但需要统一注册到微服务中心。
 ---
 
-## 微服务协议
+## 什么是Sidecar
 
-支持在软件包中自定义微服务。微服务可以用任何语言编写，运行在任何环境中，但需要统一注册到微服务中心。
+Sidecar是一个外部微服务，注册到微服务中心后可以与其他微服务交互。
 
-### 微服务注册
+Sidecar是一个HTTP服务器，它提供了一个REST接口来与其他微服务通信，而不是实现完整的微服务注册和发现功能。
 
-微服务需注册到微服务中心才能互相调用，包括可以在触发器中调用。
+Sidecar本身是一个成熟的微服务节点，拥有所有功能(例如参数验证、重试、回退、超时等)，这意味着在外部服务中，你不需要实现它们，只需要用Sidecar管理它们。
+
+## Features
+
+- write services any programming languages (which have http server & client support).
+- bundled to executable, no need to install Node.js environment for running.
+- configure Sidecar via environment variables or moleculer.config.js file.
+- contains all official transporter, cacher, discoverer, serializer libraries.
+- easy to add to any Docker image.
+- official Docker image, use it as a Sidecar pod container in Kubernetes cluster.
+
+
+## 微服务注册
+
+外部微服务需注册到微服务中心才能被识别和互相调用，包括可以在触发器中调用。
 
 ```json
 {
@@ -42,20 +56,7 @@ description:
 }
 ```
 
-### 自定义微服务
-
-每个软件包根目录下有一个名为 `package.service.js` 的默认微服务文件，这里可以编写软件包级别的微服务逻辑。
-
-在软件包的元数据文件夹 `main/default` 下有一个自定义微服务文件夹 `services`，可以在该文件夹中添加自定义微服务文件。
-
-比如我们可以把上面 [微服务注册](/docs/services#微服务注册) 中提到的内容写入目录 `main/default/services/posts.service.js` 文件中来为 posts 对象实现一些自定义微服务逻辑。
-
-自定义微服务与软件包默认微服务主要有以下区别：
-
-- 文件名可以自定义，但是必须以 `service.js`后缀命名。
-- 服务名称不会自动加前缀。
-
-### 函数（Actions）
+## 函数（Actions）
 
 服务公开的可调用的方法称为 actions。 
 
@@ -78,7 +79,7 @@ actions可以使用 broker.call 来调用。
 const res = await broker.call("posts.list", { limit: 10, offset: 0 });
 ```
 
-### Events
+## Events
 
 您可以在 events 中订阅事件。
 
@@ -98,28 +99,6 @@ const res = await broker.call("posts.list", { limit: 10, offset: 0 });
 // The `user` will be serialized to transportation.
 broker.emit("user.created", user);
 ```
-
-## 内核微服务
-
-低代码平台内核需要包含以下内核微服务。
-
-### 软件包服务
-
-安装、升级、卸载软件包，加载软件包中的元数据并发送给 Metadata Service
-
-[了解更多](./service-package)
-
-### 元数据服务
-
-负责汇总和合并元数据，并提供 Metadata API 供前端页面和VSCode插件调用。
-
-[了解更多](./service-metadata)
-
-### 记录服务
-
-根据对象的元数据定义，自动生成记录增删改查API，提供给前端页面调用。
-
-[了解更多](./service-records)
 
 ## 参考
 

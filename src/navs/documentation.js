@@ -24,6 +24,7 @@ export const documentationNav = {
     pages['functions'],
     pages['trigger'],
     pages['flow-trigger'],
+    pages['services'],
     pages['sidecar'],
     pages['page'],
     pages['process'],

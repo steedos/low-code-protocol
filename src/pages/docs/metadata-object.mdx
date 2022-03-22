@@ -54,16 +54,11 @@ version: 2
 | table_name | text | 数据库表名称 |
 | version | number | 版本 |
 | description | textarea | 备注 |
-| sidebar | object | 左侧列表 |
-| relatedList | grid | Related List |
 | custom | boolean | 自定义 |
 | owner | lookup | 拥有者 |
-| app_unique_id | text | App Unique ID |
-| app_version | text | App Version |
 | is_system | boolean | 系统 |
 | fields_serial_number | number | fields_serial_number |
 | is_deleted | boolean | 已删除 |
-| reload_time | datetime | reload_time |
 | created_by | lookup | 创建人 |
 | modified_by | lookup | 修改人 |
 | form | object | 表单事件 |
@@ -75,6 +70,13 @@ version: 2
 | form.afterView | code | 记录显示之后 |
 
 <!--
+| sidebar | object | 左侧列表 |
+| relatedList | grid | Related List |
+| app_unique_id | text | App Unique ID |
+| app_version | text | App Version |
+| fields_serial_number | number | fields_serial_number |
+| reload_time | datetime | reload_time |
+
 | form.validate | code | 验证数据 |
 | form.beforeInsert | code | 新增数据之前 |
 | form.beforeUpdate | code | 修改数据之前 |
@@ -90,9 +92,42 @@ version: 2
 
 补充说明：
 
-- **icon**: 对象图标对应 salesforce 中的 [Standard Icons](https://www.lightningdesignsystem.com/icons/#standard) 。
+- **datasource**：数据源，存在“默认数据源”和“外部数据源（oracle等）”，默认值为“默认数据源”。
+- **label**：显示名
+- **name**：API 名称, 表单事件、触发器等中调用该字段所用的名称。
+- **icon**：图标， 对象图标对应 salesforce 中的 [Standard Icons](https://www.lightningdesignsystem.com/icons/#standard) 。
+- **is_enable**：启用，该对象是否启用。
+- **in_development**：开发状态，分“开发中（仅管理员才可以访问对象）” 和“已部署”。
+- **enable_search**：允许搜索，全局搜索。
+- **enable_files**：允许上传附件，开启后详细页存在附件子表。
+- **enable_tasks**：允许添加任务，开启后详细页存在任务子表。
+- **enable_notes**：允许添加备注，开启后详细页存在备忘子表。
+- **enable_events**：允许添加事件，开启后详细页存在日程子表。
+- ~~**enable_share**~~：允许共享记录
+- **enable_workflow**：允许配置对象流程，设置审批流程功能必须开启此属性。
+- **enable_instances**：允许查看申请单，开启后详细页存在审批子表。
+- **enable_chatter**：允许添加留言，开启后详细页同级菜单栏有留言子页面。
+- **enable_audit**：记录字段历史，开启后详细页存在审计日志子表，记录字段修改历史。
+- **enable_inline_edit**：允许编辑单个字段，开启后列表页允许编辑字段保存。
+- **enable_tree**：启用树状结构显示记录，在记录列表页以树状结构显示记录。
 - **enable_trash**:	如果为true,则开启回收站功能，此对象数据删除后，会进入回收站。如果为false，则直接删除 。
-- **enable_enhanced_lookup**: 当开启增强lookup模式时，指向该对象的lookup字段会弹出窗口显示可选项！ 
+- **enable_enhanced_lookup**：启用弹出窗口查找模式,当开启增强lookup模式时，指向该对象的lookup字段会弹出窗口显示可选项！
+- **table_name**：数据库表名称，引用外部数据源的数据库表名称。
+- **version**：版本，表单版本，目前默认是2.0。
+- **description**：备注, 该对象备注信息。
+- **custom**：自定义，该对象是否是自定义对象。
+- **owner**：拥有者
+- **is_system**：系统，该对象是否是系统内置标准对象。
+- **is_deleted**：已删除，该对象是否已删除。
+- **created_by**：创建人
+- **modified_by**：修改人
+- **form**：表单事件
+- **form.onValuesChange**：数据变化时执行的函数
+- **form.initialValues**：初始化数据时执行的函数
+- **form.beforeDelete**：删除数据之前执行的函数
+- **form.afterDelete**：删除数据之后执行的函数
+- **form.beforeView**：记录显示之前执行的函数
+- **form.afterView**：记录显示之后执行的函数
 
 ## 字段 .field.yml
 
@@ -179,7 +214,52 @@ summary_type: sum
 | description | textarea | 描述 |
 
 补充说明：
-- **is_name**: 勾选该属性表示此字段会代替name字段作为“名称字段”。对象上默认以名为name的字段作为”名称字段”,点击“名称字段”会跳转到记录详细页面，支持配置为”名称字段“的字段类型有：文本、多行文本、自动编号、公式、日期、日期时间。
-- **formula_blank_value**: zeroes表示将空白字段视为零，blanks表示将空白字段视为空白，默认为zeroes 。
-- **write_requires_master_read**: 此字段仅适用于master_detail字段类型。true--允许具有'读取'访问权限的用户创建、编辑或删除子记录。false = 允许具有'读取/写入'访问权限的用户创建、编辑或删除子记录的权限。此设置比 true 更严格，并且是默认值。 
-- **primary**：作为主键字段来标识每条记录。每个对象都必须有一个主键字段来唯一标识其每条记录，默认数据源使用MongoDB作为数据库，所有对象的主键字段都是名为_id的字段，外部数据源可能使用关系型数据库，所以可以在对象设置中编辑字段属性，勾选其“外部数据源”栏的“主键”勾选框来把该字段设置为主键字段。
+- **object**: 所属对象
+- **label**: 显示名称
+- **_name**: 字段名
+- **name**: API 名称, 表单事件、触发器等中调用该字段所用的名称。
+- **type**: 字段类型
+- **defaultValue**: 默认值
+- **group**: 字段分组
+- **reference_to**: 引用对象， 只有“相关表”和“主表/子表”字段类型才显示此属性。
+- **multiple**: 多选，启用后可以保存多个值。
+- **write_requires_master_read**: 当用户对主表记录有读取权限时对子表记录可以增删改,  此字段仅适用于master_detail字段类型。true--允许具有'读取'访问权限的用户创建、编辑或删除子记录。false = 允许具有'读取/写入'访问权限的用户创建、编辑或删除子记录的权限。此设置比 true 更严格，并且是默认值。 
+- **formula**: 公式，通过用户定义的算法自动计算字段的值。
+- **data_type**: 数据类型， 保存到数据库中的值类型。
+- **filtersFunction**: 过滤器函数
+- **optionsFunction**: 选择项函数
+- **precision**: 精度(数字长度)
+- **scale**: 小数位数
+- **rows**: 多行文本行数， 只有“长文本”字段类型才显示此属性。
+- **options**: 选择项， 只有“选择框”字段类型才显示此属性。
+- **options.$**: Options
+- **options.$.label**: 显示名
+- **options.$.value**: 选项值
+- **options.$.color**: 背景颜色
+- **options.$.description**: 描述
+- **formula_blank_value**: 空白字段处理, zeroes表示将空白字段视为零，blanks表示将空白字段视为空白，默认为zeroes 。
+- **summary_object**: 要汇总的对象, 只有“累计汇总”字段类型才显示此属性。
+- **summary_type**: 汇总类型
+- **summary_field**: 要聚合的字段
+- **summary_filters**: 过滤条件
+- **summary_filters.$**: Filter Criteria
+- **summary_filters.$.field**: 字段
+- **summary_filters.$.operation**: 运算符
+- **summary_filters.$.value**: 值
+- **column_name**: 数据库字段名
+- **primary**: 主键, 作为主键字段来标识每条记录。每个对象都必须有一个主键字段来唯一标识其每条记录，默认数据源使用MongoDB作为数据库，所有对象的主键字段都是名为_id的字段，外部数据源可能使用关系型数据库，所以可以在对象设置中编辑字段属性，勾选其“外部数据源”栏的“主键”勾选框来把该字段设置为主键字段。
+- **generated**: 自增
+- **sort_no**: 排序号
+- **is_name**: 名称字段, 勾选该属性表示此字段会代替name字段作为“名称字段”。对象上默认以名为name的字段作为”名称字段”,点击“名称字段”会跳转到记录详细页面，支持配置为”名称字段“的字段类型有：文本、多行文本、自动编号、公式、日期、日期时间。
+- **required**: 必填
+- **is_wide**: 宽字段
+- **readonly**: 只读
+- **hidden**: 隐藏
+- **index**: 创建索引
+- **sortable**: 可排序
+- **searchable**: 可搜索
+- **filterable**: 过滤器默认字段
+- **show_as_qr**: 显示为二维码，只有”网址“”字段类型才显示此属性，开启后该字段值只读时显示为二维码。
+- **visible_on**: 字段显示公式，公式返回true或false来控制此字段是否显示。
+- **inlineHelpText**: 提示文本，详细页该字段显示名称右侧提供一个提示文本的图标。
+- **description**: 描述

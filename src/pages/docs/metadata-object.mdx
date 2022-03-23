@@ -39,29 +39,29 @@ version: 2
 | in_development | select | 开发状态 |
 | enable_search | boolean | 允许搜索 |
 | enable_files | boolean | 允许上传附件 |
-| enable_tasks | boolean | 允许添加任务 |
+| enable_tasks | boolean | 允许添加任务 |  //暂时不需要
 | enable_notes | boolean | 允许添加备注 |
-| enable_events | boolean | 允许添加事件 |
-| enable_share | boolean | 允许共享记录 |
-| enable_api | boolean | 允许 API 访问 |
+| enable_events | boolean | 允许添加事件 | //暂时不需要
+| enable_share | boolean | 允许共享记录 |  //暂不需要
+| enable_api | boolean | 允许 API 访问 |  //暂不需要
 | enable_workflow | boolean | 允许配置对象流程 |
-| enable_instances | boolean | 允许查看申请单 |
-| enable_chatter | boolean | 允许添加留言 |
-| enable_audit | boolean | 记录字段历史 |
-| enable_inline_edit | boolean | 允许编辑单个字段 |
-| enable_tree | boolean | 启用树状结构显示记录 |
-| enable_enhanced_lookup | boolean | 启用弹出窗口查找模式 |
-| table_name | text | 数据库表名称 |
-| version | number | 版本 |
+| enable_instances | boolean | 允许查看申请单 | //暂不需要
+| enable_chatter | boolean | 允许添加留言 |    //暂不需要
+| enable_audit | boolean | 记录字段历史 |     //审计需要
+| enable_inline_edit | boolean | 允许编辑单个字段 | //用在列表视图上，类似excel单元格编辑（在级联关系时，表单没有显示所有字段时，需要关闭）
+| enable_tree | boolean | 启用树状结构显示记录 |     //需要指定父子字段
+| enable_enhanced_lookup | boolean | 启用弹出窗口查找模式 | //编辑模式的调整，是弹窗模式
+| table_name | text | 数据库表名称 | //暂不需要
+| version | number | 版本 |   //表单版本是什么意思？，metor兼容，不需要了，删除
 | description | textarea | 备注 |
 | custom | boolean | 自定义 |
-| owner | lookup | 拥有者 |
+| owner | lookup | 拥有者 |     //需补充base的所有字段
 | is_system | boolean | 系统 |
 | fields_serial_number | number | fields_serial_number |
-| is_deleted | boolean | 已删除 |
+| is_deleted | boolean | 已删除 | //是否有删除人的字段？
 | created_by | lookup | 创建人 |
-| modified_by | lookup | 修改人 |
-| form | object | 表单事件 |
+| modified_by | lookup | 修改人 | //yml中填写，所以无时间字段？
+| form | object | 表单事件 |      //表单级，浏览器脚本js
 | form.onValuesChange | code | 数据变化时 |
 | form.initialValues | code | 初始化数据 |
 | form.beforeDelete | code | 删除数据之前 |
@@ -162,29 +162,29 @@ summary_type: sum
 |----|----|----|
 | object | master_detail | 所属对象 |
 | label | text | 显示名称 |
-| _name | text | 字段名 |
+| _name | text | 字段名 | //??确认是否保留
 | name | text | API 名称 |
 | type | select | 字段类型 |
 | defaultValue | text | 默认值 |
 | group | text | 字段分组 |
-| reference_to | lookup | 引用对象 |
-| multiple | boolean | 多选 |
-| write_requires_master_read | boolean | 当用户对主表记录有读取权限时对子表记录可以增删改 |
-| formula | textarea | 公式 |
+| reference_to | lookup | 引用对象 | //放到type表
+| multiple | boolean | 多选 |       //type相关
+| write_requires_master_read | boolean | 当用户对主表记录有读取权限时对子表记录可以增删改 | //type
+| formula | textarea | 公式 | //type
 | data_type | select | 数据类型 |
 | filtersFunction | textarea | 过滤器函数 |
 | optionsFunction | textarea | 选择项函数 |
 | precision | currency | 精度(数字长度) |
 | scale | currency | 小数位数 |
 | rows | currency | 多行文本行数 |
-| options | grid | 选择项 |
+| options | grid | 选择项 |      //chenzihang：具体字段类型需要补充的字段信息放到字段类型一节中描述
 | options.$ | object | Options |
 | options.$.label | text | 显示名 |
 | options.$.value | text | 选项值 |
 | options.$.color | text | 背景颜色 |
 | options.$.description | text | 描述 |
 | formula_blank_value | select | 空白字段处理 |
-| summary_object | lookup | 要汇总的对象 |
+| summary_object | lookup | 要汇总的对象 |  //chenzihang：具体字段类型需要补充的字段信息放到字段类型一节中描述
 | summary_type | select | 汇总类型 |
 | summary_field | lookup | 要聚合的字段 |
 | summary_filters | grid | 过滤条件 |
@@ -196,19 +196,19 @@ summary_type: sum
 | primary | boolean | 主键 |
 | generated | boolean | 自增 |
 | sort_no | number | 排序号 |
-| is_name | boolean | 名称字段 |
-| required | boolean | 必填 |
-| is_wide | boolean | 宽字段 |
-| readonly | boolean | 只读 |
-| hidden | boolean | 隐藏 |
-| index | boolean | 创建索引 |
-| sortable | boolean | 可排序 |
-| searchable | boolean | 可搜索 |
-| filterable | boolean | 过滤器默认字段 |
-| show_as_qr | boolean | 显示为二维码 |
-| visible_on | textarea | 字段显示公式 |
-| inlineHelpText | textarea | 提示文本 |
-| description | textarea | 描述 |
+| is_name | boolean | 名称字段 | //通用
+| required | boolean | 必填 |   //通用
+| is_wide | boolean | 宽字段 |  //通用，记录详细页表单视图独占一列
+| readonly | boolean | 只读 |   //通用
+| hidden | boolean | 隐藏 |    //通用
+| index | boolean | 创建索引 |  //通用
+| sortable | boolean | 可排序 | //通用
+| searchable | boolean | 可搜索 | //通用
+| filterable | boolean | 过滤器默认字段 |  //删掉
+| show_as_qr | boolean | 显示为二维码 |   //type url，只读勾选时（显示二维码，编辑时才是url）
+| visible_on | textarea | 字段显示公式 |  //通用，浏览器脚本js
+| inlineHelpText | textarea | 提示文本 | //通用
+| description | textarea | 描述 |       //通用，给开发人员看
 
 补充说明：
 - **_name**: 字段名
@@ -245,6 +245,7 @@ summary_type: sum
 - **show_as_qr**: 显示为二维码，只有”网址“”字段类型才显示此属性，开启后该字段值只读时显示为二维码。
 - **visible_on**: 字段显示公式，公式返回true或false来控制此字段是否显示。
 - **inlineHelpText**: 提示文本，详细页该字段显示名称右侧提供一个提示文本的图标。
+//chenzihang：特定字段类型（如相关表、多选框、汇总字段等）需要的字段属性，在字段类型一节中详细描述
 
 <!--
 - **filterable**: 过滤器默认字段

@@ -27,6 +27,9 @@ render_engine: amis
 
 ### 微页面版本 page_versions
 
+- 保存时, 如果最新版是未发布的, 则修改最新版本
+- 保存时, 如果最新版是已发布的, 则生成一条新版本,并是未发布状态
+
 ```yml
 _id: xxx
 page: `page_id`

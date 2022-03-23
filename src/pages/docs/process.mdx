@@ -18,7 +18,7 @@ description: 支持接入不同的流程引擎，实现业务流程自定义。
 name: `processApiName`
 label: 显示名称
 object_name: contracts
-engine: activiti-engine/camunda-engine
+engine: activiti/camunda
 is_active: true 
 entry_criteria: //入口条件公式
 ```
@@ -50,7 +50,7 @@ is_active: true
 entry_criteria: //入口条件公式
 ```
 
-### 流程图 process.activiti.bpmn
+### 流程图 .process.activiti.bpmn
 
 基于 activiti 的流程图。在元数据中单独保存此文件，以便在 VS Code 中提供设计器插件。
 
@@ -65,7 +65,7 @@ entry_criteria: //入口条件公式
 ```js
 {
     module.exports = {
-        name: "activiti-engine",
+        name: "activiti",
         settings: {
             serviceEndpoint: "https://activi.services"
         },

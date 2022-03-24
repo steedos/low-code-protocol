@@ -18,12 +18,14 @@ description: 支持接入不同的流程引擎，实现业务流程自定义。
 name: "" # 显示名称
 api_name: `processApiName` # Api Name
 object_name: contracts # 关联对象名
-engine: activiti/camunda # 引擎类型
+engine: cmbbpm/activiti/flowable/camunda # 引擎类型
 is_active: true # 是否启用
 deploy_time: new Date() # 发布时间
 version: 1 # 流程最新已发布的版本号
 description: "" # 描述
 ```
+
+- 引擎类型（engine）: cmbbpm/activiti/flowable/camunda 
 
 ### 流程版本 process_versions
 
@@ -34,7 +36,7 @@ process: `process_id` # 流程_id
 version: 2 # 版本号
 is_active: true # 版本是否已发布
 description: "" # 版本描述
-schema: `process.activiti.bpmn` # 流程定义schema
+schema: `process.${engine}.bpmn` # 流程定义schema
 entry_criteria: "", # 入口公式 传入 (when: 'afterInsert'/'afterUpdate', userSession, Record)
 ```
 
@@ -48,16 +50,16 @@ entry_criteria: "", # 入口公式 传入 (when: 'afterInsert'/'afterUpdate', us
 name: "" # 显示名称
 api_name: `processApiName` # Api Name
 object_name: contracts # 关联对象名
-engine: activiti/camunda # 引擎类型
+engine: ${engine} # 引擎类型
 is_active: true # 是否启用
 description: "" # 描述
 schema: `process.activiti.bpmn` # 流程定义schema
 entry_criteria: "", # 入口公式
 ```
 
-### 流程图 .process.activiti.bpmn
+### 流程图 .process.${engine}.bpmn
 
-基于 activiti 的流程图。在元数据中单独保存此文件，以便在 VS Code 中提供设计器插件。
+基于 ${engine} 的流程图。在元数据中单独保存此文件，以便在 VS Code 中提供设计器插件。
 
 ## 接入 BPM 引擎
 
@@ -70,7 +72,7 @@ entry_criteria: "", # 入口公式
 ```js
 {
     module.exports = {
-        name: "activiti",
+        name: `${engine}`,
         settings: {
             serviceEndpoint: "https://activi.services"
         },

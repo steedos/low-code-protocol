@@ -3,7 +3,7 @@ title: 标准对象
 description: 标准对象定义低代码平台元数据的存储格式，包括对象、字段、权限、报表、流程等；以及企业软件必须的基础数据：组织、人员、角色等。
 ---
 
-- [base对象](#base对象)
+- [基础对象](#基础对象)
 - [组织人员](#组织人员)
 - [审批](#审批)
 - [数据导入](#数据导入)
@@ -14,7 +14,12 @@ description: 标准对象定义低代码平台元数据的存储格式，包括�
 - [平台内核对象](#平台内核对象)
 - [平台基础对象](#平台基础对象)
 
-## base对象
+## 基础对象
+
+- base对象
+- core对象
+
+### base对象
 base对象是所有对象的基础对象，这意味着华炎魔方中所有的对象都是继承自该对象。
 
 - 该对象中配置了一些基础的字段，比如创建人、创建时间、所有者、所属分部等，可以在继承自该对象的对象中改写或扩展这些字段的属性。
@@ -63,6 +68,24 @@ hidden: true
 | allowRead | true | true |
 | modifyAllRecords | false | true |
 | viewAllRecords | false | true |
+
+
+<!-- TODO: 添加core对象的描述 -->
+### core对象
+
+```yaml
+name: core
+hidden: true
+```
+
+| 权限属性 | admin |
+|----|----|
+| allowCreate| true |
+| allowDelete| true |
+| allowEdit| true |
+| allowRead| true |
+| modifyAllRecords| true |
+| viewAllRecords| true |
 
 ## 组织人员
 

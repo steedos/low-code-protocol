@@ -37,8 +37,8 @@ version: 2 # 版本号
 is_active: true # 版本是否已发布
 description: "" # 版本描述
 schema: `process.${engine}.bpmn` # 流程定义schema
-after_insert_entry_criteria: "", # 入口公式 传入 (userSession, Record)
-after_update_entry_criteria: "", # 入口公式 传入 (userSession, Record)
+entry_criteria: "", # 入口公式 传入 (userSession, Record)
+when: "", # 何时执行入口公式 afterInsert/afterUpdate
 ```
 
 ## 元数据
@@ -55,8 +55,8 @@ engine: ${engine} # 引擎类型
 is_active: true # 是否启用
 description: "" # 描述
 schema: `process.activiti.bpmn` # 流程定义schema
-after_insert_entry_criteria: "", # 入口公式
-after_update_entry_criteria: "", # 入口公式
+entry_criteria: "", # 入口公式
+when: "", # 何时执行入口公式
 ```
 
 ### 流程图 .process.${engine}.bpmn

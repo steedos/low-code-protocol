@@ -30,12 +30,12 @@ description: "" # 描述
 流程版本记录流程的修订历史，任务在运行时关联到此记录。发起流程时始终取流程最新版。
 
 ```yml
-process: `process_id` # 流程id
+process: `process_id` # 流程_id
 version: 2 # 版本号
 is_active: true # 版本是否已发布
 description: "" # 版本描述
 schema: `process.activiti.bpmn` # 流程定义schema
-"entry_criteria": "", # 入口公式 传入 (when: 'afterInsert'/'afterUpdate', userSession, Record)
+entry_criteria: "", # 入口公式 传入 (when: 'afterInsert'/'afterUpdate', userSession, Record)
 ```
 
 ## 元数据
@@ -45,12 +45,14 @@ schema: `process.activiti.bpmn` # 流程定义schema
 ### 流程 .process.yml
 
 ```yml
-name: `processApiName`
-label: 显示名称
-object_name: contracts
-engine: activiti
-is_active: true 
-entry_criteria: //入口条件公式
+name: "" # 显示名称
+api_name: `processApiName` # Api Name
+object_name: contracts # 关联对象名
+engine: activiti/camunda # 引擎类型
+is_active: true # 是否启用
+description: "" # 描述
+schema: `process.activiti.bpmn` # 流程定义schema
+entry_criteria: "", # 入口公式
 ```
 
 ### 流程图 .process.activiti.bpmn

@@ -70,8 +70,10 @@ hidden: true
 | viewAllRecords | false | true |
 
 
-<!-- TODO: 添加core对象的描述 -->
+
 ### core对象
+
+关系型数据库的基础对象。
 
 ```yaml
 name: core
@@ -291,7 +293,7 @@ enable_enhanced_lookup: true
 -->
 
 | 权限属性 | user | admin | organization_admin | customer  | supplier |
-|----|----|----|----|----|
+|----|----|----|----|----|----|
 | allowCreate | false | true | true | false | false |
 | allowDelete | false | false | false | false | false |
 | allowEdit | true | true | true | true | true |
@@ -685,8 +687,8 @@ hidden: true
 | sort_no | number | 排序号 |
 | app | lookup | 所属应用 |
 
-| 权限属性 | user | admin | guest |
-|----|----|----|----|
+| 权限属性 | user | admin |
+|----|----|----|
 | allowCreate | false | true |
 | allowDelete | false | true |
 | allowEdit | false | true |
@@ -1817,14 +1819,12 @@ hidden: true
 
 | 权限属性 | user | admin |
 |----|----|----|
-| allowCreate| false | false |
-| allowDelete| false | false |
-| allowEdit| false | false |
-| allowRead| true | true |
-| modifyAllRecords| false | false |
-| viewAllRecords| true | true |
-| modifyCompanyRecords| false |  |
-| viewCompanyRecords| true  |  |
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | false | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
 
 ### 审计日志 audit_records
 跟踪字段的修改历史，此功能会消耗更多服务器资源，只有必要的对象才应该配置此属性。
@@ -2047,6 +2047,8 @@ hidden: true
 
 
 ### _object_reload_logs
+
+<!-- TODO：需要添加描述 -->
 
 ```yaml
 name: _object_reload_logs
@@ -2546,6 +2548,7 @@ hidden: true
 | modifyAllRecords | false | true | false |
 | viewAllRecords | true | true | true |
 
+<!-- 计量单位 及以下对象需要添加描述 -->
 
 ### 计量单位 measurement_unit
 

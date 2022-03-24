@@ -75,20 +75,83 @@ entry_criteria: "", # 入口公式
             serviceEndpoint: "https://activi.services"
         },
         actions: {
-            // deploy process
-            deploy(ctx) {
+            // 保存schema
+            async save(ctx) {
                 // call activiti api
             },
 
-            // start process
-            start(ctx) {
+            // 流程发布
+            async deploy(ctx) {
                 // call activiti api
             },
-            
-            beforeCancel(ctx) {
-              // 调用 Steedos 流程触发器脚本。
+
+            // 流程禁用
+            async disable(ctx) {
+                // call activiti api
+            },
+
+            // 流程启用
+            async enable(ctx) {
+                // call activiti api
+            },
+
+            // 流程删除
+            async delete(ctx) {
+                // call activiti api
+            },
+
+            // 申请单发起
+            async start(ctx) {
+                // call activiti api
+            },
+
+            // 流程取消前
+            async beforeCancel(ctx) {
+                // 调用 Steedos 流程触发器脚本。
+                return await broker.call('process.beforeCancel', { event, context })
             },
         },
+        events: {
+            // 核准
+            async approve(ctx) {
+                
+            },
+
+            // 驳回
+            async reject(ctx) {
+                
+            },
+
+            // 取消
+            async cancel(ctx) {
+                
+            },
+
+            // 撤回，发起后撤回
+            async withdraw(ctx) {
+                
+            },
+
+            // 重新发起，与撤回搭配使用
+            async restart(ctx) {
+                
+            },
+
+            // 转交，当前审批人将任务转交给他人处理
+            async transfer(ctx) {
+                
+            },
+
+            // 加签，拉审批人加入当前节点处理
+            async addsign(ctx) {
+                
+            },
+
+            // 退回，当前审批人将任务退回给指定节点
+            async backward(ctx) {
+                
+            },
+        }
     }
 }
 ```

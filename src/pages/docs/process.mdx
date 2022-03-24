@@ -37,7 +37,8 @@ version: 2 # 版本号
 is_active: true # 版本是否已发布
 description: "" # 版本描述
 schema: `process.${engine}.bpmn` # 流程定义schema
-entry_criteria: "", # 入口公式 传入 (when: 'afterInsert'/'afterUpdate', userSession, Record)
+after_insert_entry_criteria: "", # 入口公式 传入 (userSession, Record)
+after_update_entry_criteria: "", # 入口公式 传入 (userSession, Record)
 ```
 
 ## 元数据
@@ -54,7 +55,8 @@ engine: ${engine} # 引擎类型
 is_active: true # 是否启用
 description: "" # 描述
 schema: `process.activiti.bpmn` # 流程定义schema
-entry_criteria: "", # 入口公式
+after_insert_entry_criteria: "", # 入口公式
+after_update_entry_criteria: "", # 入口公式
 ```
 
 ### 流程图 .process.${engine}.bpmn
@@ -78,81 +80,131 @@ entry_criteria: "", # 入口公式
         },
         actions: {
             // 保存schema
-            async save(ctx) {
-                // call activiti api
+            save: {
+                rest: {
+                    method: "POST",
+                    path: "/save"
+                },
+                params: {},
+                handler: async function (ctx){
+                    // call activiti api
+                }
             },
 
             // 流程发布
-            async deploy(ctx) {
-                // call activiti api
+            deploy: {
+                rest: {
+                    method: "POST",
+                    path: "/deploy"
+                },
+                params: {},
+                handler: async function (ctx){
+                    // call activiti api
+                }
             },
 
             // 流程禁用
-            async disable(ctx) {
-                // call activiti api
+            disable: {
+                rest: {
+                    method: "POST",
+                    path: "/disable"
+                },
+                params: {},
+                handler: async function (ctx){
+                    // call activiti api
+                }
             },
 
             // 流程启用
-            async enable(ctx) {
-                // call activiti api
+            enable: {
+                rest: {
+                    method: "POST",
+                    path: "/enable"
+                },
+                params: {},
+                handler: async function (ctx){
+                    // call activiti api
+                }
             },
 
             // 流程删除
-            async delete(ctx) {
-                // call activiti api
+            delete: {
+                rest: {
+                    method: "POST",
+                    path: "/delete"
+                },
+                params: {},
+                handler: async function (ctx){
+                    // call activiti api
+                }
             },
 
             // 申请单发起
-            async start(ctx) {
-                // call activiti api
+            start: {
+                rest: {
+                    method: "POST",
+                    path: "/start"
+                },
+                params: {},
+                handler: async function (ctx){
+                    // call activiti api
+                }
             },
 
+
             // 流程取消前
-            async beforeCancel(ctx) {
-                // 调用 Steedos 流程触发器脚本。
-                return await broker.call('process.beforeCancel', { event, context })
+            beforeCancel: {
+                rest: {
+                    method: "POST",
+                    path: "/beforeCancel"
+                },
+                params: {},
+                handler: async function (ctx){
+                    // 调用 Steedos 流程触发器脚本。
+                    return await broker.call('process.beforeCancel', { event, context })
+                }
             },
         },
         events: {
             // 核准
-            async approve(ctx) {
+            [`${engine}.approve`]: async function (ctx) {
                 
             },
 
             // 驳回
-            async reject(ctx) {
+            [`${engine}.reject`]: async function (ctx) {
                 
             },
 
             // 取消
-            async cancel(ctx) {
+            [`${engine}.cancel`]: async function (ctx) {
                 
             },
 
             // 撤回，发起后撤回
-            async withdraw(ctx) {
+            [`${engine}.withdraw`]: async function (ctx) {
                 
             },
 
             // 重新发起，与撤回搭配使用
-            async restart(ctx) {
+            [`${engine}.restart`]: async function (ctx) {
                 
             },
 
             // 转交，当前审批人将任务转交给他人处理
-            async transfer(ctx) {
+            [`${engine}.transfer`]: async function (ctx) {
                 
             },
 
             // 加签，拉审批人加入当前节点处理
-            async addsign(ctx) {
+            [`${engine}.addsign`]: async function (ctx) {
                 
             },
 
             // 退回，当前审批人将任务退回给指定节点
-            async backward(ctx) {
+            [`${engine}.backward`]: async function (ctx) {
                 
-            },
+            }
         }
     }
 }

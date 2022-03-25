@@ -1,0 +1,974 @@
+---
+title: 平台基础对象
+description: 平台基础相关标准对象。
+---
+
+- [报表](#报表-reports)
+- [任务](#任务-tasks)
+- [日程](#日程-events)
+- [备忘](#备忘-notes)
+- [公告](#公告-announcements)
+- [附件](#附件-cms_files)
+- [附件版本](#附件版本-cfs_files_filerecord)
+- [在线表单](#在线表单-web_forms)
+- [节假日](#节假日-holidays)
+- [工作时间](#工作时间-business_hours)
+- [计量单位](#计量单位-measurement_unit)
+- [物料类型](#物料类型-asset_type)
+- [物料分组](#物料分组-material_group)
+- [物料](#物料-product)
+- [仓库](#仓库-warehouse)
+- [库位](#库位-stock_location__c)
+- [银行类别](#银行类别-bank_type)
+- [银行](#银行-bank)
+- [发票类型](#发票类型-invoice_type)
+- [税率](#税率-tax_rates)
+- [货币](#货币-currency)
+
+## 报表-reports
+业务人员可以自定义报表来分析业务数据。
+
+```yaml
+name: reports
+label: Report
+icon: report
+enable_space_global: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| report_type | select | 报表类型 |
+| data_source | select | 报表数据来源 |
+| object_name | lookup | 对象名 |
+| filter_scope | select | 过虑范围 |
+| filter_logic | text | 过滤逻辑 |
+| fields | lookup | 字段 |
+| rows | lookup | 行 |
+| columns | lookup | 列 |
+| values | lookup | 统计 |
+| filter_fields | grid | 过滤字段 |
+| filter_fields.$ | object | Filter Field |
+| filter_fields.$.field | lookup | 字段名称 |
+| filter_fields.$.required | boolean | 必填 |
+| description | textarea | 描述 |
+| charting | boolean | 显示图表 |
+| grouping | boolean | 显示小计 |
+| totaling | boolean | 显示总计 |
+| counting | boolean | 显示记录计数 |
+| graphql | textarea | Graphql |
+| html | textarea | Html |
+| helper | textarea | Helper |
+| script | textarea | Script |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+<!--
+| filters | Object | 过滤条件 |
+| filters.$ | | Filter |
+| filters.$.field | text | 字段名 |
+| filters.$.operation | select | 操作符 |
+| filters.$.value | | 字段值 |
+| options | | 操作 |
+| mrt | textarea | Mrt |
+| is_system | boolean | 系统 |
+-->
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+<!--  TODO: 含有disabled_list_views权限属性 -->
+
+## 任务-tasks
+用于日常任务管理，也可以用于管理对象的相关任务，当在对象上勾选了 ”允许添加任务“ 开关后，业务人员就可以在该对象记录详细界面看到该记录相关的任务子表。任务被创建后，其被分派人可以收到推送通知。
+
+```yaml
+name: tasks
+label: Task
+icon: timesheet_entry
+enable_search: true
+enable_files: true
+enable_chatter: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 主题 |
+| assignees | lookup | 分派给 |
+| due_date | date | 到期日期 |
+| state | select | 状态 |
+| priority | select | 优先级 |
+| related_to | lookup | 相关项 |
+| description | textarea | 描述 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+
+## 日程-events
+用于日常日程管理，也可以用于管理对象的相关日程，当在对象勾选了”允许添加事件“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的日程子表。日程被创建后，其被分派人可以收到推送通知。
+
+```yaml
+name: events
+label: Event
+icon: event
+enable_search: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 主题 |
+| start | datetime | 开始时间 |
+| end | datetime | 结束时间 |
+| assignees | lookup | 分派给 |
+| related_to | lookup | 相关项 |
+| is_all_day | boolean | 全天事件 |
+| location | text | 地址 |
+| description | textarea | 描述 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+## 备忘-notes
+用于日常备忘管理，也可以用于管理对象的相关备忘，当在对象勾选了”允许添加备注“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的备忘子表。
+
+```yaml
+name: notes
+label: Notes
+icon: note
+enable_search: true
+```
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 标题 |
+| description | textarea | 内容 |
+| related_to | lookup | 相关项 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+## 公告-announcements
+用于发布公告，可以选择要发布到哪些人员，相关人员可以收到公告通知。
+
+```yaml
+name: announcements
+icon: announcement
+label: Announcement
+hidden: false
+enable_files: true
+enable_chatter: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 标题 |
+| body | html | 正文 |
+| members | lookup | 发布对象 |
+| created | datetime | 发布时间 |
+| created_by | lookup | 发布人 |
+| modified_by | lookup | 修改人 |
+| modified | datetime | 修改时间 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+## 附件-cms_files
+以用于管理对象的相关附件，当在对象勾选了”允许添加附件“开关后，业务人员就可以在该对象记录详细界面看到该记录相关的附件子表。
+
+```yaml
+name: cms_files
+label: Attachments
+icon: drafts
+enable_search: true
+enable_api: true
+hidden: false
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| description | textarea | 描述 |
+| extention | text | 文件后缀 |
+| size | filesize | 文件大小 |
+| versions | file | 历史版本 |
+| parent | lookup | 所属记录 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+## 附件版本-cfs_files_filerecord
+用于存放附件的各个版本，可以在附件详情页查看附件各个版本。
+
+```yaml
+name: cfs_files_filerecord
+label: Attachment Version
+table_name: 'cfs.files.filerecord'
+icon: drafts
+enable_search: true
+enable_api: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| original | object | 文件 |
+| original.name | text | 文件名 |
+| original.size | number | 文件大小 |
+| metadata | object | 属性 |
+| metadata.owner | lookup | 上传者 |
+| metadata.owner_name | text | 上传者 |
+| metadata.parent | master_detail | 所属文件 |
+| uploadedAt | datetime | 上传时间 |
+| created_by | lookup | 创建人 |
+| modified_by | lookup | 修改人 |
+| owner | lookup | 所有者 |
+| created | datetime | 创建时间 |
+| modified | datetime | 修改时间 |
+| locked | boolean | 已锁定 |
+| company_id | lookup | 主分部 |
+| company_ids | lookup | 所属分部 |
+| instance_state | select | 审批状态 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | false |
+| allowDelete | true | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+## 在线表单-web_forms
+在线表单（匿名提交数据），用于潜在客户注册、合作伙伴申请表、在线故障申报之类的需求。
+
+```yaml
+name: web_forms
+label: Web Forms
+icon: display_text
+enable_api: true
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| object_name | lookup | 关联对象 |
+| fields | lookup | 显示字段 |
+| return_url | text | 返回地址 |
+| record_owner | lookup | 记录所有人 |
+| notification_users | lookup | 通知用户 |
+| generated_html | code | 表单HTML |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate| false | true |
+| allowDelete| false | true |
+| allowEdit| false | true |
+| allowRead| false | true |
+| modifyAllRecords| false | true |
+| viewAllRecords| false | true |
+| modifyCompanyRecords| false |  |
+| viewCompanyRecords| false |  |
+
+## 节假日-holidays
+用于自定义节假日。
+
+```yaml
+name: holidays
+label: Holidays
+icon: event
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| type | select | 类型 |
+| date | date | 日期 |
+| adjusted_to | select | 对应工作日 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+| 权限属性 | user | admin | guest |
+|----|----|----|----|
+| allowCreate | false | true | false |
+| allowDelete | false | true | false |
+| allowEdit | false | true | false |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | true | true | true |
+
+
+## 工作时间-business_hours
+用于自定义工作时间。
+
+```yaml
+name: business_hours
+label: Business Hours
+icon: date_time
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| is_default | boolean | 默认工作时间 |
+| start | text | 开始时间 |
+| end | text | 结束时间 |
+| lunch_start | text | 午休开始时间 |
+| lunch_end | text | 午休结束时间 |
+| working_days | select | 工作日 |
+| utc_offset | number | GMT时差 |
+
+| 权限属性 | user | admin | guest |
+|----|----|----|----|
+| allowCreate | false | true | false |
+| allowDelete | false | true | false |
+| allowEdit | false | true | false |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | true | true | true |
+
+<!-- 计量单位 及以下对象需要添加描述 -->
+
+## 计量单位-measurement_unit
+
+```yaml
+name: measurement_unit
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_enhanced_lookup: true
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: true
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+icon: account
+is_enable: true
+label: 计量单位
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|code | text | 编码 |
+|name | text | 计量单位名称 |
+|owner | lookup | 所有者 |
+|remark | textarea | 描述 |
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate | true | true | true |
+| allowDelete | true | true | true |
+| allowEdit | true | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | true |
+| viewAllRecords | false | true | true |
+| permission_set_id | user | admin | master_admin |
+| modifyCompanyRecords |  |  | false |
+| viewCompanyRecords |  |  | false |
+
+
+## 物料类型-asset_type
+
+```yaml
+name: asset_type
+enable_api: true
+enable_share: true
+enable_enhanced_lookup: true
+icon: entity
+label: 物料类型
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|code | text | 编码 |
+|name | text | 名称 |
+|separate_accounting | boolean | 单独核算 |
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate | false | true | true |
+| allowDelete | false | true | true |
+| allowEdit | false | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | true |
+| modifyCompanyRecords | false |  | false |
+| permission_set_id | user | admin | master_admin |
+| viewAllRecords | true | true | true |
+| viewCompanyRecords | true |  | false |
+
+
+## 物料分组-material_group
+
+```yaml
+name: material_group
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_enhanced_lookup: true
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: true
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+enable_tree: true
+parent_field: material_group
+icon: account
+is_enable: true
+label: 物料分组
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| asset_type | lookup | 所属物料类型 |
+| children | lookup | 子分组 |
+| group_code | text | 分组编码 |
+| inventory | boolean | 盘点 |
+| material_group | lookup | 上级物料分组 |
+| name | text | 物料分组名称 |
+| owner | lookup | 所有者 |
+| remark | textarea | 描述 |
+| separate_accounting |  formula | 单独核算 | 
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate | true | true | true |
+| allowDelete | true | true | true |
+| allowEdit | true | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | true |
+| modifyCompanyRecords |  |  | false |
+| permission_set_id | user | admin | master_admin |
+| viewAllRecords | true | true | true |
+| viewCompanyRecords |  |  | false |
+
+## 物料-product
+
+```yaml
+name: product
+custom: true
+enable_audit: true
+enable_enhanced_lookup: true
+enable_files: true
+enable_search: true
+icon: product
+label: 物料
+version: 2
+form:
+  onValuesChange: !!js/function |
+    function(args){
+      const material_group = args.values.material_group;
+      var options, result;
+      result = [];
+      options = {
+          $filter: `(_id eq '${material_group}')`,
+          $select: 'name,inventory'
+      };
+      inventory = Creator.odata.query('material_group', options, true);
+      if(inventory && inventory[0].inventory){
+        args.form.setFieldsValue({inventory: inventory[0].inventory});
+      }else{
+        args.form.setFieldsValue({inventory: false});
+      }
+    }
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| amount | currency | 价格 |
+| asset_type | lookup | 物料类型 |
+| attributes | select | 属性 |
+| company_id | lookup | 主分部 |
+| depreciation_range | number | 折旧年限 |
+| description | textarea | 备注 |
+| display_url | url | 显示URL |
+| external_data_source | lookup | 外部数据源 |
+| external_id | text | 外部ID |
+| family | select | 物料系列 |
+| gross_weight | number | 毛重 |
+| height | number | 高 |
+| image | image | 图片 |
+| inventory | boolean | 盘点 |
+| is_active | toggle | 已启用 |
+| is_asset | boolean | 资产 |
+| length | number | 长 |
+| manufacturer | text | 制造厂商 |
+| material_group | lookup | 物料分组 |
+| name | text | 物料名称 |
+| net_weight | number | 净重 |
+| number_of_quantity_installments | number | 数量分期付款期数 |
+| number_of_revenue_installments | number | 收入分期付款期数 |
+| owner | lookup | 所有者 |
+| product_code | text | 物料编码 |
+| product_currency | lookup | 币种 |
+| purpose | select | 使用用途 |
+| quantity_installment_period | text | 数量分期付款周期 |
+| quantity_schedule_type | text | 数量计划类型 |
+| quantity_scheduling_enabled | boolean | 已启用数量计划 |
+| quantity_unit_of_measure | text | 数量计量单位 |
+| replace | text | 替代 |
+| revenue_installment_period | text | 收入分期付款周期 |
+| revenue_schedule_type | text | 收入计划类型 |
+| revenue_scheduling_enabled | boolean | 已启用收入计划 |
+| salvage | percent | 残值率 |
+| separate_accounting | boolean | 单独核算 |
+| specification | text | 规格型号 |
+| stock_keeping_unit | text | 最小存货单位 |
+| supplier | text | 供应商 |
+| unit | lookup | 计量单位 |
+| version | text | 版本 |
+| width | number | 宽 |
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate | true | true | true |
+| allowDelete | true | true | true |
+| allowEdit | true | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | true |
+| modifyCompanyRecords |  |  | false |
+| permission_set_id | user | admin | master_admin |
+| viewAllRecords | true | true | true |
+| viewCompanyRecords |  |  | false |
+
+
+## 仓库-warehouse
+
+```yaml
+name: warehouse
+enable_audit: true
+enable_files: true
+enable_search: true
+enable_enhanced_lookup: true
+icon: household
+label: 仓库
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| address | textarea | 仓库地址 |
+| code | text | 仓库号 |
+| dept | lookup | 相关部门 |
+| name | text | 仓库名称 |
+| remarks | textarea | 备注 |
+| warehouse_keeper | lookup | 仓库管理员 |
+| warehouse_status | select | 仓库状态 |
+
+| 权限属性 | user | admin | crm_manager |
+|----|----|----|----|
+| allowCreate | true | true | true |
+| allowDelete | true | true | true |
+| allowEdit | true | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | true |
+| modifyCompanyRecords |  |  | false |
+| permission_set_id | user | admin | crm_manager |
+| viewAllRecords | true | true | true |
+| viewCompanyRecords |  |  | false |
+
+## 库位-stock_location__c
+
+```yaml
+name: stock_location__c
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_enhanced_lookup: true
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_tree: true
+enable_workflow: false
+icon: carousel
+is_enable: true
+label: 库位
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|children | lookup | 子库位 |
+|name | text | 库位名称 |
+|parent | lookup | 上级库位 |
+|warehouse_id__c | lookup | 所属仓库 |
+
+user权限： user.permission.yml
+```yaml
+name: 库位.用户
+allowCreate: true
+allowCreateFiles: true
+allowDelete: true
+allowDeleteFiles: true
+allowEdit: true
+allowEditFiles: true
+allowRead: true
+allowReadFiles: true
+modifyAllRecords: false
+permission_set_id: user
+viewAllFiles: true
+viewAllRecords: false
+field_permissions:
+  - field: name
+    readable: true
+    editable: true
+  - field: owner
+    readable: false
+    editable: false
+  - field: created
+    readable: true
+    editable: false
+  - field: created_by
+    readable: true
+    editable: false
+  - field: modified
+    readable: true
+    editable: false
+  - field: modified_by
+    readable: true
+    editable: false
+  - field: locked
+    readable: false
+    editable: false
+  - field: company_id
+    readable: false
+    editable: false
+  - field: company_ids
+    readable: false
+    editable: false
+  - field: instance_state
+    readable: false
+    editable: false
+  - field: parent
+    readable: true
+    editable: true
+  - field: parent
+    readable: true
+    editable: true
+  - field: children
+    readable: false
+    editable: false
+  - field: children
+    readable: false
+    editable: false
+  - field: warehouse_id__c
+    readable: true
+    editable: true
+```
+admin权限：admin.permission.yml
+```yaml
+name: 库位.管理员
+allowCreate: true
+allowCreateFiles: true
+allowDelete: true
+allowDeleteFiles: true
+allowEdit: true
+allowEditFiles: true
+allowRead: true
+allowReadFiles: true
+modifyAllFiles: true
+modifyAllRecords: true
+permission_set_id: admin
+viewAllFiles: true
+viewAllRecords: true
+field_permissions:
+  - field: name
+    readable: true
+    editable: true
+  - field: owner
+    readable: false
+    editable: false
+  - field: created
+    readable: true
+    editable: false
+  - field: created_by
+    readable: true
+    editable: false
+  - field: modified
+    readable: true
+    editable: false
+  - field: modified_by
+    readable: true
+    editable: false
+  - field: locked
+    readable: false
+    editable: false
+  - field: company_id
+    readable: false
+    editable: false
+  - field: company_ids
+    readable: false
+    editable: false
+  - field: instance_state
+    readable: false
+    editable: false
+  - field: parent
+    readable: true
+    editable: true
+  - field: parent
+    readable: true
+    editable: true
+  - field: children
+    readable: false
+    editable: false
+  - field: children
+    readable: false
+    editable: false
+  - field: warehouse_id__c
+    readable: true
+    editable: true
+```
+
+## 银行类别-bank_type
+
+```yaml
+name: bank_type
+enable_api: true
+enable_share: true
+enable_enhanced_lookup: true
+icon: account
+label: 银行类别
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|code | text | 类别代码 |
+|description | textarea | 备注 |
+|name | text | 类别名称 |
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate| false | true | true |
+| allowDelete| false | true | true |
+| allowEdit| false | true | true |
+| allowRead| true | true | true |
+| modifyAllRecords| false | true | true |
+| modifyCompanyRecords| false |   | false |
+| permission_set_id| user | admin | master_admin |
+| viewAllRecords| true | true | true |
+| viewCompanyRecords| true  |   | false |
+
+## 银行-bank
+
+```yaml
+name: bank
+custom: true
+enable_api: true
+enable_share: true
+enable_enhanced_lookup: true
+icon: account
+label: 银行
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|code | text | 银行代码 |
+|combinenum | text | 联行号 |
+|description | textarea | 备注 |
+|enablestate | select | 启用状态 |
+|name | text | 银行名称 |
+|pk_banktype | master_detail | 银行类别 |
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate| false | true | true |
+| allowDelete| false | true | true |
+| allowEdit| false | true | true |
+| allowRead| true | true | true |
+| modifyAllRecords| false | true | true |
+| modifyCompanyRecords| false |   | false |
+| permission_set_id| user | admin | master_admin |
+| viewAllRecords| true | true | true |
+| viewCompanyRecords| true  |   | false |
+
+## 发票类型-invoice_type
+
+```yaml
+name: invoice_type
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+enable_enhanced_lookup: true
+icon: account
+is_enable: true
+label: 发票类型
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|label | text | 显示名称 |
+|name | text | 代码 |
+|owner | lookup | 所有者 |
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate| false | true | true |
+| allowDelete| false | true | true |
+| allowEdit| false | true | true |
+| allowRead| true | true | true |
+| modifyAllRecords| false | true | true |
+| modifyCompanyRecords|  |   | false |
+| permission_set_id| user | admin | master_admin |
+| viewAllRecords| true | true | true |
+| viewCompanyRecords|   |   | false |
+
+## 税率-tax_rates
+
+```yaml
+name: tax_rates
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: true
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+enable_enhanced_lookup: true
+icon: account
+is_enable: true
+label: 税率
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|name | text | 名称 |
+|owner | lookup | 所有者 |
+|tax_rate | percent | 税率 |
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate| false | true | true |
+| allowDelete| false | true | true |
+| allowEdit| false | true | true |
+| allowRead| true | true | true |
+| modifyAllRecords| false | true | true |
+| modifyCompanyRecords|  |   | false |
+| permission_set_id| user | admin | master_admin |
+| viewAllRecords| true | true | true |
+| viewCompanyRecords|   |   | false |
+
+## 货币-currency
+
+```yaml
+name: currency
+enable_audit: true
+enable_files: true
+enable_search: true
+enable_enhanced_lookup: true
+icon: currency
+label: 货币
+version: 2
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| exchange_rate | number | 汇率（人民币） |
+| name | text | 货币名称 |
+| shorthand | text | 简称 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+| 权限属性 | user | admin | master_admin |
+|----|----|----|----|
+| allowCreate| false | true | true |
+| allowDelete| false | true | true |
+| allowEdit| true | true | true |
+| allowRead| true | true | true |
+| modifyAllRecords| false | true | true |
+| modifyCompanyRecords|  |   | false |
+| permission_set_id| user | admin | master_admin |
+| viewAllRecords| true | true | true |
+| viewCompanyRecords|   |   | false |

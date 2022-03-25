@@ -1,0 +1,402 @@
+---
+title: 组织人员
+description: 公司、人员等标准对象。
+---
+
+- [公司](#公司-spaces)
+- [部门](#部门-organizations)
+- [分部](#分部-company)
+- [人员](#人员-space_users)
+- [用户](#用户-users)
+- [业务伙伴](#业务伙伴-accounts)
+- [联系人](#联系人-contacts)
+
+## 公司-spaces
+公司又称工作区。用户被划分为不同的工作区（企业），每个工作区可以配置独立的组织机构和权限控制。业务人员录入的每一条业务数据都会自动加入 space 属性，用于标记所属的工作区。
+
+```yaml
+name: spaces
+label: Company
+icon: account
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name	| text | 名称 |
+| avatar | avatar | Logo |
+| owner | lookup | 所有者 |
+| admins | lookup | 管理员 |
+| qywx_corp_id | text | 企业ID(CorpId) |
+| qywx_agent_id | text | AgentID |
+| qywx_secret | text | Secret |
+| qywx_contact_secret | text | 通讯录同步Secret |
+| qywx_token | text | Token |
+| qywx_aes_key | text | AesKey |
+| dingtalk_corp_id | text | 企业ID(CorpId) |
+| dingtalk_agent_id  | text | AgentID |
+| dingtalk_key | text | AppKey |
+| dingtalk_secret | text | AppSecret |
+| dingtalk_aes_key | text | AesKey |
+| dingtalk_token | text | Token |
+| account_logo | avatar | Logo |
+| background | avatar | 登录页背景图 |
+| enable_register | boolean | 启用自助注册 |
+| default_profile | lookup | 默认简档 |
+| default_organization | lookup | 默认部门 |
+| api_key | text | API Key |
+
+<!--
+| avatar_square | avatar | 正方形Logo |
+| avatar_dark | avatar | 深色Logo |
+
+| balance | number | 账户余额 |
+| services | object | Services |
+| billing.remaining_months | number | 剩余月数 |
+| company_id | lookup | 分部 |
+| company_ids | lookup | 所属分部 |
+| features | [text] |  |
+-->
+
+| 权限属性 | user | admin | guest |
+|----|----|----|----|
+| allowCreate | true | true | true |
+| allowDelete | false | false | false |
+| allowEdit | false | true | false |
+| allowRead | true | true | true |
+| modifyAllRecords | false | false | false |
+| viewAllRecords | true | true | true |
+
+## 部门-organizations
+部门又称组织机构。用于在工作区内，定义公司的组织机构。每个员工可以属于多个组织机构。
+
+```yaml
+name: organizations
+label: Department
+icon: team_member
+enable_search: true
+enable_tree: true
+enable_enhanced_lookup: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name	| text | 名称 |
+| fullname | text | 部门全称 |
+| parent | lookup | 上级部门 |
+| parents | lookup | 上级部门 |
+| children | lookup | 下级部门 |
+| sort_no | number | 排序号 |
+| users | lookup | 成员 |
+| company_id | lookup | 所属分部 |
+| company_ids | lookup | 所属分部 |
+| is_company | boolean | 分部级 |
+| hidden | boolean | 隐藏 |
+| qywx_id | text | 企业微信部门ID |
+| dingtalk_id | text | 钉钉部门ID |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+
+## 分部-company
+分部，可以理解为集团分公司，每个员工可以属于多个分部，一般用于实现分部级权限。
+
+```yaml
+name: company
+label: Division
+icon: account
+enable_api: true
+hidden: false
+enable_enhanced_lookup: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 分部名称 |
+| code | text | 分部代码 |
+| parent | lookup | 上级分部 |
+| organization | lookup | 关联部门 |
+| currency_type | text | 本位币 |
+| admins | lookup | 管理员 |
+| description | textarea | 备注 |
+| sort_no | number | 排序号 |
+| company_id | lookup | 主分部 |
+| company_ids | lookup | 所属分部 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+| modifyCompanyRecords | false |  |
+| viewCompanyRecords | true |  |
+
+## 人员-space_users
+用于标记用户属于哪个工作区，以及在对应工作区的参数设置。每个用户可以属于多个工作区。
+
+```yaml
+name: space_users
+label: User
+icon: user
+enable_search: true
+enable_inline_edit: false
+enable_enhanced_lookup: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| company_id | lookup | 主分部 |
+| name | text | 姓名 |
+| job_number | text | 工号 |
+| company_ids | lookup | 分部(多选) |
+| username | text | 用户名 |
+| email | text | 邮件 |
+| email_verified | boolean | 邮件已验证 |
+| mobile | text | 手机 |
+| mobile_verified | boolean | 手机已验证 |
+| organizations | lookup | 部门(多选) |
+| organizations_parents | lookup | 部门(含上级) |
+| organization | lookup | 主部门 |
+| position | text | 职务 |
+| manager | lookup | 上级主管 |
+| profile | lookup | 简档 |
+| contact_id | lookup | 联系人 |
+| is_supplier | boolean | 是供应商 |
+| is_customer | boolean | 是客户 |
+| work_phone | text | 工作电话 |
+| locale | select | 语言 |
+| sort_no | number | 排序号 |
+| email_notification | boolean | 接收邮件通知 |
+| sms_notification | boolean | 接收短信提醒 |
+| user_accepted | boolean | 有效 |
+| password_expired | boolean | 密码已过期 |
+| avatar | avatar | 头像 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+| qywx_id | text | 企业微信账号 |
+| dingtalk_id | text | 钉钉账号 |
+| qywx_space | text | 企业微信工作区 |
+| dingtalk_space | text | 钉钉工作区 |
+| invite_state | text | 邀请状态 |
+| password | text | Password |
+| user | master_detail | 用户 |
+| owner | lookup | 所有者 |
+| space | text | 所属工作区 |
+
+<!--
+| hr | object | HR |
+| last_logon | date | 最近登陆 |
+-->
+
+| 权限属性 | user | admin | organization_admin | customer  | supplier |
+|----|----|----|----|----|----|
+| allowCreate | false | true | true | false | false |
+| allowDelete | false | false | false | false | false |
+| allowEdit | true | true | true | true | true |
+| allowRead | true | true | true | true | true |
+| modifyAllRecords | false | true |  | false | false |
+| viewAllRecords |  | true | true | false | false |
+| modifyCompanyRecords |  |  | true |  |  |
+| viewCompanyRecords | true |  |  |  |  |
+
+<!-- 含有 uneditable_fields 权限属性 -->
+
+## 用户-users
+用于保存系统中的注册用户和用户的基本参数。
+
+```yaml
+name: users
+label: User
+icon: user
+enable_api: true
+hidden: false
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| avatar | avatar | 头像 |
+| name | text | 姓名 |
+| mobile | text | 手机 |
+| email | text | 邮件 |
+| username | text | 用户名 |
+| steedos_id | text | Steedos ID |
+| locale | select | 语言 |
+| utcOffset | number | 时区 |
+| email_notification | boolean | 接收邮件通知 |
+| primary_email_verified | boolean | 主邮箱已验证 |
+| last_logon | date | 最近登陆 |
+| is_cloudadmin | boolean | 是云管理员 |
+| is_deleted | boolean | 已删除 |
+| password_expired | boolean | Password expired |
+| company_id | lookup | 主分部 |
+| company_ids | lookup | 所属分部 |
+| owner | lookup | 所有者 |
+| space | text | 所属工作区 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+
+<!--
+login_failed_number | number |  |
+login_failed_lockout_time | datetime |  |
+lockout | boolean |  |
+-->
+
+| 权限属性 | user | admin | guest |
+|----|----|----|----|
+| allowCreate | false | true | false |
+| allowDelete | false | true | false |
+| allowEdit | false | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | true | true | true |
+
+## 业务伙伴-accounts
+用于保存业务伙伴相关信息。
+
+```yaml
+name: accounts
+label: 业务伙伴
+icon: account
+enable_files: true
+enable_search: true
+enable_events: true
+enable_tasks: true
+enable_api: true
+enable_share: true
+enable_audit: true
+enable_enhanced_lookup: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 业务伙伴名称 |
+| owner | lookup | 所有者 |
+| is_supplier | boolean | 供应商 |
+| is_customer | boolean | 客户 |
+| type | select | 类型 |
+| parent_id | lookup | 母公司 |
+| credit_code | text | 纳税人识别号（身份证/其他） |
+| website | url | 网站 |
+| phone | text | 电话 |
+| fax | text | 传真 |
+| description | textarea | 描述 |
+| industry | select | 行业 |
+| number_of_employees | number | 员工人数 |
+| state | select | 区域 |
+| billing_address | textarea | 开单地址 |
+| shipping_address | textarea | 发货地址 |
+| account_number | text | 业务伙伴编号 |
+| rating | select | 分级 |
+| invoice_address | text | 开票地址 |
+| invoice_phone | text | 开票电话 |
+| invoice_bank | text | 开户行 |
+| invoice_combinenum | text | 账号 |
+| account_source | text | 业务伙伴来源 |
+| site | text | 业务伙伴地点 |
+| annual_revenue | currency | 年收入 |
+| ownership | select | 所有权 |
+| account_division | text | 业务伙伴分部 |
+| partner_account | boolean | 合作伙伴 |
+| assistant | text | 助理 |
+| asst_phone | text | 助理电话 |
+| birthdate | date | 生日 |
+| department | text | 部门 |
+| email | email | 电子邮件 |
+| do_not_call | boolean | 请勿致电 |
+| has_opted_out_of_email | boolean | 退出邮件列表 |
+| fax_opt_out | boolean | 退出传真列表 |
+| home_phone | text | 家庭电话 |
+| lead_source | select | 潜在业务伙伴来源 |
+| mailing_city | text | 邮寄地址-城市 |
+| mailing_street | text | 邮寄地址-街道 |
+| mailing_zip | text | 邮寄地址-邮政编码 |
+| other_city | text | 其他地址-城市 |
+| other_street | text | 其他地址-街道 |
+| other_zip | text | 其他地址-邮政编码 |
+| mobile | text | 手机 |
+| salutation | select | 性别 |
+| other_phone | text | 其他电话 |
+
+| 权限属性 | user | admin | contract_manager |
+|----|----|----|----|
+| allowCreate | true | true | true |
+| allowDelete | true | true | true |
+| allowEdit | true | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | true |
+| viewAllRecords | true | true | true |
+
+## 联系人-contacts
+用于保存联系人相关信息。
+
+```yaml
+name: contacts
+label: 联系人
+icon: contact
+enable_files: true
+enable_search: true
+enable_events: true
+enable_tasks: true
+enable_api: true
+enable_audit: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 姓名 |
+| owner | lookup | 所有者 |
+| account | master_detail | 所属客户 |
+| reports_to_id | lookup | 直属上司 |
+| salutation | select | 性别 |
+| title | text | 职务 |
+| department | text | 部门 |
+| email | email | 邮件 |
+| fax | text | 传真 |
+| phone | text | 工作电话 |
+| mobile | text | 手机 |
+| home_phone | text | 家庭电话 |
+| birthdate | date | 生日 |
+| mailing_address | textarea | 邮寄地址 |
+| user | lookup | 外部用户 |
+| hoddy | text | 爱好 |
+| description | textarea | 备注 |
+| last_save_date | date | 上次保持联系保存日期 |
+| last_request_date | date | 上次保持联系请求日期 |
+| individual | text | 个人 |
+| other_city | text | 其他地址-城市 |
+| other_street | text | 其他地址-街道 |
+| other_zip | text | 其他地址-邮政编码 |
+| other_phone | text | 其他电话 |
+| assistant | text | 助理 |
+| asst_phone | text | 助理电话 |
+| do_not_call | boolean | 请勿致电 |
+| has_opted_out_of_email | boolean | 退出邮件列表 |
+| fax_opt_out | boolean | 退出传真列表 |
+| lead_source | select | 潜在客户来源 |
+
+| 权限属性 | user | contract_manager | admin | customer |
+|----|----|----|----|----|
+| allowCreate | true | true | true | false |
+| allowDelete | true | true | true | false |
+| allowEdit | true | true | true | false |
+| allowRead | true | true | true | true |
+| modifyAllRecords | false | true | true | false |
+| viewAllRecords | true | true | true | false |

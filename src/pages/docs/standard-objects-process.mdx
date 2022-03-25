@@ -1,0 +1,213 @@
+---
+title: 批准
+description: 批准相关标准对象。
+---
+
+- [批准过程](#批准过程-process_definition)
+- [批准步骤](#批准步骤-process_node)
+- [process_instance](#process_instance)
+- [process_instance_node](#process_instance_node)
+- [批准历史](#批准历史-process_instance_history)
+
+<!--
+- 批准流程 process_flows：自动化流程, 还未实现
+- process_flows_criteria：自动化流程, 还未实现
+- process_flows_criteria_action：自动化流程, 还未实现
+-->
+
+## 批准过程-process_definition
+用于保存管理员在设置应用中配置的批准过程信息。
+
+```yaml
+name: process_definition
+label: Approval Processes
+hidden: true
+icon: approval
+enable_inline_edit: false
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | API 名称 |
+| label | text | 显示名称 |
+| object_name | lookup | 对象 |
+| description | textarea | 描述 |
+| order | number | 序号 |
+| active | boolean | 启用 |
+| entry_criteria | textarea | 指定条目条件 |
+| record_editability | select | 记录可编辑性属性 |
+| allow_recall | boolean | 允许提交人取消申请 |
+| initial_submission_record_lock | select | 锁定记录 |
+| initial_submission_updates_field_actions | lookup | 字段更新 |
+| initial_submission_workflow_notifications_actions | lookup | 工作流通知 |
+| final_approval_record_lock | select | 锁定记录 |
+| final_approval_updates_field_actions | lookup | 字段更新 |
+| final_approval_workflow_notifications_actions | lookup | 工作流通知 |
+| final_rejection_record_lock | select | 锁定记录 |
+| final_rejection_updates_field_actions | lookup | 字段更新 |
+| final_rejection_workflow_notifications_actions | lookup | 工作流通知 |
+| recall_record_lock | select | 锁定记录 |
+| recall_updates_field_actions | lookup | 字段更新 |
+| recall_workflow_notifications_actions | lookup | 工作流通知 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+## 批准步骤-process_node
+用于保存管理员在设置应用中为每个批准过程配置的批准步骤信息。
+
+```yaml
+name: process_node
+label: Approval Steps
+hidden: true
+enable_inline_edit: false
+icon: steps
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | API 名称 |
+| label | text | 显示名称 |
+| order | number | 序号 |
+| description | textarea | 描述 |
+| process_definition | master_detail | 批准过程 |
+| filtrad | boolean | 所有记录都应进入此步骤 |
+| entry_criteria | textarea | 如果满足以下条件，则进入此步骤 |
+| if_criteria_not_met | select | 如果不满足条件，则 |
+| approver | select | 选择批准人 |
+| assigned_approver_users | lookup | 指定用户处理 |
+| assigned_approver_roles | lookup | 指定审批角色 |
+| assigned_approver_flow_roles | lookup | 指定审批岗位 |
+| assigned_approver_user_field | lookup | 指定相关用户字段 |
+| when_multiple_approvers | select | 当选择多个批准人时 |
+| reject_behavior | select | 拒绝行为 |
+| approval_updates_field_actions | lookup | 字段更新 |
+| approval_workflow_notifications_actions | lookup | 工作流通知 |
+| rejection_updates_field_actions | lookup | 字段更新 |
+| rejection_workflow_notifications_actions | lookup | 工作流通知 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+<!--
+## 批准流程 process_flows
+自动化流程, 还未实现
+
+## process_flows_criteria
+自动化流程, 还未实现
+
+## process_flows_criteria_action
+自动化流程, 还未实现
+-->
+
+## process_instance
+批准过程实例
+
+```yaml
+name: process_instance
+label: process_instance
+hidden: true
+icon: record
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | name |
+| process_definition | master_detail | process_definition |
+| target_object | lookup | target_object |
+| status | select | status |
+| completed_date | datetime | completed_date |
+| last_actor | lookup | last_actor |
+| submitted_by | lookup | submitted_by |
+| elapsed_time_in_days | number | elapsed_time_in_days |
+| elapsed_time_in_hours | number | elapsed_time_in_hours |
+| elapsed_time_in_minutes | number | elapsed_time_in_minutes |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | false |
+| allowDelete | false | false |
+| allowEdit | false | false |
+| allowRead | true | true |
+| modifyAllRecords | false | false |
+| viewAllRecords | true | true |
+
+## process_instance_node
+批准过程步骤实例
+
+```yaml
+name: process_instance_node
+label: process_instance_node
+hidden: true
+icon: record
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| process_node_name | text | process_node_name |
+| process_instance | lookup | process_instance |
+| process_node | lookup | process_node |
+| node_status | select | node_status |
+| completed_date | datetime | completed_date |
+| last_actorId | lookup | last_actorId |
+| elapsed_time_in_days | number | elapsed_time_in_days |
+| elapsed_time_in_hours | number | elapsed_time_in_hours |
+| elapsed_time_in_minutes | number | elapsed_time_in_minutes |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | false |
+| allowDelete | false | false |
+| allowEdit | false | false |
+| allowRead | true | true |
+| modifyAllRecords | false | false |
+| viewAllRecords | true | true |
+
+## 批准历史-process_instance_history
+用于记录批准过程流转过程中在各个步骤执行时相关人员填写的审批信息。
+
+```yaml
+name: process_instance_history
+label: Approval History
+hidden: true
+icon: approval
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 步骤名称 | 
+| created_by | lookup | 提交人| 
+| process_instance | lookup |  process_instance | 
+| process_instance_node | lookup | process_instance_node  | 
+| step_status | select | 状态| 
+| original_actor | lookup | 被分配人| 
+| actor | lookup | 实际审批人| 
+| target_object | lookup | 审批细节| 
+| comments | textarea | 备注| 
+| step_node | lookup |  step_node | 
+| elapsed_time_in_days | number |  elapsed_time_in_days | 
+| elapsed_time_in_hours | number |  elapsed_time_in_hours | 
+| elapsed_time_in_minutes | number |  elapsed_time_in_minutes | 
+| modified | datetime | 修改时间 | 
+| modified_by | lookup | 修改人| 
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | false |
+| allowDelete | false | false |
+| allowEdit | false | false |
+| allowRead | true | true |
+| modifyAllRecords | false | false |
+| viewAllRecords | true | true |

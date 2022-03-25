@@ -1,0 +1,79 @@
+---
+title: 数据导入
+description: 数据导入相关标准对象。
+---
+
+- [数据导入](#数据导入-queue_import)
+- [数据导入历史](#数据导入历史-queue_import_history)
+
+
+## 数据导入-queue_import
+用于导入Excel文件中的数据到华炎魔方。
+
+```yaml
+name: queue_import
+label: Data Import Queue
+icon: product_consumed
+enable_files: false
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| description | text | 导入描述 |
+| object_name | lookup | 导入对象 |
+| encoding | select | 字符代码 |
+| value_separator | select | 值分隔符 |
+| operation | select | 导入操作 |
+| fire_workflows | boolean | 导入后触发工作流规则 |
+| field_mappings | grid | 字段映射 |
+| field_mappings.$ | object | Column |
+| field_mappings.$.header | text | 表头 |
+| field_mappings.$.api_name | lookup | 导入对象的字段 |
+| field_mappings.$.matched_by | text | 关联对象的key |
+| field_mappings.$.save_key_while_fail | boolean | 关联失败时保存key |
+| external_id_name | lookup | 表示数据唯一性字段(重复执行导入时根据此字段更新记录) |
+| template_url | html | 导入模板 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+
+## 数据导入历史-queue_import_history
+用于查看数据导入的历史记录。
+
+```yaml
+name: queue_import_history
+label: Data Import History
+icon: product_consumed
+enable_files: false
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| object_name | lookup | 导入对象 |
+| queue_import | lookup | 数据导入 |
+| success_count | number | 成功个数 |
+| failure_count | number | 失败个数 |
+| total_count | number | 导入总个数 |
+| start_time | datetime | 开始时间 |
+| end_time | datetime | 结束时间 |
+| state | select | 状态 |
+| error | html | 错误信息 |
+| file | file | Excel文件 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | false | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |

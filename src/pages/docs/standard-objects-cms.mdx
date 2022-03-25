@@ -1,0 +1,105 @@
+---
+title: 知识
+description: 知识相关标准对象。
+---
+
+- [栏目](#栏目-cms_categories)
+- [知识](#知识-cms_posts)
+- [站点](#站点-cms_sites)
+
+## 栏目-cms_categories
+用于保存知识文章的分类。
+
+```yaml
+name: cms_categories
+icon: folder
+label: Category
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| description | textarea | 描述 |
+| site | lookup | 站点 |
+| parent | lookup | 上级栏目 |
+| parents | lookup | 上级栏目（多层） |
+| order | number | 排序号 |
+| featured | boolean | featured |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+## 知识-cms_posts
+用于保存知识文章。
+
+```yaml
+name: cms_posts
+icon: knowledge
+label: Knowledge
+enable_files: true
+enable_chatter: true
+version: 2
+sidebar:
+  template_name: creator_grid_sidebar_sites
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 标题 |
+| summary | textarea | 摘要 |
+| body | markdown | 正文 |
+| htmlBody | html | 正文 |
+| site | lookup | 站点 |
+| category | lookup | 栏目 |
+| members | object | 授权查看 |
+| members.users | lookup | 人员 |
+| members.organizations | lookup | 部门 |
+| viewCount | number | 阅读次数 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+## 站点-cms_sites
+用于保存知识应用中的站点，每篇文章都必须属于某个站点。
+
+```yaml
+name: cms_sites
+icon: app
+label: Site
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| type | select | 类型 |
+| name | text | 名称 |
+| visibility | select | 可见性 |
+| enable_post_permissions | boolean | 启用文章级权限 |
+| order | number | 排序号 |
+| admins | lookup | 站点成员（私有） |
+| description | textarea | 描述 |
+| cover | avatar | 封面图片 |
+| avatar | avatar | Logo图片 |
+| layout | textarea | 网站模版 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |

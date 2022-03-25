@@ -1,0 +1,425 @@
+---
+title: 平台内核对象
+description: 平台内核相关标准对象。
+---
+
+- [登录会话](#登录会话-sessions)
+- [自定义主页](#自定义主页-dashboard)
+- [审计日志](#审计日志-audit_records)
+- [自动编号](#自动编号-autonumber)
+- [WebHooks](#WebHooks:object_webhooks)
+- [webhooks队列](#webhooks队列-object_webhooks_queue)
+- [API Key](#API&ensp;Key:api_keys)
+- [设置](#设置-settings)
+- [对象触发器](#对象触发器-object_triggers)
+- [_object_reload_logs](#_object_reload_logs)
+- [外部数据源](#外部数据源-datasources)
+- [邀请用户](#邀请用户-space_users_invite)
+- [外部应用](#外部应用-connected_apps)
+
+## 登录会话-sessions
+用于保存登录的用户、ip地址、登录时间等信息。
+
+```yaml
+name: sessions
+label: Session
+icon: queue
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| userId | lookup | 用户 |
+| token | text | Token |
+| userAgent | text | 用户代理 |
+| ip | text | IP地址 |
+| valid | boolean | 有效 |
+| is_phone | boolean | 手机 |
+| is_tablet | boolean | 平板电脑 |
+| client_id | text | Client ID |
+| connected_app_id | lookup | 连接的应用程序 |
+| modified | datetime | 最近登录时间 |
+| created | datetime | 首次登录时间 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate| false | false |
+| allowDelete| false | false |
+| allowEdit| false | false |
+| allowRead| true | true |
+| modifyAllRecords| false | false |
+| viewAllRecords| true | true |
+| modifyCompanyRecords| false |  |
+| viewCompanyRecords| true  |  |
+
+## 自定义主页-dashboard
+用于定义应用的主页。
+
+```yaml
+name: dashboard
+label: Dashboard
+icon: dashboard_ea
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| apps | lookup | 关联应用 |
+| widgets | grid | 组件 |
+| widgets.$.label | text | 标题 |
+| widgets.$.type | lookup | 类型 |
+| widgets.$.position | lookup | 位置 |
+| widgets.$.html | textarea | HTML |
+| description | textarea | 描述 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | false | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+## 审计日志-audit_records
+跟踪字段的修改历史，此功能会消耗更多服务器资源，只有必要的对象才应该配置此属性。
+
+```yaml
+name: audit_records
+label: Audit Record
+icon: record
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| related_to | lookup | 相关项 |
+| created | datetime | 时间 |
+| field_name | text | 字段 |
+| created_by | lookup | 用户 |
+| previous_value | text | 原始值 |
+| new_value | text | 新值 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | false |
+| allowDelete | false | false |
+| allowEdit | false | false |
+| allowRead | true | true |
+| modifyAllRecords | false | false |
+| viewAllRecords | false | true |
+
+## 自动编号-autonumber
+用于查看含有自动编号字段的对象和修改自动编号字段的当前编号值。
+
+```yaml
+name: autonumber
+label: Auto Number
+icon: formula
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| object_name | text | 对象名 |
+| field_name | text | 自动编号字段 |
+| current_no | number | 当前编号值 |
+| date_from | datetime | 日期范围开始日期 |
+| date_to | datetime | 日期范围截止日期 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+
+## WebHooks:object_webhooks
+用于保存待执行的Webhooks队列。
+
+```yaml
+name: object_webhooks
+label: Object Webhook
+icon: output
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| object_name | lookup | 对象 |
+| events | select | 事件 |
+| fields | lookup | 推送字段 |
+| payload_url | text | URL |
+| content_type | text | 请求数据格式 |
+| active | boolean | 激活 |
+| space | text | 所属工作区 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+## webhooks队列-object_webhooks_queue
+用于保存待执行的Webhooks队列。
+
+```yaml
+name: object_webhooks_queue
+label: Object Webhooks Queue
+icon: sms
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| webhook | object |  webhook  |
+| webhook.data | object |  data  |
+| webhook.payload_url | text |  payload_url  |
+| webhook.content_type | text |  content_type  |
+| webhook.action | text |  action  |
+| webhook.actionUserInfo | object |  actionUserInfo  |
+| webhook.objectName | text | Object Name|
+| webhook.objectDisplayName | text | Object Display Name|
+| webhook.nameFieldKey | text | Name Field Key|
+| webhook.redirectUrl | text | Redirect Url|
+| sent | boolean | 是否发送|
+| sending | number |  发送数量  |
+| createdAt | datetime | 发送时间|
+| createdBy | lookup |  创建人  |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | false | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+## API&ensp;Key:api_keys
+用于保存用户创建的API Key记录，启用状态的API Key通常被用于各种接口中身份验证。在激活华炎魔方私有部署项目时也是使用API Key来作身份验证的。
+
+```yaml
+name: api_keys
+custom: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: false
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+icon: omni_supervisor
+is_enable: true
+label: API Key
+
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| active | boolean | 启用 |
+| api_key | text | API Key |
+| last_use_time | datetime | 最后使用时间 |
+| name | text | 名称 |
+| owner | lookup | 所有者 |
+
+
+| 权限属性 | user | admin | supplier | customer |
+|----|----|----|----|----|
+| allowCreate| true | true | true | true |
+| allowDelete| true | true | true | true |
+| allowEdit| true | true | true | true |
+| allowRead| true | true | true | true |
+| modifyAllRecords| false | true | false | false |
+| modifyCompanyRecords| false |  | false | false |
+| permission_set_id| user | admin| supplier | customer |
+| viewAllRecords| false | true | false | false |
+| viewCompanyRecords| false |  | false | false |
+
+<!-- TODO: 含有 uneditable_fields 权限属性 -->
+
+## 设置-settings
+
+```yaml
+name: settings
+label: Setting
+icon: custom
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|type|text|类型|
+|object_name|text|对象名|
+|record_id|text|记录ID|
+|settings|object|设置|
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+## 对象触发器-object_triggers
+
+```yaml
+name: object_triggers
+icon: apex
+label: Object Triggers
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| object | master_detail | 所属对象 |
+| when | lookup | 运行时 |
+| is_enable | boolean | 已启用 |
+| todo | textarea | 执行的脚本 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | false | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+
+## _object_reload_logs
+
+<!-- TODO：需要添加描述 -->
+
+```yaml
+name: _object_reload_logs
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|object_name|text|object_name|
+|change_date|object|change_date|
+|change_time|datetime|change_time|
+
+<!--  TODO: _object_reload_logs 无权限 -->
+
+## 外部数据源-datasources
+
+```yaml
+name: datasources
+label: DataSource
+icon: entity
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| driver | select | 数据库类型 |
+| label | text | 显示名称 |
+| name | text | API 名称 |
+| url | text | 连接数据库的URL |
+| host | text | 服务器地址 |
+| port | number | 端口 |
+| database | text | 数据库 |
+| username | text | 用户名 |
+| password | password | 密码 |
+| mssql_options | textarea | 连接选项 |
+| connectString | textarea | connectString |
+| timezone | text | 时区 |
+| options | object | Options |
+| enable_space | boolean | 启用工作区 |
+| locale | text | 语言 |
+| logging | boolean | Debug |
+| is_enable | boolean | 启用 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | false | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+
+## 邀请用户-space_users_invite
+记录邀请信息
+
+```yaml
+name: space_users_invite
+icon: link
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+|valid|boolean|valid|
+|invited_users|lookup|Invited users|
+
+<!--  TODO: space_users_invite 无权限 -->
+
+
+## 外部应用-connected_apps
+
+```yaml
+name: connected_apps
+label: External Application
+icon: entity
+hidden: true
+enable_api: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| code | text | API 名称 |
+| active | boolean | 激活 |
+| app_logo | avatar | 图标 |
+| description | textarea | 描述 |
+| app_website | url | 应用官网 |
+| start_url | text | 开始 URL |
+| mobile_start_url | text | 移动开始 URL |
+| client_id | text | Client ID |
+| client_secret | text | Client Secret |
+| oauth2_enabled | boolean | 启用 OAuth2 |
+| oauth2_callback_url | text | 回调 URL |
+| oauth2_scopes | select | 范围 |
+| oauth2_logout_enabled | boolean | 启用单点注销 |
+| oauth2_logout_url | url | 单点注销 URL |
+| saml_enabled | boolean | 启用 SAML |
+| saml_entity_id | text | Entity ID |
+| saml_issuer | text | Issuer |
+| saml_idp_cert | text | IDP Cert |
+| saml_acs_url | url | ACS URL |
+| saml_name_id_format | text | Name |
+| saml_logout_enabled | boolean | 启用单点注销 |
+| saml_logout_url | url | 单点注销 URL |
+| saml_logout_block | select | 单点注销绑定 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate| false | true |
+| allowDelete| false | true |
+| allowEdit| false | true |
+| allowRead| true | true |
+| modifyAllRecords| false | true |
+| viewAllRecords| true | true |
+| modifyCompanyRecords| false |  |
+| viewCompanyRecords| true |  |

@@ -1,0 +1,219 @@
+---
+title: 软件包
+description: 软件包相关标准对象。
+---
+
+- [软件包](#软件包-package)
+- [已安装的软件包](#已安装的软件包-imported_package)
+- [软件包组件](#软件包组件-package_type_members)
+- [软件包版本](#软件包版本-package_version)
+
+## 软件包-package
+用于保存软件包信息，软件包中包含元数据及相关源代码。
+
+```yaml
+name: package
+custom: true
+hidden: true
+enable_api: true
+enable_audit: true
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: true
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+icon: folder
+is_enable: true
+label: 软件包
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| description | textarea | 描述 |
+| label | text | 软件包名称 |
+| name | text | API 名称 |
+| namespace | text | 命名空间 |
+| owner | lookup | 所有者 |
+| package_type | select | 软件包类型 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+## 已安装的软件包-imported_package
+用于保存当前华炎魔方项目已经安装的软件包信息。
+
+```yaml
+name: imported_package
+custom: true
+hidden: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: false
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+icon: case
+is_enable: true
+label: 已安装的软件包
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| apps | number | 应用 |
+| components.$.component_name | text | 名称 |
+| components.$.component_parent_object | text | 父对象 |
+| components.$.component_type | select | 类型 |
+| components | grid | 组件 |
+| description | textarea | 描述 |
+| first_installed_version | text | 首个安装版本编号 |
+| installed | date | 安装日期 |
+| installed_by | lookup | 安装者 |
+| name | text | 软件包名称 |
+| namespace | text | 命名空间前缀 |
+| objects | number | 对象 |
+| owner | lookup | 所有者 |
+| package_name | text | 软件包API 名称 |
+| package_type | text | 软件包类型 |
+| publisher | text | 发布者 |
+| version | text | 版本号 |
+| version_name | text | 版本名称 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate| false | false |
+| allowDelete| false | false |
+| allowEdit| false | false |
+| allowRead| false | true |
+| modifyAllRecords| false | false |
+| modifyCompanyRecords| false | false |
+| viewAllRecords| false | true |
+| viewCompanyRecords| false  | false |
+
+## 软件包组件-package_type_members
+用于保存每个软件包中包含哪些元数据。
+
+```yaml
+name: package_type_members
+custom: true
+hidden: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: false
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+paging:
+  enabled: false
+icon: entity
+is_enable: true
+label: 软件包组件
+form:
+  beforeEdit: !!js/function |
+    function(){
+      Meteor.setTimeout(function(){$(".creator-modal .slds-modal__content form").children(':first').children(':first').hide();}, 300);
+      $(".creator-modal .slds-modal__content").css('min-height', '460px');
+      return false;
+    }
+
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| _relatedFrom | text | _relatedFrom |
+| member | lookup | 组件 |
+| name | text | 名称 |
+| owner | lookup | 所有者 |
+| package | master_detail | 软件包名称 |
+| parent | lookup | 父对象 |
+| type | select | 类型 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | false | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+
+## 软件包版本-package_version
+用于保存软件包的每个版本信息，华炎魔方项目中安装的软件包实际上安装的是这里保存的某个版本中的包。
+
+```yaml
+name: package_version
+custom: true
+hidden: true
+enable_api: true
+enable_audit: false
+enable_chatter: false
+enable_events: false
+enable_files: false
+enable_inline_edit: false
+enable_instances: false
+enable_notes: false
+enable_search: false
+enable_share: false
+enable_tasks: false
+enable_workflow: false
+icon: case
+is_enable: true
+label: 软件包版本
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| created_by | lookup | 上载人 |
+| description | textarea | 描述 |
+| fields.$.component_name | text | 名称 |
+| fields.$.component_parent_object | text | 父对象 |
+| fields.$.component_type | select | 类型 |
+| fields | grid | 字段 |
+| installation_id | text | 软件包ID |
+| name | text | 版本名称 |
+| objects.$.component_name | text | 名称 |
+| objects.$.component_parent_object | text | 父对象 |
+| objects.$.component_type | select | 类型 |
+| objects | grid | 对象 |
+| owner | lookup | 所有者 |
+| package | master_detail | 软件包名称 |
+| password_protected | boolean | 密码保护 |
+| resources.$.component_name | text | 名称 |
+| resources.$.component_parent_object | text | 父对象 |
+| resources.$.component_type | select | 类型 |
+| resources | grid | 资源 |
+| status | select | 状态 |
+| version | text | 版本号 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | false |
+| allowDelete | false | false |
+| allowEdit | false | false |
+| allowRead | false | true |
+| modifyAllRecords | false | false |
+| permission_set_id | user | admin |
+| viewAllRecords | false | true |

@@ -1,0 +1,567 @@
+---
+title: 审批
+description: 审批相关的标准对象。
+---
+
+- [角色](#角色-roles)
+- [表单](#表单-forms)
+- [流程](#流程-flows)
+- [流程分类](#流程分类-categories)
+- [岗位](#岗位-flow_roles)
+- [岗位成员](#岗位成员-flow_positions)
+- [申请单](#申请单-instances)
+- [对象流程映射](#对象流程映射-object_workflows)
+- [历史步骤](#历史步骤-approvals)
+- [流程编号](#流程编号-instance_number_rules)
+- [效率统计](#效率统计-instances_statistic)
+- [流程委托](#流程委托-process_delegation_rules)
+- [图片签名](#图片签名-space_user_signs)
+- [流程触发器](#流程触发器-webhooks)
+
+
+## 角色-roles
+用于保存管理员在设置应用中为审批王应用配置的角色配置
+
+```yaml
+name: roles
+label: Role
+icon: groups
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 角色名称 |
+| api_name | text | API Name |
+| parent | lookup | 上级角色 |
+| users | lookup | 成员 |
+| description | textarea | 描述 |
+
+| 权限属性 | user | admin |
+|----|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+## 表单-forms
+用于保存管理员用审批王应用的表单设计器设计的表单。
+
+```yaml
+name: forms
+icon: timesheet
+label: Form
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 表单 |
+| state | select | 表单状态 |
+| description | textarea | 表单描述 |
+| category | lookup | 表单分类 |
+| is_valid | boolean | 是否有效 |
+| instance_style | select | 样式 |
+| approve_on_create | boolean | 是否同意审批 |
+| approve_on_modify | boolean | 是否修改审批 |
+| approve_on_delete | boolean | 是否删除审批 |
+| enable_workflow | boolean | 是否启用工作流 |
+| enable_view_others | boolean | 是否查看其它表单 |
+| current | object | 当前版本 |
+| current.form_script | code | Form Script |
+| current.name_forumla | code | Name Forumla |
+| current.fields | grid | Fields |
+| current.fields.$.code | text | Code |
+| current.fields.$.name | text | Name |
+| current.fields.$.type | select | Type |
+| current.fields.$.is_required | boolean | Required |
+| current.fields.$.is_wide | boolean | Wide |
+| current.fields.$.is_list_display | boolean | Display in List |
+| current.fields.$.is_searchable | boolean | Searchable |
+| current.fields.$.is_multiselect | boolean | Multiselect |
+
+<!--
+| historys |  | 历史版本 |
+-->
+
+| 权限属性 | user | admin | workflow_admin |
+|----|----|----|----|
+| allowCreate | false | false | false |
+| allowDelete | false | false | false |
+| allowEdit | false | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | false | true | false |
+| modifyCompanyRecords |  |   | true|
+| viewCompanyRecords | | | true |
+
+## 流程-flows
+用于保存管理员用审批王应用的流程设计器设计的流程。
+
+```yaml
+name: flows
+icon: environment_hub
+label: Workflow
+hidden: true
+enable_files: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| company_id | lookup | 分部 |
+| name | text | 流程名 |
+| api_name | text | Api Name |
+| form | lookup | 流程表单 |
+| category | lookup | 分类 |
+| state | select | 流程状态 |
+| is_valid | boolean | 流程有效 |
+| current_no | number | 当前序号 |
+| description | textarea | 备注 |
+| help_text | textarea | 帮助文本 |
+| created_by | lookup | 创建人 |
+| modified_by | lookup | 修改人 |
+| current | object | 当前版本 |
+| current.modified | datetime | 修改时间 |
+| current.modified_by | lookup | 修改人 |
+| current.created | datetime | 创建时间 |
+| current.created_by | lookup | 创建人 |
+| current.steps | grid | 步骤 |
+| current.steps.$._id | text | _id |
+| current.steps.$.name | text | 名称 |
+| current.steps.$.disableCC | boolean | 禁止传阅 |
+| current.steps.$.allowDistribute | boolean | 允许分发 |
+| current.steps.$.can_edit_main_attach | boolean | 允许修改正文 |
+| current.steps.$.can_edit_normal_attach | boolean | 允许修改附件 |
+| current.steps.$.distribute_optional_flows | lookup | 此步骤分发时可选的流程范围 |
+| current.steps.$.cc_must_finished | boolean | 必须等待传阅完成 |
+| current.steps.$.cc_alert | boolean | 弹出传阅提醒 |
+| current.steps.$.allowBatch | boolean | 批量审批 |
+| current.steps.$.oneClickApproval | boolean | 一键核准 |
+| current.steps.$.oneClickRejection | boolean | 一键驳回 |
+| perms | object | 权限 |
+| perms.users_can_add | lookup | 授权用户: 新建申请单 |
+| perms.orgs_can_add | lookup | 授权部门: 新建申请单 |
+| perms.users_can_monitor | lookup | 授权用户: 查看所有申请单 |
+| perms.orgs_can_monitor | lookup | 授权部门: 查看所有申请单 |
+| perms.users_can_admin | lookup | 授权用户: 查看所有申请单，并能执行重定位、转签核、删除操作 |
+| perms.orgs_can_admin | lookup | 授权部门: 查看所有申请单，并能执行重定位、转签核、删除操作 |
+| app | text | 所属应用 |
+| historys | grid | 历史版本 |
+| object_name | lookup | 绑定对象 |
+| instance_fields | grid | 审批单字段 |
+| instance_fields.$ | object | 字段 |
+| instance_fields.$.name | lookup | 字段 |
+| instance_fields.$.required | boolean | 必填 |
+| instance_table_fields | grid | 审批单子表 |
+| instance_table_fields.$.detail_field_fullname | lookup | 子表名称 |
+| instance_table_fields.$.label | text | 显示标题 |
+| instance_table_fields.$.field_names | lookup | 显示的字段 |
+| instance_template | code | 表单模板 |
+| print_template | code | 打印模板 |
+| field_map | textarea | 映射关系 |
+| events | textarea | 相关事件 |
+| distribute_optional_users | object | 流程被分发时分发对象选择范围 |
+| distribute_to_self | boolean | 分发给自己 |
+| name_formula | text | 标题公式 |
+| code_formula | text | 系统公式 |
+| auto_remind | boolean | 自动催办 |
+| sort_no | number | 排序号 |
+| timeout_auto_submit | boolean | 超时自动流转 |
+| allow_select_step | boolean | 申请人指定步骤、审批人 |
+
+| 权限属性 | user | admin | workflow_admin |
+|----|----|----|----|
+| allowCreate | false | true | true |
+| allowDelete | false | false | false |
+| allowEdit | false | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | false | true | false |
+| modifyCompanyRecords |  |  | true|
+| viewCompanyRecords | | | true |
+
+## 流程分类-categories
+用于保存管理员在设置应用中为审批王应用配置的流程分类。
+
+```yaml
+name: categories
+icon: hierarchy
+label: Workflow Category
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| sort_no | number | 排序号 |
+| app | lookup | 所属应用 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+
+## 岗位-flow_roles
+用于保存管理员在设置应用中为审批王应用配置的岗位。
+
+```yaml
+name: flow_roles
+icon: queue
+label: Workflow Role
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| api_name | text | API Name |
+
+| 权限属性 | user | admin | workflow_admin |
+|----|----|----|----|
+| allowCreate | false | true | true |
+| allowDelete | false | true | true |
+| allowEdit | false | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | false | true | false |
+| modifyCompanyRecords |  |  | true|
+| viewCompanyRecords | | | true |
+
+## 岗位成员-flow_positions
+用于保存管理员在设置应用中为审批王应用配置的岗位成员。
+
+```yaml
+name: flow_positions
+icon: person_account
+label: Workflow Position
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| role | master_detail | 岗位 |
+| users | master_detail | 成员 |
+| org | lookup | 管辖范围 |
+
+| 权限属性 | user | admin | workflow_admin |
+|----|----|----|----|
+| allowCreate | false | true | true |
+| allowDelete | false | true | true |
+| allowEdit | false | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | false | true | false |
+| modifyCompanyRecords |  |  | true|
+| viewCompanyRecords | | | true |
+
+
+## 申请单-instances
+用于保存业务人员填写的申请单和签核历程。
+
+```yaml
+name: instances
+icon: task
+label: Request
+enable_search: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text  | 文件标题 |
+| flow | lookup  | 流程 |
+| flow_version | text  | 流程版本号 |
+| form | lookup  | 表单 |
+| form_version | text  | 表单版本号 |
+| submitter | master_detail  | 提交者 |
+| submitter_name | text  | 提交者 |
+| submit_date | datetime  | 提交日期 |
+| applicant | lookup  | 申请人 |
+| applicant_name | text  | 申请人 |
+| applicant_organization | lookup  | 申请人部门 |
+| applicant_organization_name | text  | 申请人部门名称 |
+| applicant_organization_fullname | text  | 申请人部门全称 |
+| code | text  | 公式 |
+| inbox_users | lookup  | 待办处理人 |
+| outbox_users | lookup  | 已办处理人 |
+| traces | [Object]  | 步骤审批 |
+| attachments | [Object]  | 附件 |
+| flow_name | text  | 流程名 |
+| category_name | text  | 流程分类 |
+| category | lookup  | 流程分类 |
+| state | select  | 审批单状态 |
+| is_recorded | boolean  | 已归档 |
+| is_archived | boolean  | 已归档(旧) |
+| is_deleted | boolean  | 已删除 |
+| is_recorded_creator | boolean  | 已归档 |
+| related_instances | lookup  | 相关审批单 |
+| record_ids | grid  | 记录ID |
+| record_ids.$.o | text  |  record_ids.$.o |
+| record_ids.$.ids | [text]  | record_ids.$.ids |
+| current_step_auto_submit | boolean  | 当前步骤超时自动流转 |
+| applicant_company | lookup  | 申请人所属分部 |
+
+<!--
+| values |   | 审批单字段 |
+-->
+
+| 权限属性 | user | admin | workflow_admin |
+|----|----|----|----|
+| allowCreate | false | false | false |
+| allowDelete | false | false | false |
+| allowEdit | false | false | false |
+| allowRead | true | true | true |
+| modifyAllRecords | false | false | false |
+| viewAllRecords | true | true | false |
+| modifyCompanyRecords |  |  | false|
+| viewCompanyRecords | | | true |
+
+<!-- 含有 disabled_list_views 权限属性 -->
+
+## 对象流程映射-object_workflows
+用于保存管理员在设置应用中为审批王应用配置的对象流程映射关系。
+
+```yaml
+name: object_workflows
+label: Object Synchronization Rule
+icon: link
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| object_name | master_detail | 对象 |
+| flow_id | lookup | 流程 |
+| field_map | grid | 字段映射关系（对象至表单） |
+| field_map.$.workflow_field | lookup | 表单字段 |
+| field_map.$.object_field | lookup | 对象字段 |
+| field_map_back | grid | 字段映射关系（表单至对象） |
+| field_map_back.$.object_field | lookup | 对象字段 |
+| field_map_back.$.workflow_field | lookup | 表单字段 |
+| field_map_script | textarea | 对象至表单 |
+| field_map_back_script | textarea | 表单至对象 |
+| sync_attachment | select | 附件同步方式 |
+| sync_type | select | 表单至对象同步模式 |
+| sync_direction | select | 同步方向 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+
+## 历史步骤-approvals
+用于记录审批流程流转过程中在各个步骤执行时相关人员填写的审批信息。
+
+```
+name: approvals
+icon: metrics
+label: Approval
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| from_user | lookup | 发送人 |
+| start_date | datetime | 发送时间 |
+| user | lookup | 审批人 |
+| finish_date | datetime | 审批时间 |
+| cost_time | text | 历时时间 |
+| judge | select | 审批状态 |
+| state | select | 审核状态 |
+| description | text | 批语 |
+| related_to | lookup | 相关项 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |
+
+## 流程编号-instance_number_rules
+用于保存管理员在设置应用中为审批王应用配置的流程编号规则。
+
+```yaml
+name: instance_number_rules
+icon: topic2
+label: Instance Number Rule
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| company_id | lookup | 主分部 |
+| name | text | 名称 |
+| year | number | 年份 |
+| first_number | number | 起始序号 |
+| number | number | 序号 |
+| rules | text | 编号规则 |
+| owner | lookup | 所有者 |
+| space | text | 所属工作区 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+| is_deleted | boolean | 已删除 |
+| deleted | datetime | 删除时间 |
+| deleted_by | lookup | 删除人 |
+| instances | grid | 申请单 |
+| instances.$._id | text | 申请单ID |
+| instances.$.state | text | 申请单状态 |
+| sharing | grid | 记录级权限 |
+| sharing.$ | object | 授权条件 |
+| sharing.$.u | [text] | 授权用户 |
+| sharing.$.o | [text] | 授权组织 |
+| sharing.$.r | text | 来自规则 |
+| message_count | number | 留言数 |
+| locked | boolean | 已锁定 |
+| company_ids | lookup | 所属分部 |
+| instance_state | select | 审批状态 |
+| _table | object | 记录对象流程映射功能中表单中表格行信息 |
+| _table._id | text | Object Workflow Related Form Table Item ID |
+| _table._code | text | Object Workflow Related Form Table Code |
+
+| 权限属性 | user | admin | workflow_admin |
+|----|----|----|----|
+| allowCreate | false | true | true |
+| allowDelete | false | true | true |
+| allowEdit | false | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | false | true | false |
+| modifyCompanyRecords |  |  | true|
+| viewCompanyRecords | | | true |
+
+## 效率统计-instances_statistic
+审批王效率统计。
+
+```yaml
+name: instances_statistic
+icon: metrics
+label: Statistic of Processing Instances
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| user | master_detail | 用户 |
+| year | number | 年度 |
+| month | number | 月度 |
+| month_finished_count | number | 已处理总数 |
+| inbox_count | number | 待处理总数 |
+| month_finished_time | number | 已处理总耗时 |
+| inbox_time | number | 待审核总耗时 |
+| month_finished_avg | number | 已处理平均耗时 |
+| inbox_avg | number | 待处理平均耗时 |
+| avg_time | number | 总平均耗时 |
+| owner_organization | lookup | 主部门 |
+| owner_organizations | lookup | 所属部门 |
+
+| 权限属性 | user | admin | workflow_admin |
+|----|----|----|----|
+| allowCreate | false | false | false |
+| allowDelete | false | false | false |
+| allowEdit | false | false | false |
+| allowRead | true | false | false |
+| modifyAllRecords | false | false | false |
+| viewAllRecords | false | true | false |
+| modifyCompanyRecords |  |  | true|
+| viewCompanyRecords | | | true |
+
+## 流程委托-process_delegation_rules
+用于保存管理员在设置应用中为审批王应用配置的流程委托规则。
+
+```yaml
+name: process_delegation_rules
+icon: metrics
+label: Delegation
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| from | lookup | 委托人 |
+| from_name | text | 委托人姓名 |
+| to | lookup | 被委托人 |
+| to_name | text | 被委托人姓名 |
+| start_time | datetime | 委托开始 |
+| end_time | datetime | 委托结束 |
+| enabled | boolean | 启用 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | false |
+| viewAllRecords | false | false |
+
+## 图片签名-space_user_signs
+用于保存管理员在设置应用中为审批王应用配置的图片签名。
+
+```yaml
+name: space_user_signs
+icon: carousel
+label: User Sign
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| user | lookup | 用户 |
+| sign | avatar | 签名 |
+
+| 权限属性 | user | admin | workflow_admin |
+|----|----|----|----|
+| allowCreate | false | true | true |
+| allowDelete | false | true | true |
+| allowEdit | false | true | true |
+| allowRead | true | true | true |
+| modifyAllRecords | false | true | false |
+| viewAllRecords | false | true | false |
+| modifyCompanyRecords |  |  | true|
+| viewCompanyRecords | | | true |
+
+
+## 流程触发器-webhooks
+用于保存管理员在设置应用中为审批王应用配置的流程触发器，当审批流程到达特定环节时会触发指定事件。
+
+```yaml
+name: webhooks
+icon: output
+label: Webhook
+hidden: true
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | 名称 |
+| flow | lookup | 流程 |
+| payload_url | text | URL |
+| content_type | text | 请求数据格式 |
+| active | boolean | 激活 |
+| description | text | 描述 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |

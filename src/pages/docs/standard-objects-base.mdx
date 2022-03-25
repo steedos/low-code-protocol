@@ -1,0 +1,80 @@
+---
+title: 底层基础对象
+description: 底层基础对象定义了一些基础字段、操作按钮、权限，其它对象会继承这些属性配置。
+---
+
+- [base对象](#base对象)
+- [core对象](#core对象)
+
+## base对象
+base对象是所有对象的基础对象，这意味着华炎魔方中所有的对象都是继承自该对象。
+
+- 该对象中配置了一些基础的字段，比如创建人、创建时间、所有者、所属分部等，可以在继承自该对象的对象中改写或扩展这些字段的属性。
+- 该对象中配置了一些基础的操作按钮，比如新建、编辑、删除等，可以在继承自该对象的对象中改写这些按钮的属性或者添加新的按钮。
+- 该对象中配置了普通用户和管理员简档的对象权限，比如普通用户只能修改、删除属于自己的记录，而管理员可以修改、删除所有记录。
+
+```yaml
+name: base
+hidden: true
+```
+
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| owner | lookup | 所有者 |
+| space | text | 所属工作区 |
+| created | datetime | 创建时间 |
+| created_by | lookup | 创建人 |
+| modified | datetime | 修改时间 |
+| modified_by | lookup | 修改人 |
+| is_deleted | boolean | 已删除 |
+| deleted | datetime | 删除时间 |
+| deleted_by | lookup | 删除人 |
+| instances | grid | 申请单 |
+| instances.$._id | text | 申请单ID |
+| instances.$.state | text | 申请单状态 |
+| sharing | grid | 记录级权限 |
+| sharing.$ | object | 授权条件 |
+| sharing.$.u | [text] | 授权用户 |
+| sharing.$.o | [text] | 授权组织 |
+| sharing.$.r | text | 来自规则 |
+| message_count | number | 留言数 |
+| locked | boolean | 已锁定 |
+| company_id | lookup | 主分部 |
+| company_ids | lookup | 所属分部 |
+| instance_state | select | 审批状态 |
+| _table | object | 记录对象流程映射功能中表单中表格行信息 |
+| _table._id | text | 记录对象流程映射功能中表单中表格行信息ID |
+| _table._code | text | 记录对象流程映射功能中表单中表格行信息Code |
+
+
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | true | true |
+| allowDelete | true | true |
+| allowEdit | true | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | false | true |
+
+
+## core对象
+
+关系型数据库的基础对象。
+
+```yaml
+name: core
+hidden: true
+```
+
+
+
+| 权限属性 | admin |
+|----|----|
+| allowCreate| true |
+| allowDelete| true |
+| allowEdit| true |
+| allowRead| true |
+| modifyAllRecords| true |
+| viewAllRecords| true |

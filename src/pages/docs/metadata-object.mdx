@@ -179,6 +179,7 @@ summary_type: sum
 | description | textarea | 描述 |
 
 补充说明：
+- **name**: API 名称, 表单事件、触发器等中调用该字段所用的名称。
 - **column_name**: 数据库字段名, 仅支持关系型数据库。
 - **primary**: 主键, 勾选其“外部数据源”栏的“主键”勾选框来把该字段设置为主键字段，仅支持关系型数据库。
 - **generated**: 字段自增， 仅支持关系型数据库。
@@ -192,6 +193,7 @@ summary_type: sum
 - **inlineHelpText**: 提示文本，详细页该字段显示名称右侧提供一个提示文本的图标。
 
 ### 字段类型相关
+
 | 属性名 | 类型 | 含义 | 字段类型 |
 |----|----|----|----|
 | reference_to | lookup | 引用对象 | lookup/master_detail |
@@ -223,24 +225,28 @@ summary_type: sum
 
 补充说明：
 
-- **name**: API 名称, 表单事件、触发器等中调用该字段所用的名称。
+#### 选项相关类型属性说明
+
 - **reference_to**: 引用对象， 只有“相关表”和“主表/子表”字段类型才显示此属性。
 - **multiple**: 多选，启用后可以保存多个值。
 - **write_requires_master_read**: 当用户对主表记录有读取权限时对子表记录可以增删改,  此字段仅适用于master_detail字段类型。true--允许具有'读取'访问权限的用户创建、编辑或删除子记录。false = 允许具有'读取/写入'访问权限的用户创建、编辑或删除子记录的权限。此设置比 true 更严格，并且是默认值。 
-- **formula**: 公式，通过用户定义的算法自动计算字段的值。
-- **data_type**: 数据类型， 保存到数据库中的值类型。
 - **filtersFunction**: 过滤器函数，该函数返回值定义了 相关表（lookup） 和 主表/子表（master_detail） 字段类型的过滤条件。
 - **optionsFunction**: 选择项函数，该函数返回值定义了 选择框（select）、相关表（lookup） 和 主表/子表（master_detail） 字段类型的选项值。
-- **precision**: 精度(数字长度)，定义数值类型的字段的精度。
-- **scale**: 小数位数，定义数值类型的字段的小数位数。
-- **rows**: 多行文本行数， 定义“长文本”字段类型显示的文本框行数。
 - **options**: 选择项，定义“选择框”字段类型的下拉选项。
 - **options.$**: 选择项
 - **options.$.label**: 显示名
 - **options.$.value**: 选项值
 - **options.$.color**: 背景颜色
 - **options.$.description**: 描述
+
+#### 公式相关属性说明
+
+- **formula**: 公式，通过用户定义的算法自动计算字段的值。
+- **data_type**: 数据类型， 保存到数据库中的值类型。
 - **formula_blank_value**: 空白字段处理, zeroes表示将空白字段视为零，blanks表示将空白字段视为空白，默认为zeroes 。
+
+#### 汇总相关属性说明
+
 - **summary_object**: 要汇总的对象, 只有“累计汇总”字段类型才显示此属性。
 - **summary_type**: 汇总类型, 含有COUNT、SUM、MIN、MAX、AVG这五个选择项。
 - **summary_field**: 要聚合的字段，定义汇总时需要聚合汇总哪个字段，比如汇总合同金额。
@@ -249,6 +255,16 @@ summary_type: sum
 - **summary_filters.$.field**: 字段
 - **summary_filters.$.operation**: 运算符
 - **summary_filters.$.value**: 值
+
+#### 数值相关属性说明
+
+- **precision**: 精度(数字长度)，定义数值类型的字段的精度。
+- **scale**: 小数位数，定义数值类型的字段的小数位数。
+
+#### 其他相关属性说明
+
+- **rows**: 多行文本行数， 定义“长文本”字段类型显示的文本框行数。
+
 
 <!-- 
 | custom | boolean | 自定义 | 

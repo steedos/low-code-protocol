@@ -25,10 +25,9 @@ enable_enhanced_lookup: true
 icon: contract
 is_enable: true
 label: 合同
-version: 2
 ```
 
-| 属性名 | 属性类型 | 属性含义 |
+| 属性名 | 类型 | 含义 |
 |----|----|----|
 | datasource | master_detail | 数据源 |
 | label | text | 显示名 |
@@ -50,9 +49,7 @@ version: 2
 | enable_tree | boolean | 启用树状结构显示记录 |
 | enable_enhanced_lookup | boolean | 启用弹出窗口查找模式 |
 | table_name | text | 数据库表名称 |
-| version | number | 版本 |
 | description | textarea | 备注 |
-| custom | boolean | 自定义 |
 | owner | lookup | 拥有者 |
 | is_system | boolean | 系统 |
 | fields_serial_number | number | 对象上新增字段时排序号以+10方式递进 |
@@ -95,7 +92,7 @@ TODO: 需要排查的部分
 - **name**：API 名称, 表单事件、触发器等中调用该字段所用的名称。
 - **icon**：图标， 对象图标对应 salesforce 中的 [Standard Icons](https://www.lightningdesignsystem.com/icons/#standard) 。
 - **is_enable**：启用，该对象是否启用。
-- **in_development**：开发状态，分“开发中（仅管理员才可以访问对象）” 和“已部署”。
+- **in_development**：开发状态，有“开发中（仅管理员才可以访问对象）” 和“已部署”两个可选项。
 - **enable_search**：允许搜索，全局搜索。
 - **enable_files**：允许上传附件，开启后详细页存在附件子表。
 - **enable_tasks**：允许添加任务，开启后详细页存在任务子表。
@@ -111,9 +108,7 @@ TODO: 需要排查的部分
 - **enable_trash**:	如果为true,则开启回收站功能，此对象数据删除后，会进入回收站。如果为false，则直接删除 。
 - **enable_enhanced_lookup**：启用弹出窗口查找模式,当开启增强lookup模式时，指向该对象的lookup字段会弹出窗口显示可选项！
 - **table_name**：数据库表名称，引用外部数据源的数据库表名称。
-- **version**：版本，表单版本，目前默认是2.0。
 - **description**：备注, 该对象备注信息。
-- **custom**：自定义，该对象是否是自定义对象。
 - **is_system**：系统，该对象是否是系统内置标准对象。
 - **is_deleted**：已删除，该对象是否已删除。
 - **form**：表单事件
@@ -156,40 +151,16 @@ summary_object: finance_receive
 summary_type: sum
 ```
 
-| 属性名 | 属性类型 | 属性含义 |
+### 通用属性
+
+| 属性名 | 类型 | 含义 |
 |----|----|----|
 | object | master_detail | 所属对象 |
 | label | text | 显示名称 |
-| _name | text | 字段名 |
 | name | text | API 名称 |
 | type | select | 字段类型 |
 | defaultValue | text | 默认值 |
 | group | text | 字段分组 |
-| reference_to | lookup | 引用对象 |
-| multiple | boolean | 多选 |
-| write_requires_master_read | boolean | 当用户对主表记录有读取权限时对子表记录可以增删改 |
-| formula | textarea | 公式 |
-| data_type | select | 数据类型 |
-| filtersFunction | textarea | 过滤器函数 |
-| optionsFunction | textarea | 选择项函数 |
-| precision | currency | 精度(数字长度) |
-| scale | currency | 小数位数 |
-| rows | currency | 多行文本行数 |
-| options | grid | 选择项 |
-| options.$ | object | Options |
-| options.$.label | text | 显示名 |
-| options.$.value | text | 选项值 |
-| options.$.color | text | 背景颜色 |
-| options.$.description | text | 描述 |
-| formula_blank_value | select | 空白字段处理 |
-| summary_object | lookup | 要汇总的对象 |
-| summary_type | select | 汇总类型 |
-| summary_field | lookup | 要聚合的字段 |
-| summary_filters | grid | 过滤条件 |
-| summary_filters.$ | object | Filter Criteria |
-| summary_filters.$.field | lookup | 字段 |
-| summary_filters.$.operation | lookup | 运算符 |
-| summary_filters.$.value | text | 值 |
 | column_name | text | 数据库字段名 |
 | primary | boolean | 主键 |
 | generated | boolean | 自增 |
@@ -202,14 +173,56 @@ summary_type: sum
 | index | boolean | 创建索引 |
 | sortable | boolean | 可排序 |
 | searchable | boolean | 可搜索 |
-| filterable | boolean | 过滤器默认字段 |
-| show_as_qr | boolean | 显示为二维码 |
+| filterable | boolean | 高级查找默认字段 |
 | visible_on | textarea | 字段显示公式 |
 | inlineHelpText | textarea | 提示文本 |
 | description | textarea | 描述 |
 
 补充说明：
-- **_name**: 字段名
+- **column_name**: 数据库字段名, 仅支持关系型数据库。
+- **primary**: 主键, 勾选其“外部数据源”栏的“主键”勾选框来把该字段设置为主键字段，仅支持关系型数据库。
+- **generated**: 字段自增， 仅支持关系型数据库。
+- **is_name**: 名称字段, 勾选该属性表示此字段会代替name字段作为“名称字段”。对象上默认以名为name的字段作为”名称字段”,点击“名称字段”会跳转到记录详细页面，支持配置为”名称字段“的字段类型有：文本、多行文本、自动编号、公式、日期、日期时间。
+- **is_wide**: 宽字段，普通字段详细页占一列，宽字段占两列。
+- **index**: 创建索引，设置true时会自动为数据库字段创建索引。
+- **searchable**: 可全局搜索字段，默认为false，表示在对象快速搜索及全局搜索功能中不可查询该字段，设置为true表示可以全局搜索。
+- **filterable**: 高级查找默认字段，默认为true，表示在高级查找框中显示为默认字段，如果设置为false表示会折叠显示到高级栏中。需要注意的，该字段功能依赖了 searchable 属性，字段的 searchable 属性值必须为 true 时 filterable 属性值 true 才能生效。
+- **show_as_qr**: 显示为二维码，只有”网址“”字段类型才显示此属性，开启后该字段值只读时显示为二维码。
+- **visible_on**: 字段显示公式，公式返回true或false来控制此字段是否显示。
+- **inlineHelpText**: 提示文本，详细页该字段显示名称右侧提供一个提示文本的图标。
+
+### 字段类型相关
+| 属性名 | 类型 | 含义 | 字段类型 |
+|----|----|----|----|
+| reference_to | lookup | 引用对象 | lookup/master_detail |
+| multiple | boolean | 多选 | lookup/master_detail/select |
+| write_requires_master_read | boolean | 子表权限开关 | master_detail |
+| filtersFunction | textarea | 过滤器函数 | lookup/master_detail |
+| optionsFunction | textarea | 选择项函数 | lookup/master_detail/select |
+| precision | currency | 精度(数字长度) | number/currency/percent |
+| scale | currency | 小数位数 | number/currency/percent |
+| rows | currency | 多行文本行数 | textarea |
+| options | grid | 选择项 | select |
+| options.$ | object | Options |
+| options.$.label | text | 显示名 |
+| options.$.value | text | 选项值 |
+| options.$.color | text | 背景颜色 |
+| options.$.description | text | 描述 |
+| formula | textarea | 公式 | formula |
+| data_type | select | 数据类型 | formula/select |
+| formula_blank_value | select | 空白字段处理 | formula |
+| summary_object | lookup | 要汇总的对象 | summary |
+| summary_type | select | 汇总类型 | summary |
+| summary_field | lookup | 要聚合的字段 | summary |
+| summary_filters | grid | 过滤条件 | summary |
+| summary_filters.$ | object | Filter Criteria |
+| summary_filters.$.field | lookup | 字段 |
+| summary_filters.$.operation | lookup | 运算符 |
+| summary_filters.$.value | text | 值 |
+| show_as_qr | boolean | 显示为二维码 | url |
+
+补充说明：
+
 - **name**: API 名称, 表单事件、触发器等中调用该字段所用的名称。
 - **reference_to**: 引用对象， 只有“相关表”和“主表/子表”字段类型才显示此属性。
 - **multiple**: 多选，启用后可以保存多个值。
@@ -236,16 +249,9 @@ summary_type: sum
 - **summary_filters.$.field**: 字段
 - **summary_filters.$.operation**: 运算符
 - **summary_filters.$.value**: 值
-- **column_name**: 数据库字段名, 仅支持关系型数据库。
-- **primary**: 主键, 勾选其“外部数据源”栏的“主键”勾选框来把该字段设置为主键字段，仅支持关系型数据库。
-- **generated**: 字段自增， 仅支持关系型数据库。
-- **is_name**: 名称字段, 勾选该属性表示此字段会代替name字段作为“名称字段”。对象上默认以名为name的字段作为”名称字段”,点击“名称字段”会跳转到记录详细页面，支持配置为”名称字段“的字段类型有：文本、多行文本、自动编号、公式、日期、日期时间。
-- **is_wide**: 宽字段，普通字段详细页占一列，宽字段占两列。
-- **index**: 创建索引，设置true时会自动为数据库字段创建索引。
-- **show_as_qr**: 显示为二维码，只有”网址“”字段类型才显示此属性，开启后该字段值只读时显示为二维码。
-- **visible_on**: 字段显示公式，公式返回true或false来控制此字段是否显示。
-- **inlineHelpText**: 提示文本，详细页该字段显示名称右侧提供一个提示文本的图标。
 
-<!--
-- **filterable**: 过滤器默认字段
+<!-- 
+| custom | boolean | 自定义 | 
+- **custom**：自定义，该对象是否是自定义对象。
+- **_name**: 字段名
 -->

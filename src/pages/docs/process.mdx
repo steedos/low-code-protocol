@@ -23,6 +23,8 @@ is_active: true # 是否启用
 deploy_time: new Date() # 发布时间
 version: 1 # 流程最新已发布的版本号
 description: "" # 描述
+entry_criteria: "", # 入口公式 传入 (userSession, Record)
+when: "", # 何时执行入口公式 afterInsert/afterUpdate
 ```
 
 - 引擎类型（engine）: cmbbpm/activiti/flowable/camunda 

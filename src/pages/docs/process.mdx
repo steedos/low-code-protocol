@@ -23,8 +23,8 @@ is_active: true # 是否启用
 deploy_time: new Date() # 发布时间
 version: 1 # 流程最新已发布的版本号
 description: "" # 描述
-entry_criteria: "", # 入口公式 传入 (userSession, Record)
-when: "", # 何时执行入口公式 afterInsert/afterUpdate
+entry_criteria: "" # 入口公式 传入 (userSession, Record)
+when: "" # 何时执行入口公式 afterInsert/afterUpdate
 ```
 
 - 引擎类型（engine）: cmbbpm/activiti/flowable/camunda 
@@ -39,8 +39,8 @@ version: 2 # 版本号
 is_active: true # 版本是否已发布
 description: "" # 版本描述
 schema: `process.{engine}.bpmn` # 流程定义schema
-entry_criteria: "", # 入口公式 传入 (userSession, Record)
-when: "", # 何时执行入口公式 afterInsert/afterUpdate
+entry_criteria: "" # 入口公式 传入 (userSession, Record)
+when: "" # 何时执行入口公式 afterInsert/afterUpdate
 ```
 
 ## 元数据
@@ -56,8 +56,8 @@ object_name: contracts # 关联对象名
 engine: {engine} # 引擎类型
 is_active: true # 是否启用
 description: "" # 描述
-entry_criteria: "", # 入口公式
-when: "", # 何时执行入口公式
+entry_criteria: "" # 入口公式
+when: "" # 何时执行入口公式
 ```
 
 ### 流程图 .process.{engine}.bpmn

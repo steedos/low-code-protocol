@@ -197,6 +197,7 @@ summary_type: sum
 | 属性名 | 类型 | 含义 | 字段类型 |
 |----|----|----|----|
 | reference_to | lookup | 引用对象 | lookup/master_detail |
+| reference_to_field | lookup | 引用的对象的字段，按照此字段去查找相关记录;按此属性值保存到数据库 | lookup/master_detail |
 | multiple | boolean | 多选 | lookup/master_detail/select |
 | write_requires_master_read | boolean | 子表权限开关 | master_detail |
 | filtersFunction | textarea | 过滤器函数 | lookup/master_detail |
@@ -228,6 +229,7 @@ summary_type: sum
 #### 选项相关类型属性说明
 
 - **reference_to**: 引用对象，只有“相关表”和“主表/子表”字段类型才显示此属性。
+- **reference_to_field**: 引用对象保存并查找的值，只有“相关表”和“主表/子表”字段类型才显示此属性。
 - **multiple**: 多选，启用后可以保存多个值，只有“相关表”、“主表/子表”和“选择框”字段类型才显示此属性。
 - **write_requires_master_read**: 当用户对主表记录有读取权限时对子表记录可以增删改,  此字段仅适用于master_detail字段类型。true--允许具有'读取'访问权限的用户创建、编辑或删除子记录。false = 允许具有'读取/写入'访问权限的用户创建、编辑或删除子记录的权限。此设置比 true 更严格，并且是默认值。 
 - **filtersFunction**: 过滤器函数，该函数返回值定义了 相关表（lookup） 和 主表/子表（master_detail） 字段类型的过滤条件。
@@ -270,4 +272,33 @@ summary_type: sum
 | custom | boolean | 自定义 | 
 - **custom**：自定义，该对象是否是自定义对象。
 - **_name**: 字段名
+
+
+| allowedValues | ["string","boolean","array"] | 允许的值 |
+| omit | boolean | 忽略此字段 |
+| modal_mode | string | lookup字段弹出框模式: 'dialog' 、 'drawer' |
+| table_schema | ["string", "object"] | lookup字段弹出框表格定义，可以定义为列表视图名称或列表属性 |
+| firstOption | boolean |  |
+| unique | boolean | 唯一 |
+| min | ["integer", "string"] | 最小长度。支持字符串，数字，金额，日期类型字段 |
+| max | ["integer", "string"] | 最大长度。支持字符串，数字，金额，日期类型字段 |
+| blackbox | boolean | 不校验字段类型 |
+| disabled | boolean | 禁用 |
+| reference_sort | object | 排序方式 |
+| reference_limit | number | 一次最多显示数据 |
+| is_company_only | boolean | 本公司 |
+| is_company_limited | ["boolean", "string"] | 本公司 |
+| system | string |  |
+| depend_on | array | 依赖的字段 |
+| defaultIcon | string | 默认的图标 |
+| showIcon | boolean | 是否显示图标 |
+| fieldDBType | string | 字段数据库类型 |
+| collection | string | 对应对象名 |
+| language | string | 模板名 |
+| create | boolean | 关联时是否允许创建 |
+| regEx | object | 正则表达式 |
+| filters | ["array","string"] | 过滤条件 |
+| relatedList | boolean | 用于表示是否在相关表的详细页面中作为子表显示 |
+| picklist | string | 指定字段的选项列表值集 |
+
 -->

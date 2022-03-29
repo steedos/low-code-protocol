@@ -53,16 +53,16 @@ when: "" # 何时执行入口公式 afterInsert/afterUpdate
 name: "" # 显示名称
 api_name: `processApiName` # Api Name
 object_name: contracts # 关联对象名
-engine: {engine} # 引擎类型
+engine: `{engine}` # 引擎类型
 is_active: true # 是否启用
 description: "" # 描述
 entry_criteria: "" # 入口公式
 when: "" # 何时执行入口公式
 ```
 
-### 流程图 .process.{engine}.bpmn
+### 流程图 .process.`[engine]`.bpmn
 
-基于 {engine} 的流程图。在元数据中单独保存此文件，以便在 VS Code 中提供设计器插件。
+基于 `engine` 的流程图。在元数据中单独保存此文件，以便在 VS Code 中提供设计器插件。
 
 ## 接入 BPM 引擎
 

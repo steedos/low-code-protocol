@@ -170,6 +170,9 @@ summary_type: sum
 | is_wide | boolean | 宽字段 |
 | readonly | boolean | 只读 |
 | hidden | boolean | 隐藏 |
+| omit | boolean | 新建/编辑时忽略此字段 |
+| unique | boolean | 唯一 |
+| depend_on | array | 依赖的字段 |
 | index | boolean | 创建索引 |
 | sortable | boolean | 可排序 |
 | searchable | boolean | 可搜索 |
@@ -177,6 +180,10 @@ summary_type: sum
 | visible_on | textarea | 字段显示公式 |
 | inlineHelpText | textarea | 提示文本 |
 | description | textarea | 描述 |
+
+<!-- TODO: 此属性需要添加补充说明
+| unique | boolean | 唯一 |
+-->
 
 补充说明：
 - **name**: API 名称, 表单事件、触发器等中调用该字段所用的名称。
@@ -190,6 +197,7 @@ summary_type: sum
 - **filterable**: 高级查找默认字段，默认为true，表示在高级查找框中显示为默认字段，如果设置为false表示会折叠显示到高级栏中。需要注意的，该字段功能依赖了 searchable 属性，字段的 searchable 属性值必须为 true 时 filterable 属性值 true 才能生效。
 - **show_as_qr**: 显示为二维码，只有”网址“”字段类型才显示此属性，开启后该字段值只读时显示为二维码。
 - **visible_on**: 字段显示公式，公式返回true或false来控制此字段是否显示。
+- **depend_on**: 依赖的字段，当依赖的字段值变更，此字段值会被清空； 
 - **inlineHelpText**: 提示文本，详细页该字段显示名称右侧提供一个提示文本的图标。
 
 ### 字段类型相关
@@ -197,13 +205,18 @@ summary_type: sum
 | 属性名 | 类型 | 含义 | 字段类型 |
 |----|----|----|----|
 | reference_to | lookup | 引用对象 | lookup/master_detail |
-| reference_to_field | lookup | 引用的对象的字段，按照此字段去查找相关记录;按此属性值保存到数据库 | lookup/master_detail |
+| reference_to_field | lookup | 引用的对象的字段，按照此字段去查找相关记录;按此字段保存到数据库 | lookup/master_detail |
 | multiple | boolean | 多选 | lookup/master_detail/select |
 | write_requires_master_read | boolean | 子表权限开关 | master_detail |
 | filtersFunction | textarea | 过滤器函数 | lookup/master_detail |
 | optionsFunction | textarea | 选择项函数 | lookup/master_detail/select |
+| reference_limit | number | 数据显示数量 | lookup/master_detail |
+| defaultIcon | string | 默认的图标 | lookup/master_detail |
+| showIcon | boolean | 是否显示图标 | lookup/master_detail |
 | precision | currency | 精度(数字长度) | number/currency/percent |
 | scale | currency | 小数位数 | number/currency/percent |
+| min | number | 最小值 | number/currency |
+| max | number | 最大值 | number/currency |
 | rows | currency | 多行文本行数 | textarea |
 | options | grid | 选择项 | select |
 | options.$ | object | Options |
@@ -269,29 +282,25 @@ summary_type: sum
 
 
 <!-- 
+TODO: 需要
 | custom | boolean | 自定义 | 
 - **custom**：自定义，该对象是否是自定义对象。
 - **_name**: 字段名
 
 
 | allowedValues | ["string","boolean","array"] | 允许的值 |
-| omit | boolean | 忽略此字段 |
 | modal_mode | string | lookup字段弹出框模式: 'dialog' 、 'drawer' |
 | table_schema | ["string", "object"] | lookup字段弹出框表格定义，可以定义为列表视图名称或列表属性 |
 | firstOption | boolean |  |
-| unique | boolean | 唯一 |
+最大最小值需要测试 是否支持 支持字符串，数字，金额，日期类型字段。
 | min | ["integer", "string"] | 最小长度。支持字符串，数字，金额，日期类型字段 |
 | max | ["integer", "string"] | 最大长度。支持字符串，数字，金额，日期类型字段 |
 | blackbox | boolean | 不校验字段类型 |
 | disabled | boolean | 禁用 |
 | reference_sort | object | 排序方式 |
-| reference_limit | number | 一次最多显示数据 |
 | is_company_only | boolean | 本公司 |
 | is_company_limited | ["boolean", "string"] | 本公司 |
 | system | string |  |
-| depend_on | array | 依赖的字段 |
-| defaultIcon | string | 默认的图标 |
-| showIcon | boolean | 是否显示图标 |
 | fieldDBType | string | 字段数据库类型 |
 | collection | string | 对应对象名 |
 | language | string | 模板名 |

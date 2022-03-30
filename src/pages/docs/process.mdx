@@ -15,8 +15,8 @@ description: 支持接入不同的流程引擎，实现业务流程自定义。
 ### 流程 process
 
 ```yml
-name: "" # 显示名称
-api_name: `processApiName` # Api Name
+name: `processApiName` # Api Name
+label: "" # 显示名称
 object_name: contracts # 关联对象名
 engine: cmbbpm/activiti/flowable/camunda # 引擎类型
 is_active: true # 是否启用
@@ -50,8 +50,8 @@ when: "" # 何时执行入口公式 afterInsert/afterUpdate
 ### 流程 .process.yml
 
 ```yml
-name: "" # 显示名称
-api_name: `processApiName` # Api Name
+name: `processApiName` # Api Name
+label: "" # 显示名称
 object_name: contracts # 关联对象名
 engine: `{engine}` # 引擎类型
 is_active: true # 是否启用

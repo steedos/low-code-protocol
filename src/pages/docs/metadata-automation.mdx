@@ -129,3 +129,48 @@ notifications:
 | assigned_user_field | lookup | 指定对象上的用户字段 |
 
 **注意：** 工作流规则、字段更新、工作流通知这三个元数据在同一个文件下！
+
+
+### 批准过程 process_definition
+用于保存管理员在设置应用中配置的批准过程信息。
+
+```yaml
+name: process_definition
+label: Approval Processes
+hidden: true
+icon: approval
+enable_inline_edit: false
+```
+
+| 字段名 | 字段类型 | 字段含义 |
+|----|----|----|
+| name | text | API 名称 |
+| label | text | 显示名称 |
+| object_name | lookup | 对象 |
+| description | textarea | 描述 |
+| order | number | 序号 |
+| active | boolean | 启用 |
+| entry_criteria | textarea | 指定条目条件 |
+| record_editability | select | 记录可编辑性属性 |
+| allow_recall | boolean | 允许提交人取消申请 |
+| initial_submission_record_lock | select | 锁定记录 |
+| initial_submission_updates_field_actions | lookup | 字段更新 |
+| initial_submission_workflow_notifications_actions | lookup | 工作流通知 |
+| final_approval_record_lock | select | 锁定记录 |
+| final_approval_updates_field_actions | lookup | 字段更新 |
+| final_approval_workflow_notifications_actions | lookup | 工作流通知 |
+| final_rejection_record_lock | select | 锁定记录 |
+| final_rejection_updates_field_actions | lookup | 字段更新 |
+| final_rejection_workflow_notifications_actions | lookup | 工作流通知 |
+| recall_record_lock | select | 锁定记录 |
+| recall_updates_field_actions | lookup | 字段更新 |
+| recall_workflow_notifications_actions | lookup | 工作流通知 |
+
+| 权限属性 | user | admin |
+|----|----|----|
+| allowCreate | false | true |
+| allowDelete | false | true |
+| allowEdit | false | true |
+| allowRead | true | true |
+| modifyAllRecords | false | true |
+| viewAllRecords | true | true |

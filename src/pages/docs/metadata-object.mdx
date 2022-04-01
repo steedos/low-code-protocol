@@ -129,14 +129,12 @@ type: summary
 data_type: number
 filterable: false
 group: 收款信息
-hidden: true
 index: false
 is_name: false
 is_wide: false
 label: 收款累计(待收款)
 omit: false
 precision: 18
-readonly: true
 required: false
 scale: 2
 searchable: false
@@ -168,8 +166,6 @@ summary_type: sum
 | is_name | boolean | 名称字段 |
 | required | boolean | 必填 |
 | is_wide | boolean | 宽字段 |
-| readonly | boolean | 只读 |
-| hidden | boolean | 隐藏 |
 | omit | boolean | 新建/编辑时忽略此字段 |
 | unique | boolean | 唯一 |
 | depend_on | array | 依赖的字段 |
@@ -278,7 +274,7 @@ summary_type: sum
 
 #### 其他相关属性说明
 
-- **rows**: 多行文本行数， 定义“长文本”字段类型显示的文本框行数。
+- **rows**: 多行文本行数， 定义“长文本”字段类型显示的文本框行数，默认显示为3行。
 
 
 <!-- 

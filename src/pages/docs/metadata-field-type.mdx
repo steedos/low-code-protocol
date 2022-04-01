@@ -33,52 +33,95 @@ description: 低代码平台基础字段类型、属性与功能描述。
 
  以上字段类型中有些功能是比较复杂的，下面是这些复杂的字段类型的具体功能协议。
 
-### 主表/子表字段类型
+ 关于各种不同字段类型下元数据协议请参阅 [字段元数据](/docs/metadata-object#字段%20.field.yml)。
 
-在相关表字段的基础上，我们可以通过创建一个“主表/子表”字段来描述两个对象间的主从关系，需要注意的是应该把“主表/子表”字段添加到“子表”对象侧，来表示“子表”对象是通过这个字段来关联其“主表”的。比如 “报价行条目” 都应该有对应的 “报价” 与之关联，此时我们可以在 ”报价行条目“ 对象上建立一个 “报价名称” 字段，类型为主表/子表跟 “报价” 对象关联起来。
+### 长文本字段类型
 
-**区别**：设置为主表/子表类型的字段可以在主表的“相关子表”里设置关联子表显示的列。
+长文本字段类型可以在可视化界面额外配置以下属性：
 
-* **所属对象**：字段所属对象，默认值为所属对象。
-* **显示名称**：字段显示名称，这里输入”报价名称“。
-* **字段名**：字段唯一标识，界面上输入的字段名会添加“__c”作为最终的标识， 这里输入"offer_name"。
-* **字段类型**：这里选择”主表/子表“。
-* **引用对象**：该相关表字段要关联到的另一个对象，这里设置了“客户”表示通过该相关表字段把“报价”与“客户”两个对象关联起来。
-* **过滤器函数**：默认情况下，用户在新建和编辑对象记录界面上填写相关表字段值时会列出相关表的所有记录供选择，可以在这里配置可选项范围，比如输入以下内容作为过滤器函数值可让用户在新建和编辑 “报价” 记录界面上填写“报价客户”字段值时只列出有效客户供选择。
+- **rows**: 多行文本行数， 定义“长文本”字段类型显示的文本框行数，默认显示为3行。
 
-```javascript
-function(filters, values){
-  return [["state","=","active"]];
-}
+### 选择框字段类型
+
+当需要字段值不能用户随意输入的时候，可以设置一个字段的类型为选择框，设置固定的值供用户选择，支持为每个选项配置显示名、选项值和背景颜色。
+
+在可视化界面可以为该字段类型额外配置以下属性：
+
+- **多选 multiple**：勾选该属性表示可以为该字段配置多个选项值，当变更该属性时需要注意历史数据，需要手动编辑历史数据或通过执行数据库脚本批量修正历史数据中该字段值。
+- **数据类型 data_type**：默认情况下该字段类型会被保存为字符串，可以通过配置数据类型属性来变更选项值保存后的数据类型，支持复选框（CheckBox）、数值（Number）和文本（Text）三种数据类型。
+- **选择项 options**：在这里配置选择框类型字段的下拉选项。
+
+在为选择框类型字段配置选项时，可以为每个选项配置以下属性：
+
+- **显示名 label**：选项显示名。
+- **选项值 value**：该选项选中后保存到数据库中的值。
+- **颜色 color**：选中项选中后在界面上显示该选项时要显示的背景颜色，用于高亮显示某些选项，只支持16进制颜色值，如90EE90。
+
+以下是该字段类型在 `.field.yml` 配置文件中才可配置的属性：
+
+- **选择项函数 ：optionsFunction**
+
+可以在该属性中描述用户在填写选择框字段值列出哪些选项供选择，比如以下是名为数据类型的选择框字段配置文件内容，其 `optionsFunction` 属性描述了不同字段类型下支持的数据类型选项清单。
+
+```yml
+//date_type.field.yml
+type: select
+label: Data Type
+inlineHelpText: This field must be filled when the field type is 'Formula'
+depend_on:
+  - type
+optionsFunction: !<tag:yaml.org,2002:js/function> |-
+  function (values) {
+    if(values.type === "select"){
+        return [
+            {
+              "label": "Checkbox",
+              "value": "boolean"
+            },
+            {
+              "label": "Number",
+              "value": "number"
+            },
+            {
+              "label": "Text",
+              "value": "text"
+            }
+        ];
+    }
+    else{
+        return [
+            {
+              "label": "Checkbox",
+              "value": "boolean"
+            },
+            {
+              "label": "Number",
+              "value": "number"
+            },
+            {
+              "label": "Currency",
+              "value": "currency"
+            },
+            {
+              "label": "Percent",
+              "value": "percent"
+            },
+            {
+              "label": "Text",
+              "value": "text"
+            },
+            {
+              "label": "Date",
+              "value": "date"
+            },
+            {
+              "label": "Datetime",
+              "value": "datetime"
+            }
+        ];
+    }
+  }
 ```
-
-关于该函数返回值，目前推荐使用数组语法。详情请查看 “[查询过滤条件详解](/docs/api-records-filters)”。
-
-* **选择项函数**：与上述过滤器函数类似，你可以在这里描述用户在填写相关表字段值列出哪些选项供选择，比如输入以下内容作为选择项函数值可以实现上述过滤器函数中内容同样的效果。
-
-```javascript
-function(values){
-  var result = [];
-  var queryFilters = [["state", "=", "active"]];
-  var steedosFilters = require("@steedos/filters");
-  var odataFilter = steedosFilters.formatFiltersToODataQuery(queryFilters);
-  var options = {
-    $select: 'name'
-  };
-  options.$filter = odataFilter;
-  var accounts = Creator.odata.query('accounts', options, true);
-  accounts.forEach(function (item) {
-    result.push({
-      label: item.name,
-      value: item._id
-    });
-  });
-  return result;
-}
-```
-
-> 该字段类型的字段也被称为外键字段，其值保存的是关联对象记录的主键字段值而不是名称字段值。
-
 
 ### 相关表字段类型
 
@@ -99,7 +142,7 @@ function(filters, values){
 
 关于该函数返回值，目前推荐使用数组语法。详情请查看 “[查询过滤条件详解](/docs/api-records-filters)”。
 
-* **选择项函数**：与上述过滤器函数类似，你可以在这里描述用户在填写相关表字段值列出哪些选项供选择，比如输入以下内容作为选择项函数值可以实现上述过滤器函数中内容同样的效果。
+* **选择项函数**：与上述过滤器函数类似，可以在这里描述用户在填写相关表字段值列出哪些选项供选择，比如输入以下内容作为选择项函数值可以实现上述过滤器函数中内容同样的效果。
 
 ```javascript
 function(values){
@@ -132,19 +175,51 @@ function(values){
 
 > 该字段类型的字段也被称为外键字段，其值保存的是关联对象记录的主键字段值而不是名称字段值。
 
-### 选择框字段类型
+### 主表/子表字段类型
 
-当需要字段值不能用户随意输入的时候，可以设置一个字段的类型为选择框，设置固定的值供用户选择，并设置选择框的值和背景颜色。如报价对象的“状态” 字段可以设置该类型。点击“新建”字段，填写必填项显示名称“状态”、字段名“status”、字段类型“选择框”、选择项（显示名：待审核，选项值：To audit，颜色：90EE90），可添加多条选项。
+在相关表字段的基础上，我们可以通过创建一个“主表/子表”字段来描述两个对象间的主从关系，需要注意的是应该把“主表/子表”字段添加到“子表”对象侧，来表示“子表”对象是通过这个字段来关联其“主表”的。比如 “报价行条目” 都应该有对应的 “报价” 与之关联，此时我们可以在 ”报价行条目“ 对象上建立一个 “报价名称” 字段，类型为主表/子表跟 “报价” 对象关联起来。
 
-* **显示名**：选项名，由用户自定义。
-* **选项值**：该选项记录在数据库中的值。
-* **颜色**：选择后的背景颜色，只支持16进制颜色值，如90EE90。
+**区别**：设置为主表/子表类型的字段可以在主表的“相关子表”里设置关联子表显示的列。
 
-![](https://console.steedos.cn/api/files/images/j8Gry5kNsAnn8MGzg)
+* **所属对象**：字段所属对象，默认值为所属对象。
+* **显示名称**：字段显示名称，这里输入”报价名称“。
+* **字段名**：字段唯一标识，界面上输入的字段名会添加“__c”作为最终的标识， 这里输入"offer_name"。
+* **字段类型**：这里选择”主表/子表“。
+* **引用对象**：该相关表字段要关联到的另一个对象，这里设置了“客户”表示通过该相关表字段把“报价”与“客户”两个对象关联起来。
+* **过滤器函数**：默认情况下，用户在新建和编辑对象记录界面上填写相关表字段值时会列出相关表的所有记录供选择，可以在这里配置可选项范围，比如输入以下内容作为过滤器函数值可让用户在新建和编辑 “报价” 记录界面上填写“报价客户”字段值时只列出有效客户供选择。
 
-点击保存即完成，创建后的使用效果如下：
+```javascript
+function(filters, values){
+  return [["state","=","active"]];
+}
+```
 
- ![](https://console.steedos.cn/api/files/images/DJtzN8Lvx9dGKiR67)
+关于该函数返回值，目前推荐使用数组语法。详情请查看 “[查询过滤条件详解](/docs/api-records-filters)”。
+
+* **选择项函数**：与上述过滤器函数类似，可以在这里描述用户在填写相关表字段值列出哪些选项供选择，比如输入以下内容作为选择项函数值可以实现上述过滤器函数中内容同样的效果。
+
+```javascript
+function(values){
+  var result = [];
+  var queryFilters = [["state", "=", "active"]];
+  var steedosFilters = require("@steedos/filters");
+  var odataFilter = steedosFilters.formatFiltersToODataQuery(queryFilters);
+  var options = {
+    $select: 'name'
+  };
+  options.$filter = odataFilter;
+  var accounts = Creator.odata.query('accounts', options, true);
+  accounts.forEach(function (item) {
+    result.push({
+      label: item.name,
+      value: item._id
+    });
+  });
+  return result;
+}
+```
+
+> 该字段类型的字段也被称为外键字段，其值保存的是关联对象记录的主键字段值而不是名称字段值。
 
 ### 自动编号字段类型
 

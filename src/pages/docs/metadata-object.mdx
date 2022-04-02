@@ -201,7 +201,7 @@ summary_type: sum
 | 属性名 | 类型 | 含义 | 字段类型 |
 |----|----|----|----|
 | reference_to | lookup | 引用对象 | lookup/master_detail |
-| reference_to_field | lookup | 引用的对象的字段，按照此字段去查找相关记录;按此字段保存到数据库 | lookup/master_detail |
+| reference_to_field | string | 引用字段 | lookup/master_detail |
 | multiple | boolean | 多选 | lookup/master_detail/select |
 | write_requires_master_read | boolean | 子表权限开关 | master_detail |
 | filtersFunction | textarea | 过滤器函数 | lookup/master_detail |
@@ -237,7 +237,7 @@ summary_type: sum
 #### 选项相关类型属性说明
 
 - **reference_to**: 引用对象，只有“相关表”和“主表/子表”字段类型才显示此属性。
-- **reference_to_field**: 引用对象保存并查找的值，只有“相关表”和“主表/子表”字段类型才显示此属性。
+- **reference_to_field**: 引用的对象的字段，默认值为主键字段 `_id`，表示要把对象上哪个字段值作为相关表的字段值保存到数据库中，只有“相关表”和“主表/子表”字段类型才显示此属性。
 - **multiple**: 多选，启用后可以保存多个值，只有“相关表”、“主表/子表”和“选择框”字段类型才显示此属性。
 - **write_requires_master_read**: 当用户对主表记录有读取权限时对子表记录可以增删改,  此字段仅适用于master_detail字段类型。true--允许具有'读取'访问权限的用户创建、编辑或删除子记录。false = 允许具有'读取/写入'访问权限的用户创建、编辑或删除子记录的权限。此设置比 true 更严格，并且是默认值。 
 - **filtersFunction**: 过滤器函数，该函数返回值定义了 相关表（lookup） 和 主表/子表（master_detail） 字段类型的过滤条件。

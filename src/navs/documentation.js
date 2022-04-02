@@ -21,7 +21,7 @@ export const documentationNav = {
   ],
   '软件包开发': [
     pages['objectql'],
-    pages['functions'],
+    // pages['functions'],
     pages['trigger'],
     pages['flow-trigger'],
     pages['services'],

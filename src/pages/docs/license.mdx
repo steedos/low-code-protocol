@@ -5,7 +5,7 @@ description: 如何为软件包添加许可证限制。
 
 ## 许可证 Service
 
-### getFeature
+### hasFeature
 
 判断平台是否有审计日志功能。
 
@@ -19,4 +19,20 @@ hasFeature('platform-ee.audit-logs')
 
 ```
 getProduct('contract-ee');
+```
+
+返回
+```json
+{
+  product: 'contract-ee',
+  end_date: '2022-12-31',
+  user_number: 10,
+  features: {
+     feature_a: {
+       label: '功能A',
+       limit: 100,
+       extra_data: {}
+     }
+  }
+}
 ```

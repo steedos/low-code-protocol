@@ -9,20 +9,22 @@ description: 如何为软件包添加许可证限制。
 
 判断平台是否有审计日志功能。
 
-```
+```js
 hasFeature('platform-ee.audit-logs')
 ```
+
+返回 true/false
 
 ### getProduct
 
 获取产品的License
 
-```
+```js
 getProduct('contract-ee');
 ```
 
 返回
-```json
+```js
 {
   product: 'contract-ee',
   end_date: '2022-12-31',

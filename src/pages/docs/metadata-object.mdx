@@ -159,42 +159,46 @@ summary_type: sum
 | type | select | 字段类型 |
 | defaultValue | text | 默认值 |
 | group | text | 字段分组 |
-| column_name | text | 数据库字段名 |
-| primary | boolean | 主键 |
-| generated | boolean | 自增 |
 | sort_no | number | 排序号 |
 | is_name | boolean | 名称字段 |
 | required | boolean | 必填 |
 | is_wide | boolean | 宽字段 |
-| omit | boolean | 新建/编辑时忽略此字段 |
-| unique | boolean | 唯一 |
-| depend_on | array | 依赖的字段 |
-| index | boolean | 创建索引 |
+| omit | boolean | 忽略此字段 |
+| unique | boolean | 唯一索引字段 |
+| index | boolean | 创建字段索引 |
 | sortable | boolean | 可排序 |
 | searchable | boolean | 可搜索 |
 | filterable | boolean | 高级查找默认字段 |
 | visible_on | textarea | 字段显示公式 |
+| depend_on | text[] | 依赖的字段 |
 | inlineHelpText | textarea | 提示文本 |
 | description | textarea | 描述 |
 
-<!-- TODO: 此属性需要添加补充说明
-| unique | boolean | 唯一 |
--->
-
 补充说明：
 - **name**: API 名称, 表单事件、触发器等中调用该字段所用的名称。
-- **column_name**: 数据库字段名, 仅支持关系型数据库。
-- **primary**: 主键, 勾选其“外部数据源”栏的“主键”勾选框来把该字段设置为主键字段，仅支持关系型数据库。
-- **generated**: 字段自增， 仅支持关系型数据库。
 - **is_name**: 名称字段, 勾选该属性表示此字段会代替name字段作为“名称字段”。对象上默认以名为name的字段作为”名称字段”,点击“名称字段”会跳转到记录详细页面，支持配置为”名称字段“的字段类型有：文本、多行文本、自动编号、公式、日期、日期时间。
 - **is_wide**: 宽字段，普通字段详细页占一列，宽字段占两列。
+- **omit**: 新建和编辑时忽略该字段，当用户没有字段编辑权限的时候会自动设置该属性为true。
+- **unique**: 字段上配置该属性可以自动生成唯一性索引。
 - **index**: 创建索引，设置true时会自动为数据库字段创建索引。
 - **searchable**: 可全局搜索字段，默认为false，表示在对象快速搜索及全局搜索功能中不可查询该字段，设置为true表示可以全局搜索。
 - **filterable**: 高级查找默认字段，默认为true，表示在高级查找框中显示为默认字段，如果设置为false表示会折叠显示到高级栏中。需要注意的，该字段功能与 searchable 属性有点重复，字段的 searchable 或 filterable 两属性之一值为 true 该字段就不会显示在查找界面的高级栏中，而是显示在默认过滤字段里。
-- **show_as_qr**: 显示为二维码，只有”网址“”字段类型才支持此属性，开启后该字段值只读时显示为二维码。
 - **visible_on**: 字段显示公式，公式返回true或false来控制此字段是否显示。
-- **depend_on**: 依赖的字段，当依赖的字段值变更，此字段值会被清空； 
+- **depend_on**: 依赖的字段，当依赖的字段值变更，此字段值会被清空。
 - **inlineHelpText**: 提示文本，详细页该字段显示名称右侧提供一个提示文本的图标。
+
+### 外部数据源相关
+
+| 属性名 | 类型 | 含义 |
+|----|----|----|
+| column_name | text | 数据库字段名 |
+| primary | boolean | 主键 |
+| generated | boolean | 自增 |
+
+补充说明：
+- **column_name**: 数据库字段名, 仅支持关系型数据库。
+- **primary**: 主键, 勾选其“外部数据源”栏的“主键”勾选框来把该字段设置为主键字段，仅支持关系型数据库。
+- **generated**: 字段自增， 仅支持关系型数据库。
 
 ### 字段类型相关
 
@@ -206,12 +210,13 @@ summary_type: sum
 | write_requires_master_read | boolean | 子表权限开关 | master_detail |
 | filtersFunction | textarea | 过滤器函数 | lookup/master_detail |
 | optionsFunction | textarea | 选择项函数 | lookup/master_detail/select |
+| depend_on | text[] | 依赖的字段 | lookup/master_detail/select |
 | reference_limit | number | 选项显示数量 | lookup/master_detail |
 | showIcon | boolean | 是否显示图标 | lookup/master_detail |
 | precision | currency | 精度(数字长度) | number/currency/percent |
 | scale | currency | 小数位数 | number/currency/percent |
-| min | number | 最小值 | number/currency |
-| max | number | 最大值 | number/currency |
+| min | number | 最小值 | number/currency/percent/text/textarea |
+| max | number | 最大值 | number/currency/percent/text/textarea |
 | rows | currency | 多行文本行数 | textarea |
 | options | grid | 选择项 | select |
 | options.$ | object | Options |
@@ -232,9 +237,7 @@ summary_type: sum
 | summary_filters.$.value | text | 值 |
 | show_as_qr | boolean | 显示为二维码 | url |
 
-补充说明：
-
-#### 选项相关类型属性说明
+#### 选项相关类型属性补充说明
 
 - **reference_to**: 引用对象，只有“相关表”和“主表/子表”字段类型才支持此属性。
 - **reference_to_field**: 引用的对象的字段，默认值为主键字段 `_id`，表示要把对象上哪个字段值作为相关表的字段值保存到数据库中，只有“相关表”和“主表/子表”字段类型才支持此属性。
@@ -250,14 +253,15 @@ summary_type: sum
 - **options.$.description**: 描述
 - **reference_limit**: 选项显示数量，当显示为下拉选项时，默认只会列出10个选项供选择，只有“相关表”、“主表/子表”和“选择框”字段类型才支持此属性。
 - **showIcon**: 是否显示图标，每个对象上都可以配置图标，默认情况下相关表字段会在选项上显示引用对象的图标，配置该属性值为false可以隐藏选项上的图标，只有“相关表”、“主表/子表”和“选择框”字段类型才支持此属性。
+- **depend_on**: 依赖的字段，当依赖的字段值变更时，不但会清空此字段值，而且会触发 optionsFunction 和 filtersFunction 函数重新执行。
 
-#### 公式相关属性说明
+#### 公式相关属性补充说明
 
 - **formula**: 公式，通过用户定义的算法自动计算字段的值，只有“公式”字段类型才支持此属性。
 - **data_type**: 数据类型，保存到数据库中的值类型，只有“公式”和“选择框”字段类型才支持此属性。
 - **formula_blank_value**: 空白字段处理, zeroes表示将空白字段视为零，blanks表示将空白字段视为空白，默认为zeroes，只有“公式”才支持此属性。
 
-#### 汇总相关属性说明
+#### 汇总相关属性补充说明
 
 - **summary_object**: 要汇总的对象, 只有“累计汇总”字段类型才支持此属性。
 - **summary_type**: 汇总类型, 含有COUNT、SUM、MIN、MAX、AVG这五个选择项, 只有“累计汇总”字段类型才支持此属性。
@@ -268,17 +272,17 @@ summary_type: sum
 - **summary_filters.$.operation**: 运算符
 - **summary_filters.$.value**: 值
 
-#### 数值相关属性说明
+#### 数值相关属性补充说明
 
 - **precision**: 精度(数字长度)，定义数值类型的字段的精度, 只有“数值”、“金额”和“百分比”字段类型才支持此属性。
 - **scale**: 小数位数，定义数值类型的字段的小数位数, 只有“数值”、“金额”和“百分比”字段类型才支持此属性。
-- **min**: 最小值，定义数值类型的字段允许的最小值，只有“数值”、“金额”和“百分比”字段类型才支持此属性。
-- **max**: 最大值，定义数值类型的字段允许的最大值, 只有“数值”、“金额”和“百分比”字段类型才支持此属性。
+- **min**: 最小值，定义数值类型的字段允许的最小值，只有“数值”、“金额”和“百分比”字段类型才支持此功能，用于文本类型字段时表示允许的字符最小长度。
+- **max**: 最大值，定义数值类型的字段允许的最大值, 只有“数值”、“金额”和“百分比”字段类型才支持此功能，用于文本类型字段时表示允许的字符最大长度。
 
-#### 其他相关属性说明
+#### 其他相关属性补充说明
 
 - **rows**: 多行文本行数， 定义“长文本”字段类型显示的文本框行数，默认显示为3行。
-
+- **show_as_qr**: 显示为二维码，只有”网址“”字段类型才支持此属性，开启后该字段值只读时显示为二维码。
 
 <!-- 
 TODO: 需要

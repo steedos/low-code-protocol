@@ -78,6 +78,10 @@ description: 低代码平台中“主表/子表”字段功能协议，包括限
 
 比如对象M上配置了与A、B两个主表对象的主子表关系，可以在主表对象A和B上同时配置对子表M进行各种汇总计算的汇总字段，并且它们可以对子表M上的同一字段进行聚合汇总。
 
+当对象上存在多层级主子表关系时，低代码平台按以下规范处理累计汇总功能：
+
+不可以跨层级进行累计汇总计算，比如 `A-B-C` 这种主子表关系链中的主表对象A上不可以直接配置对子表对象C进行汇总计算的汇总字段，只能配置对其直属下级子表对象B进行汇总计算的汇总字段。
+
 参考：
 
 - [Considerations for Relationships](https://help.salesforce.com/articleView?id=sf.relationships_considerations.htm&type=5)

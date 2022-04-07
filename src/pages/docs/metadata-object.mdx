@@ -224,7 +224,7 @@ summary_type: sum
 | options.$.value | text | 选项值 |
 | options.$.color | text | 背景颜色 |
 | options.$.description | text | 描述 |
-| formula | textarea | 公式 | formula |
+| formula | textarea | 公式 | formula/autonumber |
 | data_type | select | 数据类型 | formula/select |
 | formula_blank_value | select | 空白字段处理 | formula |
 | summary_object | lookup | 要汇总的对象 | summary |
@@ -257,7 +257,7 @@ summary_type: sum
 
 #### 公式相关属性补充说明
 
-- **formula**: 公式，通过用户定义的算法自动计算字段的值，只有“公式”字段类型才支持此属性。
+- **formula**: 公式，通过用户定义的算法自动计算字段的值，只有“公式”和“自动编号”字段类型才支持此属性。
 - **data_type**: 数据类型，保存到数据库中的值类型，只有“公式”和“选择框”字段类型才支持此属性。
 - **formula_blank_value**: 空白字段处理, zeroes表示将空白字段视为零，blanks表示将空白字段视为空白，默认为zeroes，只有“公式”才支持此属性。
 
